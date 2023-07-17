@@ -1,1 +1,9 @@
-.header{background-color: rgb(36, 117, 87);}
+.header{
+    background-color: rgb(4, 75, 49);
+    color: whitesmoke;
+}
+
+.footer{
+    background-color: rgb(4, 75, 49);
+    color: whitesmoke;
+}
