@@ -5,6 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>rentaGarden</title>
+    <style>
+        /* Estilos personalizados para los enlaces */
+        .menuLink{
+            color: white !important; /* Cambia "red" por el color que desees */
+            text-decoration: none; /* Opcional: elimina la subrayado del enlace */
+            letter-spacing: 2px;
+            transition: color 0.5s;
+          }
+        
+        .menuLink:hover{
+            color:grey!important;
+
+        }
+    </style>
         <!-- Font Awesome -->
         <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -28,10 +42,10 @@
             <div class="col-2"><h1>rentaGarden</h1></div>
             <div class="col-5"></div>
             <div class="col-5  align-self-center text-align-center d-flex justify-content-between">
-                <h5 class="display-7">Arriendos</h5>
-                <h5 class="display-7">Login</h5>
-                <h5 class="display-7">Registro</h5>
-                <h5 class="display-7">Contacto</h5>   
+                <h5 class="display-7 menuLink">Arriendos</h5>
+                <h5 class="display-7 menuLink">Login</h5>
+                <a href="{%url 'register'%}"><h5 class="display-7 menuLink">Registro</h5></a>
+                <h5 class="display-7 menuLink">Contacto</h5>   
             </div>
         </div>
     </div>

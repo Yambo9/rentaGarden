@@ -4,3 +4,6 @@ from django.shortcuts import render
 
 def Home(request):
     return render(request,'index.html',{})
+
+def Register(request):
+    return render(request,'register.html',{})
