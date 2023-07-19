@@ -1,20 +1,69 @@
-{%extends 'base.html'%}
-{%block content%}
-{%load static%}
-    <div class="container-fluid">
-        <div class="row">
+{% extends 'base.html' %}
 
-            <div class="col-12 text-center my-4">
-                <h2 class="display-4">Register</h2>
-            </div>
+{% block content %}
+{% load static %}
 
-
-            <div class="col-3"></div>
-            <div class="col-3 align-items-center align-self-center">
-                <form method="POST"><input type="text" class="w-100"></form>
-            </div>
-            <img class="mx-3 mb-5 col-3 align-self-center text-align-center" src="{% static 'C:\Users\Tomas\Desktop\rentaGarden\static\img\suculentaRedondaa.png' %}" alt="Descripción de la imagen">
-            <div class="col-3"></div>
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center mt-5 text-center">
+        <div class="col-lg-6 col-md-12 col-sm-12 col-12 text-center mt-5">
+            <h2 class="display-5">Registro de Usuario</h2>
+            {%if problem%}
+                <h6 class="text-danger">*{{problem}}</h6>
+            {%endif%}
         </div>
+        <div class="col-6"></div>
+        <div class="col-lg-6 col-md-6 col-sm-8 col-10 align-items-center container-fluid border rounded-8 border-dark py-5">
+            <form method="POST" class="register-form row">
+                {% csrf_token %}
+                <!--FILA 1-->
+                <div class="col-1"></div>
+
+                <div class="col-5 text-center">
+                    <h6>Nombres</h6>
+                    {{ form.nombres }}
+                </div>
+                <div class="col-5 text-center">
+                    <h6>Apellidos</h6>
+                    {{ form.apellidos }}
+                </div>
+                <div class="col-1"></div>
+                <!--FILA 1-->
+
+                <!--FILA 2-->
+                <div class="col-2"></div>
+
+                <div class="col-8 text-center">
+                    <h6>Correo Electronico</h6>
+                    {{ form.email }}
+                </div>
+                <div class="col-2"></div>
+                <!--FILA 2-->
+
+                <!--FILA 3-->
+                <div class="col-1"></div>
+
+                <div class="col-5 mb-4 text-center">
+                    <h6>Contraseña</h6>
+                    <input type="password" name="{{ form.contraseña1.name }}" class="form-control">
+                </div>
+                <div class="col-5 mb-4 text-center">
+                    <h6>Repite la contraseña</h6>
+                    <input type="password" name="{{ form.contraseña2.name }}" class="form-control">
+                </div>
+                <div class="col-1"></div>
+                <!--FILA 3-->
+
+                <div class="col-4"></div>
+                <button class="col-4 btn btn-warning">Registrarme</button>
+                <div class="col-4"></div>
+            </form>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-8 mb-5 text-center">
+            <img class="img-fluid" src="{% static 'img/suculentaRedondaa.png' %}" alt="Imagen de ejemplo">
+        </div>
+        <div class="col-1"></div>
     </div>
-{%endblock%}
+</div>
+<br>
+{% endblock %}
