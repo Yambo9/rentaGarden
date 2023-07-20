@@ -24,15 +24,15 @@ class Admin(models.Model):
 
 
 class Arrendatario(models.Model):
-    usuario = models.ForeignKey(User,on_delete=models.CASCADE)
-    rut = models.CharField(max_length=20)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    rut = models.CharField(max_length=15, unique=True)
     fecha_registro = models.DateTimeField(auto_now=True)
-    fecha_nacimiento = models.DateField(null=True,blank=True)
-    comuna = models.ForeignKey(Comuna,on_delete=models.CASCADE)
-    direccion = models.CharField(max_length=200,null=True,blank=True)
-    numero_direccion = models.IntegerField(null=True,blank=True)
-    numero_telefono = models.IntegerField(null=True,blank=True)
-    ultimo_login = models.DateTimeField(auto_now=True,null=True,blank=True)
+    fecha_nacimiento = models.DateField(null=True, blank=True)
+    comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE)
+    direccion = models.CharField(max_length=200, null=True, blank=True)
+    numero_direccion = models.IntegerField(null=True, blank=True)
+    numero_telefono = models.IntegerField(null=True, blank=True)
+    ultimo_login = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     
 class Ejecutivo(models.Model):

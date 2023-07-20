@@ -12,7 +12,7 @@
                     <h2 class="display-4 mb-3">Mis Datos</h2>
                     <h5 class="text-white mb-3 col-12 display-7">Correo Electrónico: {{ request.user.email }}</h5>
                     <h5 class="text-white mb-3 col-12 display-7">Nombre: {{ request.user.first_name }} {{ request.user.last_name }}</h5>
-                {%if arrendatario%}
+                {% if arrendatario %}
                 {%else%}
                     <div class="col-3"></div>
                     <a href="{%url 'crear_arrendatario' %}"class="col-6 my-3 w-100  py-4 text-center align-self-center">

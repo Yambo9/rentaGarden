@@ -5,6 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
 from .models import *
+from django.contrib import messages
 
 # Create your views here.
 
@@ -65,15 +66,57 @@ def Signin(request):
     
 @login_required
 def Profile(request):
-    return render(request, 'profile.html', {})
+    if request.user.is_authenticated:
+        try:
+            arrendatario = Arrendatario.objects.filter(usuario=request.user).first()
+            if arrendatario is None:
+                print('El usuario no tiene sus datos completos')
+                return render(request, 'profile.html', {})
+            else:
+                print('Arrendatario encontrado')
+                return render(request, 'profile.html', {'arrendatario': arrendatario})
+        except Exception as e:
+            print('Ocurrió un error al cargar el Perfil:', e)
+            return redirect('home')
+    else:
+        print('El usuario no está autenticado')
+        return redirect('home')  # or redirect to the login page
 
 
+  # Make sure to import the Comuna model
+
+@login_required
 def Crear_arrendatario(request):
     if request.method == 'POST':
-        form = ArrendatarioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('crear_arrendatario')
+        try:
+            # ... other code
+
+            if 8 <= len(request.POST['rut']) and len(request.POST['rut']) <= 12:
+                # Get the Comuna object based on the ID from the form
+                comuna_id = int(request.POST['comuna'])
+                comuna_instance = Comuna.objects.get(pk=comuna_id)
+
+                data = Arrendatario.objects.create(
+                    usuario=request.user,
+                    rut=request.POST['rut'],
+                    fecha_nacimiento=request.POST['fecha_nacimiento'],
+                    comuna=comuna_instance,  # Assign the Comuna instance, not the ID
+                    direccion=request.POST['direccion'],
+                    numero_direccion=request.POST['numero_direccion'],
+                    numero_telefono=request.POST['numero_telefono'],
+                )
+                data.save()
+                return redirect('profile')
+            else:
+                problem_message = 'El rut ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
+                form = ArrendatarioForm(request.POST)
+                return render(request, 'crear_arrendatario.html', {'form': form, 'problem': problem_message})
+
+        except Exception as e:
+            error_message = str(e)  # Get the error message from the exception
+            form = ArrendatarioForm(request.POST)
+            return render(request, 'crear_arrendatario.html', {'form': form, 'problem': 'Ocurrió un problema :('})
+    
     else:
-        form = ArrendatarioForm()
+        form = ArrendatarioForm()  # Define the form for GET request
     return render(request, 'crear_arrendatario.html', {'form': form})
