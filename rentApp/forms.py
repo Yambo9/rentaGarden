@@ -21,3 +21,7 @@ class RegisterForm(forms.Form):
         self.fields['contraseña2'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
 
 
+class ArrendatarioForm(forms.ModelForm):
+    class Meta:
+        model = Arrendatario
+        exclude = ['usuario', 'ultimo_login']

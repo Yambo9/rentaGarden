@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+<script src="{% static 'js/profile.js' %}"></script>
+<div class="container-fluid mt-5">
+    <div class="row">
+
+        <div class="col-0"></div>
+        <div class="col-4 border border-dark rounded-5 py-4 px-5 my-2 container recuadro">
+            <div class="row">
+                    <h2 class="display-4 mb-3">Mis Datos</h2>
+                    <h5 class="text-white mb-3 col-12 display-7">Correo Electrónico: {{ request.user.email }}</h5>
+                    <h5 class="text-white mb-3 col-12 display-7">Nombre: {{ request.user.first_name }} {{ request.user.last_name }}</h5>
+                {%if arrendatario%}
+                {%else%}
+                    <div class="col-3"></div>
+                    <a href="{%url 'crear_arrendatario' %}"class="col-6 my-3 w-100  py-4 text-center align-self-center">
+
+                        
+                        <button class=" text-dark boton w-100">Completar Datos Personales</button>
+                    </a>
+
+
+
+                    <div class="col-3"></div>
+                {%endif%}
+            </div>
+        </div>
+        <div class="col-7 mx-1 py-4 px-5 my-5 recuadro border rounded-5">
+            <u class="mb-5"><h4>Mis Arriendos</h4></u>
+
+            {%if pedido%}
+
+            {%else%}
+            <h6 class="alerta mt-4">* Para hacer tu primer arriendo debes completar antes tus datos personales. Solo toma un minuto.</h6>
+            {%endif%}
+        </div>
+    </div>
+</div>
+<br><br>
+
+{% endblock %}

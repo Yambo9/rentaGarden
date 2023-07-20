@@ -26,8 +26,6 @@ class Admin(models.Model):
 class Arrendatario(models.Model):
     usuario = models.ForeignKey(User,on_delete=models.CASCADE)
     rut = models.CharField(max_length=20)
-    nombres = models.CharField(max_length=150)
-    apellidos = models.CharField(max_length=150)
     fecha_registro = models.DateTimeField(auto_now=True)
     fecha_nacimiento = models.DateField(null=True,blank=True)
     comuna = models.ForeignKey(Comuna,on_delete=models.CASCADE)

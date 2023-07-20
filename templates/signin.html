@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+    <div class="row justify-content-center align-items-center mt-2 text-center">
+        <div class="col-lg-8 col-md-12 col-sm-12 col-12 text-center mt-3">
+            <u><h2 class="display-5">Inicio de Sesion</h2></u>
+            {%if problem%}
+                <h6 class="text-danger">*{{problem}}</h6>
+            {%endif%}
+        </div>
+        <div class="col-4"></div>
+        <div class="px-5 col-lg-4 col-md-6 col-sm-8 col-10 align-items-center container-fluid border rounded-8 border-dark py-5">
+            <form method="POST" class="register-form row">
+                {% csrf_token %}
+                <div class="col-1"></div>
+                <div class="col-10 mb-4">
+                    <h5>Correo Electronico</h5>
+                    {{form.username}}
+                </div>
+                <div class="col-1"></div>
+
+                <div class="col-1"></div>
+                <div class="col-10 mb-4">
+                    <h5>Contraseña</h5>
+                    {{form.password}}
+                </div>
+                <div class="col-1"></div>
+
+                <div class="col-3"></div>
+                <button class="col-6 btn btn-success">Registrarme</button>
+                <div class="col-3"></div>
+            </form>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-8 mb-5 text-center">
+            <img class="img-fluid" src="{% static 'img/suculentaRedondaa.png' %}" alt="Imagen de ejemplo">
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+<br>
+<br>
+
+
+{% endblock %}

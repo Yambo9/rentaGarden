@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, get_user_model,logout
 from django.contrib.auth.forms import AuthenticationForm
-
+from .forms import *
+from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
 from .models import *
 
@@ -45,17 +46,34 @@ def Register(request):
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
+@login_required
 def Logout(request):
     logout(request)
     return redirect('home')
 
-def Login(request):
+def Signin(request):
     if request.method == 'GET':
         form = AuthenticationForm()
-        return render(request,'signup.html',{'form':form})
+        return render(request,'signin.html',{'form':form})
     else:
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is not None:
-            login(request, user)        
-        return render(request,'signup.html',{'problem':'Usuario no encontrado'})
+            login(request, user) 
+            return redirect('home')
+        form = AuthenticationForm()       
+        return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
     
+@login_required
+def Profile(request):
+    return render(request, 'profile.html', {})
+
+
+def Crear_arrendatario(request):
+    if request.method == 'POST':
+        form = ArrendatarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('crear_arrendatario')
+    else:
+        form = ArrendatarioForm()
+    return render(request, 'crear_arrendatario.html', {'form': form})
