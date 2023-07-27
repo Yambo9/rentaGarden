@@ -1,0 +1,17 @@
+.recuadrito{background-color: whitesmoke; color: rgb(23, 23, 23);}
+
+.botonAgregar{
+    background-color: rgb(18, 129, 79);
+    color: whitesmoke; 
+    border: solid black;
+    font-size: 21px;
+    
+}
+
+.botonAgregar:hover{
+    background-color: rgb(110, 178, 76);
+    color: whitesmoke; 
+    border: solid black;
+    font-size: 21px;
+    transition: 2s;
+}

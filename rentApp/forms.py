@@ -25,3 +25,25 @@ class ArrendatarioForm(forms.ModelForm):
     class Meta:
         model = Arrendatario
         exclude = ['usuario', 'ultimo_login']
+
+
+class EjecutivoForm(forms.Form):
+    email  = forms.EmailField(label="Correo Electronico", max_length=150, required=True)
+    nombre = forms.CharField(label="Nombres",max_length=200,required=True)
+    apellido = forms.CharField(label="Apellidos",max_length=200,required=True)
+    rut = forms.CharField(label="Rut",max_length=14,required=True)
+    rol = forms.CharField(max_length=50)
+    telefono = forms.IntegerField(required=True)
+
+    contraseña = forms.CharField(label="Contraseña", max_length=150, required=True)
+    contraseña2 = forms.CharField(label="Repite la Contraseña", max_length=150, required=True)
+ 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nombre'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['apellido'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['rut'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['rol'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['email'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['contraseña'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['contraseña2'].widget.attrs['class'] = 'form-control mb-4 rounded-5'

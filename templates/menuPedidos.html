@@ -1,0 +1,48 @@
+{%extends 'base.html'%}
+{%block content%}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/menuPedidos.css' %}">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center my-2 mt-5">
+                <h3 class="display-4">Mis Pedidos</h3>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-12">
+                <!--ARRENDATARIO DATOS COMPLETOS-->
+                {%if arrendatario%}
+                <h4 class="display-7 text-center text-danger">
+                    Datos Completos
+                </h4>
+
+                <div class="justify-content-center align-items-center text-center my-5">
+                    <a href="{%url 'register'%}"><button class="boton_grande rounded-9 my-4 mb-5">Hacer Arriendo</button></a>
+                </div>
+
+                {%else%}
+                    <!--USUARIO REGISTRADO-->
+                    {%if user.is_authenticated%}
+                        <h4 class="display-7 text-center text-danger">
+                            * Para poder hacer un Arriendo debes tener tus datos completos
+                        </h4>
+
+                        <div class="justify-content-center align-items-center text-center my-5">
+                            <a href="{%url 'register'%}"><button class="boton_grande rounded-9 my-4 mb-5">COMPLETAR DATOS</button></a>
+                        </div>
+                    <!--SIN REGISTRO NI NADA-->
+                    {%else%}
+                        <h4 class="display-7 text-center text-danger">
+                            * Para poder hacer un Arriendo debes registrarte y tener tus datos completos
+                        </h4>
+
+                        <div class="justify-content-center align-items-center text-center my-5">
+                            <a href="{%url 'register'%}"><button class="boton_grande rounded-9 my-4 mb-5">REGISTRARME</button></a>
+                        </div>
+                    {%endif%}
+                {%endif%}
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+{%endblock%}

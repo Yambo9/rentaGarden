@@ -12,6 +12,8 @@ admin.site.register(Planta),
 admin.site.register(Pedido),
 admin.site.register(Mensaje),
 admin.site.register(Planta_pedido),
+admin.site.register(Ejecutivo),
+
 
 
 

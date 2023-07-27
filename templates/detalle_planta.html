@@ -1,0 +1,58 @@
+{%extends 'base.html'%}
+{%block content%}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/detalle_planta.css' %}">
+    <div class="container-fluid my-5">
+        <div class="row">
+
+            <div class="col-1"></div>
+            <div class="col-3 h-100 text-center">
+                <img src="{{planta.imagen.url}}" alt="" class="col-12 h-100">
+
+                <a href="{%url 'menuArriendo'%}" class="w-100 px-4 py-4 my-3 highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+                    Hacer un Arriendo !</a> 
+
+                <a href="{%url 'catalogo'%}" class="w-100 px-4 py-4  highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+                    Ir al Catalogo</a> 
+         
+            </div>
+            <div class="col-7 container">
+                <div class="row border border-dark rounded-5">
+                    <div class="col-12  my-4"><h5 class=" text-center display-6">{{planta.nombre}} </h5></div>
+                    <div class="col-8 px-4 my-2 borde_interno">
+                        <u><h4 class="mb-4 display-8">Nombre Cientifico: {{planta.nombre_cientifico}}</h4></u>
+                        <h6 class="my-2">Categoria: {{planta.categoria}}</h6>
+                        <h6 class="my-2">Familia: {{planta.familia}}</h6>
+                        <h6 class="my-2">Epoca de Floración: {{planta.floracion}}</h6>
+                        <h6 class="my-2">Descripción: {{planta.descripcion}}</h6>
+                        <h6 class="my-2">Riego: {{planta.riego}}</h6>
+                    </div>
+                    <div class="col-4 px-4 my-2 align-items-center ">
+                        <h6 class="my-3 datos_secundarios">Perenne: &nbsp;{%if planta.perenne%} SI{%else%} NO{%endif%}</h6>
+                        <h6 class="my-3 datos_secundarios">Peso: &nbsp;&nbsp;&nbsp;{{planta.peso}} KG</h6>
+                        <h6 class="my-3 datos_secundarios">Altura:&nbsp;&nbsp;&nbsp;{{ planta.altura }} {% if planta.altura > 1 %} Metros {% elif planta.altura == 1 %} Metros {% else %} Metro{% endif %}</h6> 
+                        <h6 class="my-3 datos_secundarios">Tamaño M²: {{ planta.tamaño_m2 }} {% if planta.tamaño_m2 > 1 %} Metros {% elif planta.tamaño_m2 == 1 %},00 Metro {% else %} Metros {% endif %}</h6>
+
+                        <div class="my-3 mt-4 text-center">
+
+                        </div>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <h3 class="mx-3 px-3 my-3 mb-3 display-8">Datos</h3>
+                        {%for a in planta.caracteristica.all%}
+                        <ul>
+                            <li><h6 class="my-1 px-4">{{a.titulo}}</h6><p class="mb-4 px-4">{{a.descripcion}}</p></li>
+                        </ul>
+                        {%endfor%}
+                    </div>
+
+                    
+                </div>
+            </div>
+            <div class="col-1"></div>
+
+            <div class="col-1"></div>
+
+        </div>
+    </div>
+{%endblock%}

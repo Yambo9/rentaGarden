@@ -23,7 +23,7 @@ def Register(request):
             contraseña = form.cleaned_data['contraseña1']
             contraseña2 = form.cleaned_data['contraseña2']
             if(contraseña == contraseña2):
-                if(contraseña<8):
+                if(len(contraseña)>=8):
                     # Crear el usuario
                     User = get_user_model()
                     user = User.objects.create_user(username=email, email=email, password=contraseña)
@@ -34,7 +34,7 @@ def Register(request):
                     user = authenticate(request, username=email, password=contraseña)
                     if user is not None:
                         login(request, user)
-                    return redirect('home')  # Redirigir a la página de inicio después del registro exitoso
+                    return redirect('profile')  # Redirigir a la página de inicio después del registro exitoso
                 else:
                    problem = "Las Contraseña ingresada es demasiado corta. Asegurate de que tenga un mínimo de 8 caracteres."
                    form = RegisterForm()
@@ -60,23 +60,34 @@ def Signin(request):
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
         if user is not None:
             login(request, user) 
-            return redirect('home')
+            return redirect('profile')
         form = AuthenticationForm()       
         return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
     
 @login_required
 def Profile(request):
     if request.user.is_authenticated:
+        #REVISA SI ES ADMIN
         try:
-            arrendatario = Arrendatario.objects.filter(usuario=request.user).first()
-            if arrendatario is None:
-                print('El usuario no tiene sus datos completos')
-                return render(request, 'profile.html', {})
+            admin = Admin.objects.filter(usuario=request.user).first()
+            if admin is None:
+            #REVISA SI ES ARRENDATARIO
+                try:
+                    arrendatario = Arrendatario.objects.filter(usuario=request.user).first()
+                    if arrendatario is None:
+                        print('El usuario no tiene sus datos completos')
+                        return render(request, 'profile.html', {})
+                    else:
+                        print('Arrendatario encontrado')
+                        return render(request, 'profile.html', {'arrendatario': arrendatario})
+                except Exception as e:
+                    print('Ocurrió un error al cargar el Perfil:', e)
+                    return redirect('home')
             else:
-                print('Arrendatario encontrado')
-                return render(request, 'profile.html', {'arrendatario': arrendatario})
-        except Exception as e:
-            print('Ocurrió un error al cargar el Perfil:', e)
+                print('ADMIN encontrado')
+                return render(request, 'profile.html', {'admin': admin})
+        except:
+            print("ERROR AL BUSCAR AL ADMIN")
             return redirect('home')
     else:
         print('El usuario no está autenticado')
@@ -120,3 +131,107 @@ def Crear_arrendatario(request):
     else:
         form = ArrendatarioForm()  # Define the form for GET request
     return render(request, 'crear_arrendatario.html', {'form': form})
+
+def Catalogo(request):
+    try:
+        arboles = Planta.objects.filter(categoria='Arbol')
+        arbustos = Planta.objects.filter(categoria ='Arbusto')
+        return render(request,'catalogo.html',{'arboles':arboles,'arbustos':arbustos})
+
+    except:
+        print("Ocurrio un error al cargar las plantas.")
+        return redirect('home')
+    
+def DetallePlanta(request,id):
+    try:
+        plantita = Planta.objects.get(pk=id)
+        return render(request,'detalle_planta.html',{'planta':plantita})
+    except:
+        print('Ocurrio un error al encontrar la planta')
+        return redirect('home')
+    
+def menuArriendo(request):
+    try:
+        print('VIENDO SI EL USUARIO ESTA REGISTRADO')
+        if(request.user.is_authenticated):
+            print("EL USUARIO ESTA REGISTRADO")
+            print("VIENDO SI LOS DATOS PERSONALES ESTAN COMPLETOS")
+            try:
+                arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
+                if(arrendatario is None):
+                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN INCOMPLETOS")
+                    return render(request,'menuPedidos.html')
+                else:
+                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN COMPLETOS")
+                    return render(request,'menuPedidos.html',{'arrendatario':arrendatario})
+            except:
+                print("Ocurrio un problema al ver si el usuario tiene datos personales Completados")
+                return redirect('profile')
+        else:
+            print("El usuario no esta registrado. Mandando al ususario al formulario de registro.")
+            return render(request,'menuPedidos.html')
+    except:
+        print('Ocurrio un error al encontrar al Usuario')
+        return render('home')
+
+def MenuEjecutivos(request):
+    try:
+        admin = Admin.objects.get(usuario=request.user)
+        if admin is not None:
+            print('Eres admin')
+            try:
+                ejecutivos = Ejecutivo.objects.all()
+                print('Se encontraron los Ejecutivos')
+                return render(request,'menu_ejecutivos.html',{'ejecutivos':ejecutivos})
+
+            except:    
+                print("Ocurrio un error al encontrar al ejecutivo.")
+                return redirect('home')
+        else:
+            print("No eres Admin")
+            return redirect('home')
+    except:
+        print('Ocurrio un error al ver si eres Admin')
+        return redirect('home')
+
+
+def CrearEjecutivo(request):
+    if request.method == 'POST':
+        form = EjecutivoForm(request.POST)
+        if form.is_valid():
+            # Código para guardar al ejecutivo
+            nombre = form.cleaned_data['nombre']
+            apellido = form.cleaned_data['apellido']
+            email = form.cleaned_data['email']
+            contraseña = form.cleaned_data['contraseña']
+            contraseña2 = form.cleaned_data['contraseña2']
+            if(contraseña == contraseña2):
+                if(len(contraseña) >= 8):
+                    # Crear el usuario
+                    User = get_user_model()
+                    user = User.objects.create_user(username=email, email=email, password=contraseña)
+                    user.first_name = nombre
+                    user.last_name = apellido
+                    user.save()
+                    print("Usuario guardado correctamente")
+                    # Ahora guardando ejecutivo
+                    rut = form.cleaned_data['rut']
+                    rol = form.cleaned_data['rol']
+                    telefono = form.cleaned_data['telefono']
+                    ejecutivo = Ejecutivo.objects.create(
+                        usuario=user,
+                        nombre=nombre,
+                        apellido=apellido,
+                        rut=rut,
+                        rol=rol,
+                        telefono=telefono
+                    )
+                    ejecutivo.save()
+                    print('El usuario fue guardado correctamente')
+                    return redirect('menu_ejecutivos')
+        else:
+            # Si el formulario no es válido, renderizar el formulario con los errores
+            return render(request, 'crear_ejecutivo.html', {'form': form})
+    else:
+        form = EjecutivoForm()
+        return render(request, 'crear_ejecutivo.html', {'form': form})

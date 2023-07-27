@@ -1,0 +1,7 @@
+.fotoMenu{width:10% ;}
+
+.recuadro{    background-color: rgb(4, 75, 49);
+    color: whitesmoke;}
+
+a{transition: color 0.8s;}
+a:hover{color: rgb(122, 122, 122);}

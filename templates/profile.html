@@ -12,28 +12,58 @@
                     <h2 class="display-4 mb-3">Mis Datos</h2>
                     <h5 class="text-white mb-3 col-12 display-7">Correo Electrónico: {{ request.user.email }}</h5>
                     <h5 class="text-white mb-3 col-12 display-7">Nombre: {{ request.user.first_name }} {{ request.user.last_name }}</h5>
-                {% if arrendatario %}
+                <!--SI ES ADMIN-->
+                {%if admin%}
+                    <u><h1>ADMIN</h1></u>
+                    <h5 class="text-white mb-3 col-12 display-7">Nombre: {{admin.nombre}}</h5>
+                    <h5 class="text-white mb-3 col-12 display-7">Apellido: {{admin.apellido}}</h5>
+                    <h5 class="text-white mb-3 col-12 display-7">Rol: {{admin.rol}}</h5>
+
+                <!--SI ES ARRENDATARIO-->
                 {%else%}
-                    <div class="col-3"></div>
-                    <a href="{%url 'crear_arrendatario' %}"class="col-6 my-3 w-100  py-4 text-center align-self-center">
-
-                        
-                        <button class=" text-dark boton w-100">Completar Datos Personales</button>
-                    </a>
-
-
-
-                    <div class="col-3"></div>
+                    {% if arrendatario %}
+                        <h5 class="text-white mb-3 col-12 display-7">Rut: {{ arrendatario.rut }}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Fecha Registro: {{ arrendatario.fecha_registro }}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Fecha Nacimiento: {{ arrendatario.fecha_nacimiento}}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Comuna: {{ arrendatario.comuna.nombre }}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Direccion: {{ arrendatario.direccion }} - {{arrendatario.numero_direccion}}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Numero de Telefono: {{ arrendatario.numero_telefono}}</h5>
+                        <h5 class="text-white mb-3 col-12 display-7">Ultimo Login: {{ arrendatario.ultimo_login}}</h5>
+                    {%else%}
+                        <div class="col-3"></div>
+                        <a href="{%url 'crear_arrendatario' %}"class="col-6 my-3 w-100  py-4 text-center align-self-center">
+                            <button class=" text-dark boton w-100">Completar Datos Personales</button>
+                        </a>
+                        <div class="col-3"></div>
+                    {%endif%}
                 {%endif%}
             </div>
         </div>
         <div class="col-7 mx-1 py-4 px-5 my-5 recuadro border rounded-5">
-            <u class="mb-5"><h4>Mis Arriendos</h4></u>
-
-            {%if pedido%}
-
+            <div class="d-flex align-items-center align-self-center justify-content-around">
+                {%if admin%}
+                    <u class=""><h3 class="justify-self-center display-5">MENU de ADMIN</h3></u> 
+                {%else%}
+                    <u class=""><h3 class="justify-self-center display-5">Mis Arriendos</h3></u>{%if arrendatario%} <a href="{%url 'menuArriendo'%}"><button>Hacer Arriendo!</button></a> {%endif%}
+                {%endif%}
+                </div>
+            <hr>
+            <!--SI ES ADMIN-->
+            {%if admin%}
+            <h5 class=" my-4">COSAS DE ADMIN</h5>
+            <hr>
+            <div class="d-flex justify-content-around">
+                <a href="{%url 'menu_ejecutivos'%}"><button>EJECUTIVOS</button></a>
+                <button>VER MENSAJES</button>
+            </div>
             {%else%}
-            <h6 class="alerta mt-4">* Para hacer tu primer arriendo debes completar antes tus datos personales. Solo toma un minuto.</h6>
+                <!--SI ES ARRENDATARIO-->
+                {%if arrendatario%}
+                    <h5 class=" mt-4">Realiza tu primer arriendo!</h5>
+                <!--SI ES USUARIO SIN DATOS COMPLETOS-->
+                {%else%}
+                    <h6 class="alerta mt-4">* Para hacer tu primer arriendo debes completar antes tus datos personales. Solo toma un minuto.</h6>
+                {%endif%}
             {%endif%}
         </div>
     </div>
