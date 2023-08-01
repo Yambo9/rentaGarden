@@ -107,9 +107,10 @@ class Planta(models.Model):
     
 class Pedido(models.Model):
     arrendatario = models.ForeignKey(Arrendatario,on_delete=models.CASCADE)
+    ejecutivo = models.ForeignKey(Ejecutivo,on_delete=models.CASCADE)
     comuna = models.ForeignKey(Comuna,on_delete=models.CASCADE)
     direccion = models.CharField(max_length=200)
-    numero = models.IntegerField()
+    numero = models.IntegerField(null=True,blank=True)
     fecha_inicio = models.DateField()
     fecha_termino = models.DateField()
     hora_inicio = models.TimeField(null=True,blank=True)

@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, get_user_model,logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm
+import random
 from .models import *
 from django.contrib import messages
 
@@ -12,6 +12,8 @@ from django.contrib import messages
 def Home(request):
     print(request.user)
     return render(request,'index.html',{})
+
+
 
 def Register(request):
     if request.method == 'POST':
@@ -22,8 +24,8 @@ def Register(request):
             email = form.cleaned_data['email']
             contraseña = form.cleaned_data['contraseña1']
             contraseña2 = form.cleaned_data['contraseña2']
-            if(contraseña == contraseña2):
-                if(len(contraseña)>=8):
+            if contraseña == contraseña2:
+                if len(contraseña) >= 8:
                     # Crear el usuario
                     User = get_user_model()
                     user = User.objects.create_user(username=email, email=email, password=contraseña)
@@ -36,16 +38,19 @@ def Register(request):
                         login(request, user)
                     return redirect('profile')  # Redirigir a la página de inicio después del registro exitoso
                 else:
-                   problem = "Las Contraseña ingresada es demasiado corta. Asegurate de que tenga un mínimo de 8 caracteres."
-                   form = RegisterForm()
-                   return render(request, 'register.html', {'form': form,'problem':problem})
+                    problem = "La contraseña ingresada es demasiado corta. Asegúrate de que tenga un mínimo de 8 caracteres."
             else:
-                   problem = "Las contraseñas ingresadas no coinciden."
-                   form = RegisterForm()
-                   return render(request, 'register.html', {'form': form,'problem':problem})
+                problem = "Las contraseñas ingresadas no coinciden."
+        else:
+            problem = "Hay errores en el formulario. Verifica los campos."
+
+        # Si hay algún problema, renderizar la página con el formulario y el mensaje de error
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form, 'problem': problem})
     else:
         form = RegisterForm()
-    return render(request, 'register.html', {'form': form})
+        return render(request, 'register.html', {'form': form})
+
 
 @login_required
 def Logout(request):
@@ -117,7 +122,7 @@ def Crear_arrendatario(request):
                     numero_telefono=request.POST['numero_telefono'],
                 )
                 data.save()
-                return redirect('profile')
+                return redirect('menuArriendo')
             else:
                 problem_message = 'El rut ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
                 form = ArrendatarioForm(request.POST)
@@ -150,6 +155,7 @@ def DetallePlanta(request,id):
         print('Ocurrio un error al encontrar la planta')
         return redirect('home')
     
+
 def menuArriendo(request):
     try:
         print('VIENDO SI EL USUARIO ESTA REGISTRADO')
@@ -174,6 +180,29 @@ def menuArriendo(request):
         print('Ocurrio un error al encontrar al Usuario')
         return render('home')
 
+def seleccionar_plantas(request):
+    plantas = Planta.objects.all()
+    if request.method == 'POST':
+        form = SeleccionarPlantaForm(request.POST)
+        if form.is_valid():
+            planta = form.cleaned_data['planta']
+            cantidad = form.cleaned_data['cantidad']
+            
+            # Verificar si la cantidad seleccionada supera el stock disponible
+            if cantidad > planta.stock:
+                error_message = "No hay suficiente stock disponible para esa cantidad."
+                return render(request, 'seleccionar_plantas.html', {'form': form, 'plantas': plantas, 'error_message': error_message})
+            
+            # Crear el registro de Planta_pedido
+            planta_pedido = Planta_pedido(pedido=None, planta=planta, cantidad=cantidad)
+            planta_pedido.save()
+
+    else:
+        form = SeleccionarPlantaForm()
+
+    return render(request, 'seleccionar_plantas.html', {'form': form, 'plantas': plantas})
+
+
 def MenuEjecutivos(request):
     try:
         admin = Admin.objects.get(usuario=request.user)
@@ -182,7 +211,7 @@ def MenuEjecutivos(request):
             try:
                 ejecutivos = Ejecutivo.objects.all()
                 print('Se encontraron los Ejecutivos')
-                return render(request,'menu_ejecutivos.html',{'ejecutivos':ejecutivos})
+                return render(request, 'menu_ejecutivos.html', {'ejecutivos': ejecutivos})
 
             except:    
                 print("Ocurrio un error al encontrar al ejecutivo.")
@@ -193,7 +222,6 @@ def MenuEjecutivos(request):
     except:
         print('Ocurrio un error al ver si eres Admin')
         return redirect('home')
-
 
 def CrearEjecutivo(request):
     if request.method == 'POST':
@@ -235,3 +263,52 @@ def CrearEjecutivo(request):
     else:
         form = EjecutivoForm()
         return render(request, 'crear_ejecutivo.html', {'form': form})
+
+def ModificarEjecutivo(request, id):
+    try:
+        ejecutivo = Ejecutivo.objects.get(usuario=id)
+        user = ejecutivo.usuario
+
+        if request.method == 'POST':
+            form = EjecutivoForm(request.POST)
+
+            if form.is_valid():
+                user.email = form.cleaned_data['email']
+                user.set_password(form.cleaned_data['contraseña'])
+                user.save()
+
+                ejecutivo.nombre = form.cleaned_data['nombre']
+                ejecutivo.apellido = form.cleaned_data['apellido']
+                ejecutivo.rut = form.cleaned_data['rut']
+                ejecutivo.rol = form.cleaned_data['rol']
+                ejecutivo.telefono = form.cleaned_data['telefono']
+                ejecutivo.save()
+
+                return redirect('menu_ejecutivos')
+        else:
+            form = EjecutivoForm(initial={
+                'email': user.email,
+                'nombre': ejecutivo.nombre,
+                'apellido': ejecutivo.apellido,
+                'rut': ejecutivo.rut,
+                'rol': ejecutivo.rol,
+                'telefono': ejecutivo.telefono
+            })
+
+        return render(request, 'modificar_ejecutivos.html', {'form': form, 'instancia': ejecutivo})
+    except:
+        print('Ocurrió un error al modificar al usuario.')
+        return redirect('home')
+
+def EliminarEjecutivo(request,id):
+    try:
+        if request.method == 'GET':
+            usuario = Ejecutivo.objects.get(usuario = id)
+            return render(request,'eliminar_ejecutivo.html',{'ejecutivo':usuario})
+        else:
+            usuario = User.objects.get(id = id)
+            usuario.delete()
+            return redirect('menu_ejecutivos')
+    except:
+        print("Ocurrio un error al eliminar al ejecutivo.")
+        return redirect('home')

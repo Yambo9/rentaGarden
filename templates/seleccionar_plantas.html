@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Seleccionar Plantas</h1>
+  <form method="post">
+    {% csrf_token %}
+    {% for planta in plantas %}
+      <div>
+        <label>
+          <img src="{{ planta.imagen.url }}" alt="{{ planta.nombre }}" height="100">
+          {{ planta.nombre }} - {{ planta.nombre_cientifico }}
+          {{ form.planta }}
+        </label>
+        {% if form.planta.value == planta.pk %}
+          <br>
+          <label>Cantidad:</label>
+          {{ form.cantidad }}
+          {% if form.cantidad.errors %}
+            <ul class="errorlist">
+              {% for error in form.cantidad.errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <button type="submit" name="agregar_planta" value="{{ planta.pk }}">Agregar</button>
+          {% if error_message %}
+            <p>{{ error_message }}</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </form>
+{% endblock %}

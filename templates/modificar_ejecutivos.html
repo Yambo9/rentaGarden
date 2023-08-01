@@ -2,10 +2,12 @@
 
 {% block content %}
 <div class="container">
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <h5 class="text-center mb-4">Crear Ejecutivo</h5>
-            <form method="POST" class="border rounded-8 border-dark p-4">
+            <div class="d-flex justify-content-around my-4 align-items-center">
+            <h3 class="text-center my-4">Modificar Ejecutivo</h3>
+            <a href="{%url 'menu_ejecutivos'%}"><button class="btn btn-warning">Volver</button></a></div>
+            <form method="POST">
                 {% csrf_token %}
                 <div class="row mb-3">
                     <div class="col">
@@ -19,8 +21,8 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
-                        {{ form.email }}
+                        <label for="{{ form.rut.id_for_label }}">Rut</label>
+                        {{ form.rut }}
                     </div>
                     <div class="col">
                         <label for="{{ form.rol.id_for_label }}">Rol</label>
@@ -29,8 +31,8 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col">
-                        <label for="{{ form.rut.id_for_label }}">Rut</label>
-                        {{ form.rut }}
+                        <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
+                        {{ form.email }}
                     </div>
                     <div class="col">
                         <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
@@ -40,16 +42,16 @@
                 <div class="row mb-3">
                     <div class="col">
                         <label for="{{ form.contraseña.id_for_label }}">Contraseña</label>
-                        <input type="password" name="{{ form.contraseña.name }}" class="form-control">
+                        {{ form.contraseña }}
                     </div>
                     <div class="col">
                         <label for="{{ form.contraseña2.id_for_label }}">Repite la Contraseña</label>
-                        <input type="password" name="{{ form.contraseña2.name }}" class="form-control">
+                        {{ form.contraseña2 }}
                     </div>
                 </div>
-                <div class="row justify-content-center">
-                    <button type="submit" class="btn btn-success">Guardar Ejecutivo</button>
-                </div>
+                <div class="d-flex justify-content-around"></div>
+                <button type="submit" class="btn btn-primary mb-5">Modificar</button>
+                
             </form>
         </div>
     </div>

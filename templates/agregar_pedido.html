@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h5 class="display-6">Selecciona las plantas que quieres arrendar</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-2 container">
+                <div class="col-12 text-center">
+                    <h3 class="display-3 my-4">Agregar Plantas</h3>
+                    {% for planta in plantas %}
+                        <div class="row border rounded-8 border-dark py-3 mb-3">
+                            <div class="col-4 text-center">
+                                <h6>{{ planta.nombre }}</h6>
+                                <img src="{{ planta.imagen.url }}" alt="{{ planta.nombre }}" width="150" height="150">
+                            </div>
+                            <div class="col-4 text-center">
+                                <h6>Valor</h6>
+                                <p>{{ planta.valor }}</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="planta_id" value="{{ planta.id }}">
+                                    <div class="form-group">
+                                        <label for="cantidad">Cantidad</label>
+                                        <input type="number" name="cantidad" class="form-control mb-4" min="1" max="{{ planta.stock }}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Agregar</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+{% endblock %}
