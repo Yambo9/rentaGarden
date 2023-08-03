@@ -157,50 +157,31 @@ def DetallePlanta(request,id):
     
 
 def menuArriendo(request):
-    try:
+    #try:
         print('VIENDO SI EL USUARIO ESTA REGISTRADO')
         if(request.user.is_authenticated):
             print("EL USUARIO ESTA REGISTRADO")
             print("VIENDO SI LOS DATOS PERSONALES ESTAN COMPLETOS")
-            try:
-                arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
-                if(arrendatario is None):
-                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN INCOMPLETOS")
-                    return render(request,'menuPedidos.html')
-                else:
-                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN COMPLETOS")
-                    return render(request,'menuPedidos.html',{'arrendatario':arrendatario})
-            except:
-                print("Ocurrio un problema al ver si el usuario tiene datos personales Completados")
-                return redirect('profile')
+            #try:
+            arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
+            if(arrendatario is None):
+                print("LOS DATOS PERSONALES DEL USUARIO ESTAN INCOMPLETOS")
+                return render(request,'menuPedidos.html')
+            else:
+                print("LOS DATOS PERSONALES DEL USUARIO ESTAN COMPLETOS")
+                return render(request,'menuPedidos.html',{'arrendatario':arrendatario})
+            #except:
+                #print("Ocurrio un problema al ver si el usuario tiene datos personales Completados")
+                #return redirect('profile')
         else:
             print("El usuario no esta registrado. Mandando al ususario al formulario de registro.")
             return render(request,'menuPedidos.html')
-    except:
-        print('Ocurrio un error al encontrar al Usuario')
-        return render('home')
+    #except:
+        #print('Ocurrio un error al encontrar al Usuario')
+        #return redirect('home')
 
-def seleccionar_plantas(request):
-    plantas = Planta.objects.all()
-    if request.method == 'POST':
-        form = SeleccionarPlantaForm(request.POST)
-        if form.is_valid():
-            planta = form.cleaned_data['planta']
-            cantidad = form.cleaned_data['cantidad']
-            
-            # Verificar si la cantidad seleccionada supera el stock disponible
-            if cantidad > planta.stock:
-                error_message = "No hay suficiente stock disponible para esa cantidad."
-                return render(request, 'seleccionar_plantas.html', {'form': form, 'plantas': plantas, 'error_message': error_message})
-            
-            # Crear el registro de Planta_pedido
-            planta_pedido = Planta_pedido(pedido=None, planta=planta, cantidad=cantidad)
-            planta_pedido.save()
-
-    else:
-        form = SeleccionarPlantaForm()
-
-    return render(request, 'seleccionar_plantas.html', {'form': form, 'plantas': plantas})
+def seleccionar_plantas_pedido(request):
+    return render(request, 'seleccionar_plantas.html', {})
 
 
 def MenuEjecutivos(request):

@@ -15,7 +15,7 @@ urlpatterns=[
     path('catalogo/',Catalogo,name='catalogo'),
     path('detalle_planta/<int:id>/', DetallePlanta, name='detalle_planta'),
     path('menu_pedidos/', menuArriendo, name='menuArriendo'),
-    path('seleccionar_plantas/',seleccionar_plantas,name='seleccionar_plantas'),
+    path('seleccionar_plantas/',seleccionar_plantas_pedido,name='seleccionar_plantas'),
 
     path('menu_ejecutivos/', MenuEjecutivos, name='menu_ejecutivos'),
     path('crear_ejecutivo/', CrearEjecutivo, name='crear_ejecutivo'),
