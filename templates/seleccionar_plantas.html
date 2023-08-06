@@ -1,0 +1,53 @@
+{%extends 'base.html'%}
+{%block content%}
+{%load static%}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center mt-5 mb-2">
+            <h5 class="display-5">Selecciona tus Plantas..{{pedido.pk}}</h5>
+            <h5 class="">Presiona Sobre ellas y Selecciona cuantas quieres arrendar..</h5>
+
+        </div>
+    </div>
+    <div class="row my-5">
+        <div class="col-1"></div>
+        <div class="col-9 container recuadro border-5 rounded-7  px-5 pt-5">
+            <div class="row">
+                <div class="col-1 mb-3"></div>
+                <div class="col-11 mb-3">
+                    <h5 class="display-6"><u>Arbustos</u></h5>
+                </div>
+                {%for a in arbusto%}
+                    <div class="col-4 text-center my-4">
+                            <a href="{%url 'detalle_seleccion_plantas' id=a.id%}"><img src="{{a.imagen.url}}" alt="" class="w-100 px-5">
+                            <h5 >{{a.nombre}}</h5>
+                            <h5>{{a.nombre_cientifico}}</h5></a>
+                    </div>
+                {%endfor%}
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-1 mt-5 mb-3"></div>
+                <div class="col-11 mt-5 mb-3">
+                    <h5 class="display-6"><u>Arboles</u></h5>
+                </div>
+                {%for a in arbol%}
+                    <div class="col-3 text-center my-4">
+                            <img src="{{a.imagen.url}}" alt="" class="w-100 px-5">
+                            <h5 >{{a.nombre}}</h5>
+                            <h5>{{a.nombre_cientifico}}</h5>
+                    </div>
+                {%endfor%}
+            </div>
+        </div>
+        <!--PLANTAS YA SELECCIONADAS-->
+        <div class="col-1">
+            {%for a in planta_pedido%}
+                {{a.planta.nombre}}
+            {%endfor%}
+        </div>
+
+        <div class="col-1"></div>
+    </div>
+</div>
+{%endblock%}

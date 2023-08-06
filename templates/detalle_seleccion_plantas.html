@@ -1,0 +1,35 @@
+{%extends 'base.html'%}
+{%block content%}
+{%load static%}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3 class="display-5 my-3 mt-4">Cuantas {{planta.nombre}} desea arrendar?</h3>
+            </div>
+
+        </div>
+        <div class="row recuadro my-4 py-5">
+            <div class="col-3"></div>
+            <div class="col-3">
+                <img src="{{planta.imagen.url}}" alt="" class="w-100">
+            </div>
+            <div class="col-3">
+                <h4 class="mt-5">{{planta.nombre}}</h4>
+                <h5>Nombre Cientifico: {{planta.nombre_cientifico}}</h5>
+                <h5 class="">Stock Disponible: {{planta.stock}}</h5>
+                <form method="POST" class="mt-4 text-center">
+                    {%csrf_token%}
+                    <p class="text-danger">{{problem}}</p>
+                    {{form.cantidad}}
+                    <div class="text-center d-flex justify-content-around">
+                        <button type="submit" class="btn btn-success botoncito px-5 py-3 mt-3 text-center">Agregar al Pedido</button>
+                </div>
+                </form>
+
+            </div>
+            <div class="col-1 "><img class="w-50" src="{% static 'C:\Users\Tomas\Desktop\rentaGarden\static\img\cancel.png' %}" alt=""></div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+
+{%endblock%}

@@ -14,8 +14,13 @@ urlpatterns=[
     path('crear_arrendatario/',Crear_arrendatario,name="crear_arrendatario"),
     path('catalogo/',Catalogo,name='catalogo'),
     path('detalle_planta/<int:id>/', DetallePlanta, name='detalle_planta'),
+
+
     path('menu_pedidos/', menuArriendo, name='menuArriendo'),
     path('seleccionar_plantas/',seleccionar_plantas_pedido,name='seleccionar_plantas'),
+    path('detalle_seleccion_plantas/<int:id>/',detalle_seleccion_plantas,name='detalle_seleccion_plantas'),
+
+
 
     path('menu_ejecutivos/', MenuEjecutivos, name='menu_ejecutivos'),
     path('crear_ejecutivo/', CrearEjecutivo, name='crear_ejecutivo'),

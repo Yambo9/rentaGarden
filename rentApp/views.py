@@ -169,7 +169,22 @@ def menuArriendo(request):
                     return render(request,'menuPedidos.html')
                 else:
                     print("LOS DATOS PERSONALES DEL USUARIO ESTAN COMPLETOS")
-                    return render(request,'menuPedidos.html',{'arrendatario':arrendatario})
+                    #ACA TENEMOS QUE VER SI EL USUARIO YA TIENE UN PEDIDO EN PROCESO
+                    try:
+                        pedido = Pedido.objects.filter(arrendatario = arrendatario).first()
+                        if(pedido is None):
+                            #SI NO EXISTE CREAMOS EL PEDIDO Y LO MANDAMOS A SELECCION DE PLANTAS
+                            pedidito = Pedido.objects.create(arrendatario=arrendatario)
+                            pedidito.save()
+                            return redirect('seleccionar_plantas')
+                        else:
+                            #SI EXISTE LO MANDAMOS A LA SELECCION DE PLANTAS
+                            return redirect('seleccionar_plantas')
+
+
+                    except:
+                        print("Ocurrio un problema al recibir si hay un pedido en proceso")
+                        return redirect('home')
             except:
                 print("Ocurrio un problema al ver si el usuario tiene datos personales Completados")
                 return redirect('profile')
@@ -180,10 +195,60 @@ def menuArriendo(request):
         print('Ocurrio un error al encontrar al Usuario')
         return redirect('home')
 
+@login_required
 def seleccionar_plantas_pedido(request):
-    return render(request, 'seleccionar_plantas.html', {})
+    try:
+        arbol = Planta.objects.filter(categoria='Arbol')
+        arbusto = Planta.objects.filter(categoria='Arbusto')
+        arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
+        pedido = Pedido.objects.filter(arrendatario=arrendatario).first()
 
+        #ENCONTRANDO LAS PLANTAS YA SELECCIONADAS
+        try:
+            plantas_pedido = Planta_pedido.objects.filter(pedido = pedido)
+            return render(request, 'seleccionar_plantas.html', {'arbol':arbol,'arbusto':arbusto,'pedido':pedido,'planta_pedido':plantas_pedido})
+        except:
+            print('OCURRIO un problema al encontrar las plantas del pedido')
+    except:
+        print("Ocurrio un problema al encontrar algo")
+        return redirect('home')
 
+@login_required
+def detalle_seleccion_plantas(request, id):
+    try:
+        planta = Planta.objects.filter(pk=id).first()
+        form = SeleccionarPlantaForm()
+        if request.method == 'POST':
+            form = SeleccionarPlantaForm(request.POST)
+            if form.is_valid():
+                arrendatarioo = Arrendatario.objects.filter(usuario=request.user).first()
+                try:
+                    pedido = Pedido.objects.filter(arrendatario=arrendatarioo).first()
+                    if pedido is not None:
+                        #VIENDO SI EL PEDIDO COINCIDE CON EL STOCK
+                        cantidad = int(request.POST['cantidad'])
+                        if(planta.stock >= cantidad):
+                            planta_pedido = Planta_pedido.objects.create(pedido=pedido, planta=planta, cantidad=form.cleaned_data['cantidad'])
+                            planta_pedido.save()
+                            print("Pedido guardado correctamente")
+                            return redirect('detalle_seleccion_plantas', id=id)
+                        else:
+                            print("EL stock no coincide")
+                            return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'La cantidad de plantas del pedido es mayor al stock existente.'})
+                    else:
+                        print('Ocurrio un problema en el tramo final')
+                        return redirect('home')
+                except:
+                    print("Ocurrio un problema al encontrar el pedido")
+                    return redirect('home')
+            else:
+                print(form.errors)
+
+        return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form})
+    except:
+        print("Ocurrio un problema al encontrar la planta")
+        return redirect('home')
+    
 def MenuEjecutivos(request):
     try:
         admin = Admin.objects.get(usuario=request.user)

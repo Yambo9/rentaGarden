@@ -107,12 +107,15 @@ class Planta(models.Model):
     
 class Pedido(models.Model):
     arrendatario = models.ForeignKey(Arrendatario,on_delete=models.CASCADE)
-    ejecutivo = models.ForeignKey(Ejecutivo,on_delete=models.CASCADE)
-    comuna = models.ForeignKey(Comuna,on_delete=models.CASCADE)
-    direccion = models.CharField(max_length=200)
+    ejecutivo = models.ForeignKey(Ejecutivo,on_delete=models.CASCADE,null=True,blank=True)
+    comuna = models.ForeignKey(Comuna,on_delete=models.CASCADE,null=True,blank=True)
+    direccion = models.CharField(max_length=200,null=True,blank=True)
+    proceso = models.BooleanField(default=True)
+    terminado = models.BooleanField(default=False)
+    seleccionPlantasLista = models.BooleanField(default=False)
     numero = models.IntegerField(null=True,blank=True)
-    fecha_inicio = models.DateField()
-    fecha_termino = models.DateField()
+    fecha_inicio = models.DateField(null=True,blank=True)
+    fecha_termino = models.DateField(null=True,blank=True)
     hora_inicio = models.TimeField(null=True,blank=True)
     hora_termino = models.TimeField(null=True,blank=True)
     instrucciones = models.TextField(null=True,blank=True)
@@ -120,7 +123,7 @@ class Pedido(models.Model):
     valor =  models.DecimalField(max_digits=8, decimal_places=2,null=True,blank=True)
     valorFlete = models.DecimalField(max_digits=8, decimal_places=2,null=True,blank=True)
     def __str__(self) -> str:
-        return "Arriendo - " + self.arrendatario.usuario.first_name + " " + self.arrendatario.usuario.last_name + " - " + self.fecha_inicio 
+        return "Arriendo - " + self.arrendatario.usuario.first_name
 
 class Mensaje(models.Model):
     pedido = models.ForeignKey(Pedido,on_delete=models.CASCADE)

@@ -26,11 +26,6 @@ class ArrendatarioForm(forms.ModelForm):
         model = Arrendatario
         exclude = ['usuario', 'ultimo_login']
 
-
-
-
-from django import forms
-
 class EjecutivoForm(forms.Form):
     email = forms.EmailField(label="Correo Electrónico", max_length=150, required=True)
     nombre = forms.CharField(label="Nombres", max_length=200, required=True)
@@ -55,15 +50,13 @@ class EjecutivoForm(forms.Form):
 
 
 class SeleccionarPlantaForm(forms.Form):
-    planta = forms.ModelChoiceField(queryset=Planta.objects.all(), widget=forms.CheckboxSelectMultiple)
-    cantidad = forms.IntegerField(widget=forms.NumberInput(attrs={'min': 1}))
-
-    def clean_cantidad(self):
-        cantidad = self.cleaned_data.get('cantidad')
-        planta = self.cleaned_data.get('planta')
-
-        if cantidad is not None and planta is not None:
-            if cantidad > planta.stock:
-                raise forms.ValidationError(f"La cantidad no puede ser mayor al stock ({planta.stock}).")
-
-        return cantidad
+    cantidad = forms.IntegerField(
+        widget=forms.NumberInput(
+            attrs={
+                'min': 1,
+                'class': 'form-control mb-3 rounded-5 mt-5',
+                'placeholder': 'Ingrese la cantidad de plantas a arrendar'}
+        )
+    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
