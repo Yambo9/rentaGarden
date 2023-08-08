@@ -228,10 +228,16 @@ def detalle_seleccion_plantas(request, id):
                         #VIENDO SI EL PEDIDO COINCIDE CON EL STOCK
                         cantidad = int(request.POST['cantidad'])
                         if(planta.stock >= cantidad):
-                            planta_pedido = Planta_pedido.objects.create(pedido=pedido, planta=planta, cantidad=form.cleaned_data['cantidad'])
-                            planta_pedido.save()
-                            print("Pedido guardado correctamente")
-                            return redirect('detalle_seleccion_plantas', id=id)
+                            #VIENDO SI HAY ALGUN REGISTRO EN ESTE PEDIDO DE LA MISMA PLANTA
+                            revision = Planta_pedido.objects.filter(pedido=pedido,planta=planta).first()
+                            if revision is not None:
+                                print("ESTA PLANTA YA ESTA EN ESTE PEDIDO")
+                                return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'Este pedido ya tiene registrada esta planta.'})
+                            else:
+                                planta_pedido = Planta_pedido.objects.create(pedido=pedido, planta=planta, cantidad=form.cleaned_data['cantidad'])
+                                planta_pedido.save()
+                                print("Pedido guardado correctamente")
+                                return redirect('detalle_seleccion_plantas', id=id)
                         else:
                             print("EL stock no coincide")
                             return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'La cantidad de plantas del pedido es mayor al stock existente.'})
@@ -248,7 +254,11 @@ def detalle_seleccion_plantas(request, id):
     except:
         print("Ocurrio un problema al encontrar la planta")
         return redirect('home')
-    
+
+@login_required  
+def Eliminar_seleccion(request,id):
+    return redirect('seleccionar_plantas')
+
 def MenuEjecutivos(request):
     try:
         admin = Admin.objects.get(usuario=request.user)

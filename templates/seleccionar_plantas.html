@@ -1,6 +1,9 @@
 {%extends 'base.html'%}
 {%block content%}
 {%load static%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-center mt-5 mb-2">
@@ -9,9 +12,9 @@
 
         </div>
     </div>
-    <div class="row my-5">
+    <div class="row recuadro border-5 rounded-7 pb-5 mb-5  px-5 pt-5 mx-4">
         <div class="col-1"></div>
-        <div class="col-9 container recuadro border-5 rounded-7  px-5 pt-5">
+        <div class="col-8 container ">
             <div class="row">
                 <div class="col-1 mb-3"></div>
                 <div class="col-11 mb-3">
@@ -41,9 +44,27 @@
             </div>
         </div>
         <!--PLANTAS YA SELECCIONADAS-->
-        <div class="col-1">
+        <div class="col-3 borde-izquierdo">
+            <h5 class="mt-4 mx-4">Plantas Seleccionadas para su pedido...</h5>
             {%for a in planta_pedido%}
-                {{a.planta.nombre}}
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10"></div>
+                        <a class="col-2 float-right mb-3" href="{%url 'eliminar_seleccion' id=a.id%}">
+                            <img class=" cerrar " src="{% static 'C:\Users\Tomas\Desktop\rentaGarden\static\img\X.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <h6 class=" mb-3 mx-3 text-center">{{a.planta.nombre}} X {{a.planta.stock}}</h6>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3"></div>
+                        <img src="{{a.planta.imagen.url}}" alt="" class="col-6 mb-2">
+
+                        <div class="col-3"></div>
+                    </div>
+                </div>
             {%endfor%}
         </div>
 

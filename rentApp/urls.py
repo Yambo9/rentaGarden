@@ -19,6 +19,7 @@ urlpatterns=[
     path('menu_pedidos/', menuArriendo, name='menuArriendo'),
     path('seleccionar_plantas/',seleccionar_plantas_pedido,name='seleccionar_plantas'),
     path('detalle_seleccion_plantas/<int:id>/',detalle_seleccion_plantas,name='detalle_seleccion_plantas'),
+    path('eliminar_seleccion/<int:id>/',Eliminar_seleccion,name='eliminar_seleccion'),
 
 
 

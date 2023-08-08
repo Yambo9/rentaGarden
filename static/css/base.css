@@ -2,7 +2,10 @@
     background-color: rgb(4, 75, 49);
     color: whitesmoke;
 }
-
+.borde-izquierdo{
+    border-left: 2px solid whitesmoke;
+}
+.cerrar{font-family: 'Roboto', sans-serif; width: 50%;}
 .footer{
     background-color: rgb(4, 75, 49);
     color: whitesmoke;
