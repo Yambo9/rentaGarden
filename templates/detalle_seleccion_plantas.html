@@ -17,6 +17,8 @@
                 <h4 class="mt-5">{{planta.nombre}}</h4>
                 <h5>Nombre Cientifico: {{planta.nombre_cientifico}}</h5>
                 <h5 class="">Stock Disponible: {{planta.stock}}</h5>
+                <h5 class="">Valor Unidad: {{planta.valor}}</h5>
+
                 <form method="POST" class="mt-4 text-center">
                     {%csrf_token%}
                     <p class="text-danger">{{problem}}</p>

@@ -100,7 +100,7 @@ class Planta(models.Model):
     stock = models.IntegerField()
     floracion = models.CharField(max_length=100, null=True,blank=True)
     familia = models.CharField(max_length=150, null=True,blank=True)
-    valor = models.DecimalField(max_digits=8, decimal_places=2)
+    valor = models.IntegerField()
     imagen = models.ImageField(upload_to='plantas/', null=True, blank=True)
     def __str__(self) -> str:
         return self.nombre_cientifico + " (" + self.nombre + ")" 
@@ -120,7 +120,7 @@ class Pedido(models.Model):
     hora_termino = models.TimeField(null=True,blank=True)
     instrucciones = models.TextField(null=True,blank=True)
     peso =  models.DecimalField(max_digits=7, decimal_places=2,null=True,blank=True)
-    valor =  models.DecimalField(max_digits=8, decimal_places=2,null=True,blank=True)
+    valor =  models.IntegerField(null=True,blank=True)
     valorFlete = models.DecimalField(max_digits=8, decimal_places=2,null=True,blank=True)
     def __str__(self) -> str:
         return "Arriendo - " + self.arrendatario.usuario.first_name

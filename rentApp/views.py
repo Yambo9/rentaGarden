@@ -205,8 +205,12 @@ def seleccionar_plantas_pedido(request):
 
         #ENCONTRANDO LAS PLANTAS YA SELECCIONADAS
         try:
-            plantas_pedido = Planta_pedido.objects.filter(pedido = pedido)
-            return render(request, 'seleccionar_plantas.html', {'arbol':arbol,'arbusto':arbusto,'pedido':pedido,'planta_pedido':plantas_pedido})
+
+            plantas_pedido = Planta_pedido.objects.filter(pedido=pedido)
+            conteo = sum([pp.cantidad for pp in plantas_pedido])
+            valor_total = sum([pp.planta.valor * pp.cantidad for pp in plantas_pedido])
+            valor_total_formatted = "{:,.0f}".format(valor_total).replace(",", ".")
+            return render(request, 'seleccionar_plantas.html', {'conteo':conteo,'valor':valor_total,'valor_formateado':valor_total_formatted,'arbol':arbol,'arbusto':arbusto,'pedido':pedido,'planta_pedido':plantas_pedido})
         except:
             print('OCURRIO un problema al encontrar las plantas del pedido')
     except:
@@ -237,7 +241,7 @@ def detalle_seleccion_plantas(request, id):
                                 planta_pedido = Planta_pedido.objects.create(pedido=pedido, planta=planta, cantidad=form.cleaned_data['cantidad'])
                                 planta_pedido.save()
                                 print("Pedido guardado correctamente")
-                                return redirect('detalle_seleccion_plantas', id=id)
+                                return redirect('seleccionar_plantas')
                         else:
                             print("EL stock no coincide")
                             return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'La cantidad de plantas del pedido es mayor al stock existente.'})
@@ -257,7 +261,12 @@ def detalle_seleccion_plantas(request, id):
 
 @login_required  
 def Eliminar_seleccion(request,id):
+    seleccion = Planta_pedido.objects.filter(pk=id).first()
+    seleccion.delete()
     return redirect('seleccionar_plantas')
+
+
+
 
 def MenuEjecutivos(request):
     try:

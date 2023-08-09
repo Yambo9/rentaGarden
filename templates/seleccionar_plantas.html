@@ -5,10 +5,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 <div class="container-fluid">
-    <div class="row">
+    <div class="row my-5">
         <div class="col-12 text-center mt-5 mb-2">
-            <h5 class="display-5">Selecciona tus Plantas..{{pedido.pk}}</h5>
-            <h5 class="">Presiona Sobre ellas y Selecciona cuantas quieres arrendar..</h5>
+            <h5 class="display-5">Selecciona tus Plantas</h5>
+            <h5 class=" mb-5">Presiona Sobre ellas y Selecciona cuantas quieres arrendar</h5>
 
         </div>
     </div>
@@ -36,9 +36,11 @@
                 </div>
                 {%for a in arbol%}
                     <div class="col-3 text-center my-4">
+                        <a href="{%url 'detalle_seleccion_plantas' id=a.id%}">
                             <img src="{{a.imagen.url}}" alt="" class="w-100 px-5">
                             <h5 >{{a.nombre}}</h5>
                             <h5>{{a.nombre_cientifico}}</h5>
+                        </a>
                     </div>
                 {%endfor%}
             </div>
@@ -46,6 +48,11 @@
         <!--PLANTAS YA SELECCIONADAS-->
         <div class="col-3 borde-izquierdo">
             <h5 class="mt-4 mx-4">Plantas Seleccionadas para su pedido...</h5>
+            <hr>
+            <h5 class="mx-2">Cantidad de plantas: {{conteo}}</h5>
+            <h5 class="mx-2">Valor Total: {{valor_formateado}}</h5>
+            <button class="btn btn-warning text-center">Concretar Pedido</button>
+
             {%for a in planta_pedido%}
                 <hr>
                 <div class="container">
@@ -56,7 +63,7 @@
                         </a>
                     </div>
                 </div>
-                <h6 class=" mb-3 mx-3 text-center">{{a.planta.nombre}} X {{a.planta.stock}}</h6>
+                <h6 class=" mb-3 mx-3 text-center">{{a.planta.nombre}} X {{a.cantidad}}</h6>
                 <div class="container">
                     <div class="row">
                         <div class="col-3"></div>
