@@ -60,3 +60,8 @@ class SeleccionarPlantaForm(forms.Form):
     )
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+class CrearPlantaForm(forms.ModelForm):
+    class Meta:
+        model = Planta
+        fields = '__all__'

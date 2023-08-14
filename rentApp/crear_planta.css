@@ -1,0 +1,28 @@
+/* Agrega estos estilos en tu archivo CSS */
+
+.formulario-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centrar verticalmente */
+    margin-bottom: 10px;
+  }
+  
+  .form-row label {
+    flex: 0.3; /* El 30% del ancho del contenedor */
+  }
+  
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    flex: 0.65; /* El 65% del ancho del contenedor */
+  }
+  
+  /* Ajusta los estilos según tus preferencias */

@@ -26,6 +26,16 @@ urlpatterns=[
     path('menu_ejecutivos/', MenuEjecutivos, name='menu_ejecutivos'),
     path('crear_ejecutivo/', CrearEjecutivo, name='crear_ejecutivo'),
 
+    path('crear_planta/', crear_planta, name='crear_planta'),
+    path('menu_plantas/',MenuPlantas,name='menu_plantas'),
+    path('modificar_planta/<int:id>/',ModificarPlanta,name='modificar_planta'),
+    path('eliminar_planta/<int:id>/',EliminarPlanta,name='eliminar_planta'),
+    path('plantas_eliminadas/',PlantasBorradas,name='plantas_eliminadas'),
+    path('reponer_plantas.html/<int:id>/',ReponerPlanta,name='reponer_planta'),
+
+
+
+
     path('eliminar_ejecutivo/<int:id>/', EliminarEjecutivo, name='eliminar_ejecutivo'),
     path('modificar_ejecutivo/<int:id>/', ModificarEjecutivo, name='modificar_ejecutivo'),
 

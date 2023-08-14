@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="container-fluid">
+    <div class="row">
+        <h3 class="col-12 display-4 text-center my-4 mt-5">Eliminar Planta</h3>
+        <hr>
+        <h4 class="text-center my-4 mb-5 col-12">¿ Seguro que quieres eliminar la planta {{planta.nombre}} ?</h4>
+        <div class="col-5 mb-5"></div>
+        <form method="POST" class="col-2 ">
+            {%csrf_token%}
+            <button class=" w-100 px-5 py-4 px-4 btn btn-danger border border-dark">ELIMINAR</button>
+        </form>
+        <div class="col-5 mb-5"></div>
+        <hr class="mb-5 my-5">
+    </div>
+</div>
+<br><br><br>
+{%endblock%}

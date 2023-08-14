@@ -5,6 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 import random
 from .models import *
+from django.db.models import F, Sum
 from django.contrib import messages
 
 # Create your views here.
@@ -377,3 +378,60 @@ def EliminarEjecutivo(request,id):
     except:
         print("Ocurrio un error al eliminar al ejecutivo.")
         return redirect('home')
+
+@login_required
+def MenuPlantas(request):
+    plantas = Planta.objects.all()
+    arbustos = Planta.objects.filter(categoria='Arbusto',archivada='False')
+    arboles = Planta.objects.filter(categoria='Arbol',archivada='False')
+    tipos_plantas = Planta.objects.filter(archivada='False').count()
+    peso_total = Planta.objects.filter(archivada='False').aggregate(total_peso=Sum(F('peso') * F('stock')))['total_peso']
+    cantidad_total = Planta.objects.filter(archivada='False').aggregate(Sum('stock'))['stock__sum']
+    return render(request,'menu_plantas.html',{'plantas':plantas,'arbustos':arbustos,'arboles':arboles,'peso_total':peso_total,'cantidad_total':cantidad_total,'tipos_plantas':tipos_plantas})
+
+@login_required    
+def EliminarPlanta(request,id):
+        planta = Planta.objects.filter(pk=id).first()
+        if request.method == 'GET':
+            return render(request,'eliminar_planta.html',{'planta':planta})
+        else:
+            planta.archivada = True
+            planta.save()
+            return redirect('menu_plantas')
+
+
+@login_required    
+def ModificarPlanta(request,id):
+    return render(request,'modificar_planta.html',{})
+
+@login_required 
+def crear_planta(request):
+    if request.method == 'POST':
+        form = CrearPlantaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form = CrearPlantaForm()
+    return render(request, 'crear_planta.html', {'form': form})
+
+@login_required
+def PlantasBorradas(request):
+    try:
+        plantas = Planta.objects.filter(archivada='True')
+        return render(request,'plantas_eliminadas.html',{'plantas':plantas})
+    except:
+        print("Ocurrio un Error al cargar la Planta")
+        return redirect('home')
+    
+@login_required
+def ReponerPlanta(request,id):
+    try:
+        planta = Planta.objects.filter(pk=id).first()
+        if request.method=='GET':
+            return render(request,'reponer_planta.html',{'planta':planta})
+        else:
+            planta.archivada = False
+            planta.save()
+            return redirect('menu_plantas')
+    except:
+        print("Ocurrio un problema al Encontrar la planta")

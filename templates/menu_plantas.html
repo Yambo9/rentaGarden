@@ -1,0 +1,80 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center my-4 d-flex justify-content-center align-items-center">
+            <h3 class="display-2 mx-4">Menu de Plantas</h3>
+            <a href="{%url 'crear_planta'%}"><button class="rounded-4 mx-4 py-2 px-4 display-6">Agregar Planta</button></a>
+        </div>
+        <hr>
+        <div class="col-1"></div>
+        <div class="col-10 my-4 d-flex justify-content-around align-items-center">
+            <div class="text-center"><h1 class="display-3">{{cantidad_total}}</h1><h4>Cantidad de Plantas</h4></div>
+            <div class="text-center"><h1 class="display-3">{{peso_total}} KG</h1><h4>Peso Total de las Plantas</h4></div>
+            <div class="text-center"><h1 class="display-3">{{tipos_plantas}}</h1><h4>Distintas Plantas</h4></div>
+        </div>
+        <div class="col-1"></div>
+        <hr>
+        <div class="col-3"></div>
+        <div class="col-6"><u><h3 class="display-5 mt-4">Arbustos</h3></u></div>
+        <div class="col-3"></div>
+
+        {%for a in arbustos%}
+        <div class="col-3"></div>
+        <div class="col-6 container-fluid border border-dark">
+            <div class="row my-4">
+                <img class="col-4" src="{{a.imagen.url}}" alt="">
+                <div class="col-8">
+                    <u><h3 class="mb-3 text-center mb-3">{{a.nombre}}</h3></u>
+                    <h5>Nombre Cientifico: {{a.nombre_cientifico}}</h5>
+                    <h5 class="">Perenne: {{a.perenne}}</h5>
+                    <h5 class="">Floración: {{a.floracion}}</h5>
+                    <h5 class="">Altura: {{a.altura}}</h5>
+                    <h5 class="">Peso: {{a.peso}}</h5>
+                    <div class="d-flex text-center justify-content-center my-2">
+                        <button class="btn btn-primary mx-4">Modificar</button>
+                        <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+        {%endfor%}
+
+        <hr class="my-3">
+
+        <div class="col-3"></div>
+        <div class="col-6 mt-3"><u><h3 class="display-5">Arboles</h3></u></div>
+        <div class="col-3"></div>
+
+        {%for a in arboles%}
+        <div class="col-3"></div>
+        <div class="col-6 container-fluid border border-dark">
+            <div class="row my-4">
+                <img class="col-3" src="{{a.imagen.url}}" alt="">
+                <div class="col-1"></div>
+                <div class="col-8">
+                    <u><h3 class="mb-5 text-center">{{a.nombre}}</h3></u>
+                    <h5>Nombre Cientifico: {{a.nombre_cientifico}}</h5>
+                    <h5 class="">Perenne: {{a.perenne}}</h5>
+                    <h5 class="">Floración: {{a.floracion}}</h5>
+                    <h5 class="">Altura: {{a.altura}}</h5>
+                    <h5 class="">Peso: {{a.peso}}</h5>
+                    <div class="d-flex text-center justify-content-center my-4">
+                        <button class="btn btn-primary mx-4">Modificar</button>
+                        <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+        {%endfor%}
+        <hr class="my-4">
+        <div class="col-12 d-flex justify-content-center my-4">
+            <a href="{%url 'plantas_eliminadas'%}"><button class="display-4 mb-5 btn py-4 px-5 border border-dark">IR AL LISTADO DE PLANTAS ELIMINADAS</button></a>
+        </div>
+    </div>
+</div>
+{%endblock%}

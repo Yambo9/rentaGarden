@@ -102,6 +102,7 @@ class Planta(models.Model):
     familia = models.CharField(max_length=150, null=True,blank=True)
     valor = models.IntegerField()
     imagen = models.ImageField(upload_to='plantas/', null=True, blank=True)
+    archivada = models.BooleanField(default=False)
     def __str__(self) -> str:
         return self.nombre_cientifico + " (" + self.nombre + ")" 
     
