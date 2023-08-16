@@ -23,7 +23,9 @@
         <div class="col-3"></div>
         <div class="col-6 container-fluid border border-dark">
             <div class="row my-4">
-                <img class="col-4" src="{{a.imagen.url}}" alt="">
+                {% if a.imagen %}
+                    <img class="col-4" src="{{ a.imagen.url }}" alt="">
+                {% endif %}
                 <div class="col-8">
                     <u><h3 class="mb-3 text-center mb-3">{{a.nombre}}</h3></u>
                     <h5>Nombre Cientifico: {{a.nombre_cientifico}}</h5>

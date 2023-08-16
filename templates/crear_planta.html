@@ -3,56 +3,70 @@
 
 {% block content %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/tu_archivo_de_estilos.css' %}"> <!-- Enlace al archivo de estilos CSS -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8 text-center">
+      <div class="formulario-container">
+        <h2 class="my-5">Crear Nueva Planta</h2>
+        <form method="post" enctype="multipart/form-data">  <!-- Agregado enctype -->
+          {% csrf_token %}
+          <div class="form-row my-2">
+            <label class="my-3" for="{{ form.nombre.id_for_label }}">Nombre:</label>
+            {{ form.nombre }}
+            <label class="my-3" for="{{ form.nombre_cientifico.id_for_label }}">Nombre Científico:</label>
+            {{ form.nombre_cientifico }}
+            <label class="my-3" for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+            {{ form.descripcion }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.altura.id_for_label }}">Altura:</label>
+            {{ form.altura }}
+            <label class="my-3" for="{{ form.tamaño_m2.id_for_label }}">Tamaño (m2):</label>
+            {{ form.tamaño_m2 }}
+            <label class="my-3" for="{{ form.peso.id_for_label }}">Peso:</label>
+            {{ form.peso }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.categoria.id_for_label }}">Categoría:</label>
+            {{ form.categoria }}
+            <label class="my-3" for="{{ form.perenne.id_for_label }}">Perenne:</label>
+            {{ form.perenne }}
+            <label class="my-3" for="{{ form.riego.id_for_label }}">Riego:</label>
+            {{ form.riego }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.cuidados.id_for_label }}">Cuidados:</label>
+            <textarea name="{{ form.cuidados.name }}" id="{{ form.cuidados.id_for_label }}" rows="4">{{ form.cuidados.value }}</textarea>
+            <label class="my-3" for="{{ form.stock.id_for_label }}">Stock:</label>
+            {{ form.stock }}
+            <label class="my-3" for="{{ form.floracion.id_for_label }}">Floración:</label>
+            {{ form.floracion }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.familia.id_for_label }}">Familia:</label>
+            {{ form.familia }}
+            <label class="my-3" for="{{ form.valor.id_for_label }}">Valor:</label>
+            {{ form.valor }}
+            <label class="my-3" for="{{ form.imagen.id_for_label }}">Imagen:</label>
+            {{ form.imagen }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.archivada.id_for_label }}">Archivada:</label>
+            {{ form.archivada }}
+          </div>
+          <div class="form-row">
+            <label class="my-3" for="{{ form.caracteristica.id_for_label }}">Características:</label>
+            {{ form.caracteristica }}
+          </div>
+          <button type="submit">Guardar Planta</button>
+        </form>
+      
+    </div>
+    <div class="col-2"></div>
 
-  <div class="formulario-container">
-    <h2>Crear Nueva Planta</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="form-row">
-        <label for="{{ form.nombre.id_for_label }}">Nombre:</label>
-        {{ form.nombre }}
-        <label for="{{ form.nombre_cientifico.id_for_label }}">Nombre Científico:</label>
-        {{ form.nombre_cientifico }}
-        <label for="{{ form.descripcion.id_for_label }}">Descripción:</label>
-        {{ form.descripcion }}
-      </div>
-      <div class="form-row">
-        <label for="{{ form.altura.id_for_label }}">Altura:</label>
-        {{ form.altura }}
-        <label for="{{ form.tamaño_m2.id_for_label }}">Tamaño (m2):</label>
-        {{ form.tamaño_m2 }}
-        <label for="{{ form.peso.id_for_label }}">Peso:</label>
-        {{ form.peso }}
-      </div>
-      <div class="form-row">
-        <label for="{{ form.categoria.id_for_label }}">Categoría:</label>
-        {{ form.categoria }}
-        <label for="{{ form.perenne.id_for_label }}">Perenne:</label>
-        {{ form.perenne }}
-        <label for="{{ form.riego.id_for_label }}">Riego:</label>
-        {{ form.riego }}
-      </div>
-      <div class="form-row">
-        <label for="{{ form.cuidados.id_for_label }}">Cuidados:</label>
-        <textarea name="{{ form.cuidados.name }}" id="{{ form.cuidados.id_for_label }}" rows="4">{{ form.cuidados.value }}</textarea>
-        <label for="{{ form.stock.id_for_label }}">Stock:</label>
-        {{ form.stock }}
-        <label for="{{ form.floracion.id_for_label }}">Floración:</label>
-        {{ form.floracion }}
-      </div>
-      <div class="form-row">
-        <label for="{{ form.familia.id_for_label }}">Familia:</label>
-        {{ form.familia }}
-        <label for="{{ form.valor.id_for_label }}">Valor:</label>
-        {{ form.valor }}
-        <label for="{{ form.imagen.id_for_label }}">Imagen:</label>
-        {{ form.imagen }}
-      </div>
-      <div class="form-row">
-        <label for="{{ form.archivada.id_for_label }}">Archivada:</label>
-        {{ form.archivada }}
-      </div>
-      <button type="submit">Guardar Planta</button>
-    </form>
+  </div>
+</div>
+  
   </div>
 {% endblock %}

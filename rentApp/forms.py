@@ -62,6 +62,8 @@ class SeleccionarPlantaForm(forms.Form):
         super().__init__(*args, **kwargs)
 
 class CrearPlantaForm(forms.ModelForm):
+    caracteristica = forms.ModelMultipleChoiceField(queryset=Caracteristica.objects.all())  # Ajusta el queryset
+    
     class Meta:
         model = Planta
         fields = '__all__'

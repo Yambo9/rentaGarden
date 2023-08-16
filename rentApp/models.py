@@ -86,7 +86,7 @@ class Planta(models.Model):
         ('Suculenta', 'Suculenta'),
         ('Cactus', 'Cactus'),
     )
-    caracteristica = models.ManyToManyField(Caracteristica)
+    caracteristica = models.ManyToManyField(Caracteristica, blank=True)
     nombre = models.CharField(max_length=150)
     nombre_cientifico = models.CharField(max_length=150)
     descripcion = models.TextField(default="",null=True,blank=True)

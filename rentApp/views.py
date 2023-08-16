@@ -404,24 +404,26 @@ def EliminarPlanta(request,id):
 def ModificarPlanta(request,id):
     return render(request,'modificar_planta.html',{})
 
-@login_required 
+@login_required
 def crear_planta(request):
     if request.method == 'POST':
         form = CrearPlantaForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            return redirect('menu_plantas')
+        else:
+            print(form.errors)
     else:
         form = CrearPlantaForm()
     return render(request, 'crear_planta.html', {'form': form})
 
+
 @login_required
 def PlantasBorradas(request):
-    try:
+
         plantas = Planta.objects.filter(archivada='True')
         return render(request,'plantas_eliminadas.html',{'plantas':plantas})
-    except:
-        print("Ocurrio un Error al cargar la Planta")
-        return redirect('home')
+
     
 @login_required
 def ReponerPlanta(request,id):
