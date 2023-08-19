@@ -135,6 +135,25 @@ class Mensaje(models.Model):
     def __str__(self) -> str:
         return self.pedido.arrendatario.usuario.first_name + self.pedido.arrendatario.usuario.last_name + " - " + self.ejecutivo.nombre + " " + self.ejecutivo.apellido
     
+class MensajeAnonimo(models.Model):
+    nombre = models.CharField(max_length=80, null= True, blank= True)
+    asunto = models.CharField(max_length=300,null=True,blank=True)
+    email = models.EmailField(max_length=300)
+    mensaje = models.TextField()
+    fecha = models.DateTimeField(auto_now=True)
+    leido = models.BooleanField(default=False)
+    def __str__(self):
+        return self.nombre + " ( " + self.email + " ) " + " - " + self.asunto
+    
+class RespuestaMensajeAnonimo(models.Model):
+    mensajeAnonimo = models.ForeignKey(MensajeAnonimo,on_delete=models.CASCADE)
+    admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
+    respuesta = models.TextField()
+    fecha = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.admin.nombre + " " + self.admin.apellido + " en respuesta a "+ self.mensajeAnonimo.nombre
+
+
 class Planta_pedido(models.Model):
     pedido = models.ForeignKey(Pedido,on_delete=models.CASCADE)
     planta = models.ForeignKey(Planta,on_delete=models.CASCADE)

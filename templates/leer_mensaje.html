@@ -1,0 +1,60 @@
+{%extends 'base.html'%}
+{%block content%}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-3 d-flex align-items-center mt-4"><u><h3 class="display-5 mx-5">Mensaje</h3></u>
+                 <a href="{%url 'menu_mensajes'%}"><button class="px-5 py-3 btn border border-dark">Volver</button></a>
+            </div>
+            <div class="col-7"></div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8 container mb-5">
+                <div class="row mt-4">
+                    <div class="col-8 border border-dark">
+                        <h4 class="mt-3 mx-4"><b>De: {{mensaje.nombre}}</b></h4>
+                        <h4 class="mt-3 mx-4">Correo: {{mensaje.email}}</h4>
+                        <h4 class="mt-3 mx-4">Asunto: {{mensaje.asunto}}</h4>
+
+                    </div>
+                    <div class="col-4   border border-dark">
+                        <h5 class="mt-4">Fecha: {{mensaje.fecha}}</h5>
+                    </div>
+                    <div class="col-12 border border-dark">
+                        <h6 class="mx-4 mt-3">Mensaje: {{mensaje.mensaje}}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
+        <div class="row mt-2 container-fluid">
+            <div class="col-2"></div>
+            <div class="col-3 mb-4"><u><h3 class="display-5">Respuesta</h3></u></div>
+            <div class="col-7"></div>
+            {%if respuesta%}
+                {%for a in respuesta%}
+                    <div class="col-2"></div>
+                    <div class="col-8 mb-4 py-4 border border-dark">
+                        <h5 class="px-5 mb-3">Respuesta realizada en: {{a.fecha}}</h5>
+                        <h5 class="px-5">Mensaje: {{a.respuesta}}</h5>
+                    </div>
+                    <div class="col-2"></div>
+                {%endfor%}
+            {%else%}
+            <div class="col-2"></div>
+            <div class="col-8 border border-dark">
+                <h5 class="text-center my-4">Este mensaje aun no tiene respuesta</h5>
+            </div>
+            <div class="col-2"></div>
+            {%endif%}
+            <div class="col-2"></div>
+            <form method="POST" class="col-8 mb-5">
+                {%csrf_token%}
+                {{form}}
+                <button class="btn btn-success">Responder</button>
+            </form>
+            <div class="col-2"></div>
+        </div>
+    </div>
+{%endblock%}

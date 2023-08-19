@@ -13,6 +13,10 @@ admin.site.register(Pedido),
 admin.site.register(Mensaje),
 admin.site.register(Planta_pedido),
 admin.site.register(Ejecutivo),
+admin.site.register(MensajeAnonimo),
+admin.site.register(RespuestaMensajeAnonimo),
+
+
 
 
 

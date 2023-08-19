@@ -67,3 +67,30 @@ class CrearPlantaForm(forms.ModelForm):
     class Meta:
         model = Planta
         fields = '__all__'
+
+class PlantaForm(forms.ModelForm):
+    class Meta:
+        model = Planta
+        fields = '__all__'
+
+
+class MensajeAnonimoForm(forms.Form):
+    nombre = forms.CharField(label="nombre", max_length=150, required=True)
+    asunto = forms.CharField(label="asunto", max_length=200, required=False)
+    email = forms.CharField(label="email", max_length=200, required=True)
+    mensaje = forms.CharField(widget=forms.Textarea)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nombre'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['asunto'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['email'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['mensaje'].widget.attrs['class'] = 'form-control mb-4 rounded-5 col-12'
+
+class RespuestaMensajeAnonimoForm(forms.Form):
+    respuesta = forms.CharField(label="respuesta", required=True, widget=forms.Textarea)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['respuesta'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+
+
+

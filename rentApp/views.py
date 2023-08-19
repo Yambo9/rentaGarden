@@ -7,14 +7,16 @@ import random
 from .models import *
 from django.db.models import F, Sum
 from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from rentaPlant import settings
+from django.contrib import messages 
 
 # Create your views here.
 
 def Home(request):
     print(request.user)
     return render(request,'index.html',{})
-
-
 
 def Register(request):
     if request.method == 'POST':
@@ -52,7 +54,6 @@ def Register(request):
         form = RegisterForm()
         return render(request, 'register.html', {'form': form})
 
-
 @login_required
 def Logout(request):
     logout(request)
@@ -69,7 +70,139 @@ def Signin(request):
             return redirect('profile')
         form = AuthenticationForm()       
         return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
+
+
+
+def Mensaje_Anonimo(request):
+    form = MensajeAnonimoForm()
+    try:
+        if request.method == 'GET':
+            return render(request,'mensaje_anonimo.html',{'form':form})
+        else:
+            print(request.POST)
+            if len(request.POST['nombre']) < 5:
+                print("Nombre ingresado es muy corto")
+                return render(request,'mensaje_anonimo.html',{'form':form,'problem':"El nombre ingresado es demasiado corto, ingreselo nuevamente pero más completo."})
+            else:
+                if '.' not in request.POST['email']:
+                    print('EL email ingresado no tiene un punto. Intentelo nuevamente con un correo valido.')
+                    return render(request,'mensaje_anonimo.html',{'form':form,'problem':"EL email ingresado no tiene un punto. Intentelo nuevamente con un correo valido."})
+                else:
+                    if '@' not in request.POST['email']:
+                        print('EL email ingresado no tiene un @. Intentelo nuevamente con un correo valido.')
+                        return render(request,'mensaje_anonimo.html',{'form':form,'problem':"EL email ingresado no tiene un @. Intentelo nuevamente con un correo valido."})
+                    else:
+                        if len(request.POST['mensaje'])<15:
+                            print('EL mensaje es demasiado corto, debe tener a lo menos 16 caracteres.')
+                            return render(request,'mensaje_anonimo.html',{'form':form,'problem':"EL mensaje es demasiado corto, debe tener a lo menos 16 caracteres."})
+                        else:
+                            mensaje = MensajeAnonimo.objects.create(
+                                nombre=request.POST['nombre'],
+                                asunto = request.POST['asunto'],
+                                email = request.POST['email'],
+                                mensaje = request.POST['mensaje'])
+                            mensaje.save()
+
+                            #ENVIANDO EL CORREO
+                            nombre = request.POST['nombre']
+                            asunto = request.POST['asunto']
+                            email = request.POST['email']
+                            message = request.POST['mensaje']
+                            template = render_to_string('email_template.html',{
+                                'nombre':nombre,
+                                'asunto':asunto,
+                                'email':email,
+                                'message':message
+                            })
+                            email = EmailMessage(
+                                asunto,
+                                template,
+                                settings.EMAIL_HOST_USER,
+                                ['rentagardencontrol@gmail.com','tomasvalverdepresidente@gmail.com']
+                            )
+                            email.fail_silently = False
+                            email.send()
+                            messages.success(request,'Se ha enviado un correo.')
+                            #El mail se manda
+                            return render(request,'mensaje_anonimo.html',{'messages':'Tu Mensaje fue enviado correctamente! Te responderemos a la brevedad','form':form})
+    except:
+        print("Ocurrio un error al enviar el mensaje")
+        return render(request,'mensaje_anonimo.html',{'form':form})
+
+@login_required
+def Menu_mensajes(request):
+    #revisando si es admin
+    try:
+        admin = Admin.objects.filter(usuario=request.user).first()
+        if request.method == 'GET':
+            if admin is not None:
+                mensajes = MensajeAnonimo.objects.filter(leido=False)
+                mensajesLeidos = MensajeAnonimo.objects.filter(leido=True).order_by('-fecha')[:10]
+                return render(request, 'menu_mensajes.html',{'mensajes':mensajes,'mensajesLeidos':mensajesLeidos})
+            else:
+                print("No tienes las credenciales para estar aca.")
+                return redirect('home')
+        else:
+            print("Realizando busqueda....")
+    except:
+        print("Ocurrio un error al encontrar los mensajes")
+        return redirect('home')
     
+
+def Leer_mensaje(request,id):
+   
+        mensaje = MensajeAnonimo.objects.filter(pk=id).first()
+        respuesta = RespuestaMensajeAnonimo.objects.filter(mensajeAnonimo = mensaje)
+        form = RespuestaMensajeAnonimoForm()
+        if request.method == 'GET':
+            #Encontrando el mensaje
+            if mensaje is not None:
+                print("El mensaje existe")
+                if mensaje.leido == False:
+                    mensaje.leido = True
+                    mensaje.save()
+                if respuesta is not None:
+                    return render(request, 'leer_mensaje.html',{'mensaje':mensaje,'respuesta':respuesta,'form':form})
+                else:
+                    return render(request, 'leer_mensaje.html',{'mensaje':mensaje,'form':form})
+
+            else:
+                print("MENSAJE NO EXISTE")
+                return redirect('menu_mensajes')
+        else:
+            print("Generando respuesta")
+            admins = Admin.objects.filter(usuario=request.user).first()
+            respuestita = RespuestaMensajeAnonimo.objects.create(
+                mensajeAnonimo=mensaje,
+                admin=admins,
+                respuesta=request.POST['respuesta'],
+            )
+            respuestita.save()
+            print("El mensaje de respuesta fue guardado correctamente")
+            #ENVIANDO EL EMAIL
+            correo = mensaje.email
+            mensajito   = respuestita.respuesta
+            asunto = "Respuesta Rentagarden"
+            template = render_to_string('RespuestaTemplate.html',{
+                'mensajito':mensajito
+            })
+            email = EmailMessage(
+                asunto,  # Asunto del correo
+                template,  # Contenido del correo generado con render_to_string
+                settings.EMAIL_HOST_USER,
+                [correo]
+            )
+            email.fail_silently = False
+            email.send()
+            messages.success(request,'Se ha enviado un correo.')
+            #El mail se manda
+            return redirect('menu_mensajes')
+
+            return redirect('menu_mensajes')
+   
+        print("Ocurrio un error al Leer el mensaje")
+        return redirect('home')
+
 @login_required
 def Profile(request):
     if request.user.is_authenticated:
@@ -379,6 +512,8 @@ def EliminarEjecutivo(request,id):
         print("Ocurrio un error al eliminar al ejecutivo.")
         return redirect('home')
 
+
+
 @login_required
 def MenuPlantas(request):
     plantas = Planta.objects.all()
@@ -400,9 +535,6 @@ def EliminarPlanta(request,id):
             return redirect('menu_plantas')
 
 
-@login_required    
-def ModificarPlanta(request,id):
-    return render(request,'modificar_planta.html',{})
 
 @login_required
 def crear_planta(request):
@@ -419,8 +551,22 @@ def crear_planta(request):
 
 
 @login_required
-def PlantasBorradas(request):
+def modificar_planta(request, id):
+    planta = Planta.objects.get(pk=id)  # Obtén la instancia de Planta a editar
+    if request.method == 'POST':
+        form = PlantaForm(request.POST, request.FILES, instance=planta)  # Pasa la instancia para editar
+        if form.is_valid():
+            form.save()
+            return redirect('menu_plantas')
+        else:
+            print(form.errors)
+    else:
+        form = PlantaForm(instance=planta)  # Pasa la instancia para cargar los datos
+        return render(request, 'editar_planta.html', {'form': form, 'planta': planta})
 
+
+@login_required
+def PlantasBorradas(request):
         plantas = Planta.objects.filter(archivada='True')
         return render(request,'plantas_eliminadas.html',{'plantas':plantas})
 

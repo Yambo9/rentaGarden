@@ -1,0 +1,47 @@
+{%extends 'base.html'%}
+{%block content%}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center my-5">
+            <h2 class="display-5">Mensaje Directo</h2>
+            <h5 class="display-7">Escribenos tus dudas y te responderemos a la brevedad en tu Correo Electronico.</h5>
+            {%if messages%}
+                    <div class="alert alert-success" role="alert">
+                        {{messages}}
+                    </div>
+            {%endif%}
+        </div>
+        <div class="col-3"></div>
+        <div class="container-fluid col-6 border boder-dark pt-4  px-4 rounded-5 mb-5">
+            <p class="text-center text-danger">{{problem}}</p>
+            <form method="POST" class="row">
+                {%csrf_token%}
+                <div class="col-6">
+                    <h5>Nombre: </h5>
+                    {{form.nombre}}
+                </div>
+                <div class="col-6">
+                    <h5>Email: </h5>
+                    {{form.email}}
+                </div>
+                <div class="col-12">
+                    <h5>Asunto: </h5>
+                    {{form.asunto}}
+                </div>
+
+                <h5 class="col-12">Mensaje: </h5>
+                {{form.mensaje}}
+                
+
+                <div class="col-4"></div>
+                <button class="col-4 border border-dark btn">Enviar</button>
+                <div class="col-4"></div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+
+    </div>
+</div>
+
+{%endblock%}

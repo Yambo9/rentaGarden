@@ -34,7 +34,7 @@
                     <h5 class="">Altura: {{a.altura}}</h5>
                     <h5 class="">Peso: {{a.peso}}</h5>
                     <div class="d-flex text-center justify-content-center my-2">
-                        <button class="btn btn-primary mx-4">Modificar</button>
+                        <a href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
                         <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
                     </div>
 
@@ -64,7 +64,7 @@
                     <h5 class="">Altura: {{a.altura}}</h5>
                     <h5 class="">Peso: {{a.peso}}</h5>
                     <div class="d-flex text-center justify-content-center my-4">
-                        <button class="btn btn-primary mx-4">Modificar</button>
+                        <a href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
                         <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
                     </div>
 
