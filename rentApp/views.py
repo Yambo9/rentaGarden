@@ -11,6 +11,9 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from rentaPlant import settings
 from django.contrib import messages 
+from django.core.cache import cache
+from autocomplete_light import shortcuts as autocomplete_light
+
 
 # Create your views here.
 
@@ -132,25 +135,28 @@ def Mensaje_Anonimo(request):
 @login_required
 def Menu_mensajes(request):
     #revisando si es admin
-    try:
+    
         admin = Admin.objects.filter(usuario=request.user).first()
         if request.method == 'GET':
             if admin is not None:
                 mensajes = MensajeAnonimo.objects.filter(leido=False)
                 mensajesLeidos = MensajeAnonimo.objects.filter(leido=True).order_by('-fecha')[:10]
-                return render(request, 'menu_mensajes.html',{'mensajes':mensajes,'mensajesLeidos':mensajesLeidos})
+                form = BusquedaMensaje()
+                return render(request, 'menu_mensajes.html',{'mensajes':mensajes,'mensajesLeidos':mensajesLeidos,'form':form})
             else:
                 print("No tienes las credenciales para estar aca.")
                 return redirect('home')
         else:
             print("Realizando busqueda....")
-    except:
+
+            informacionFiltrada = MensajeAnonimo.objects.filter(nombre__contains=request.POST['nombre'].order_by('-fecha'))
+            return render(request,'busqueda_mensajes.html',{'busqueda':informacionFiltrada})
+    
         print("Ocurrio un error al encontrar los mensajes")
         return redirect('home')
     
 
 def Leer_mensaje(request,id):
-   
         mensaje = MensajeAnonimo.objects.filter(pk=id).first()
         respuesta = RespuestaMensajeAnonimo.objects.filter(mensajeAnonimo = mensaje)
         form = RespuestaMensajeAnonimoForm()
@@ -282,125 +288,79 @@ def Catalogo(request):
         return redirect('home')
     
 def DetallePlanta(request,id):
-    try:
+ 
         plantita = Planta.objects.get(pk=id)
         return render(request,'detalle_planta.html',{'planta':plantita})
-    except:
+ 
         print('Ocurrio un error al encontrar la planta')
         return redirect('home')
     
 
-def menuArriendo(request):
-    try:
-        print('VIENDO SI EL USUARIO ESTA REGISTRADO')
-        if(request.user.is_authenticated):
-            print("EL USUARIO ESTA REGISTRADO")
-            print("VIENDO SI LOS DATOS PERSONALES ESTAN COMPLETOS")
-            try:
-                arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
-                if(arrendatario is None):
-                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN INCOMPLETOS")
-                    return render(request,'menuPedidos.html')
-                else:
-                    print("LOS DATOS PERSONALES DEL USUARIO ESTAN COMPLETOS")
-                    #ACA TENEMOS QUE VER SI EL USUARIO YA TIENE UN PEDIDO EN PROCESO
-                    try:
-                        pedido = Pedido.objects.filter(arrendatario = arrendatario).first()
-                        if(pedido is None):
-                            #SI NO EXISTE CREAMOS EL PEDIDO Y LO MANDAMOS A SELECCION DE PLANTAS
-                            pedidito = Pedido.objects.create(arrendatario=arrendatario)
-                            pedidito.save()
-                            return redirect('seleccionar_plantas')
-                        else:
-                            #SI EXISTE LO MANDAMOS A LA SELECCION DE PLANTAS
-                            return redirect('seleccionar_plantas')
 
-
-                    except:
-                        print("Ocurrio un problema al recibir si hay un pedido en proceso")
-                        return redirect('home')
-            except:
-                print("Ocurrio un problema al ver si el usuario tiene datos personales Completados")
-                return redirect('profile')
-        else:
-            print("El usuario no esta registrado. Mandando al ususario al formulario de registro.")
-            return render(request,'menuPedidos.html')
-    except:
-        print('Ocurrio un error al encontrar al Usuario')
-        return redirect('home')
-
-@login_required
 def seleccionar_plantas_pedido(request):
     try:
         arbol = Planta.objects.filter(categoria='Arbol')
         arbusto = Planta.objects.filter(categoria='Arbusto')
-        arrendatario = Arrendatario.objects.filter(usuario = request.user).first()
-        pedido = Pedido.objects.filter(arrendatario=arrendatario).first()
+        datosPedido = request.session.get('misPlantitas', [])
+        plantas_seleccionadas = []
 
-        #ENCONTRANDO LAS PLANTAS YA SELECCIONADAS
-        try:
+        for pedido in datosPedido:
+            planta_id = pedido['id']
+            cantidad = pedido['cantidad']
+            planta = Planta.objects.get(pk=planta_id)
+            plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad})
 
-            plantas_pedido = Planta_pedido.objects.filter(pedido=pedido)
-            conteo = sum([pp.cantidad for pp in plantas_pedido])
-            valor_total = sum([pp.planta.valor * pp.cantidad for pp in plantas_pedido])
-            valor_total_formatted = "{:,.0f}".format(valor_total).replace(",", ".")
-            return render(request, 'seleccionar_plantas.html', {'conteo':conteo,'valor':valor_total,'valor_formateado':valor_total_formatted,'arbol':arbol,'arbusto':arbusto,'pedido':pedido,'planta_pedido':plantas_pedido})
-        except:
-            print('OCURRIO un problema al encontrar las plantas del pedido')
-    except:
-        print("Ocurrio un problema al encontrar algo")
-        return redirect('home')
+        total_plantas = sum(item['cantidad'] for item in datosPedido)
+        valor_total = sum(item['subtotal'] for item in plantas_seleccionadas)  # Calcular el valor total
 
-@login_required
+        return render(request, 'seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                            'datos': plantas_seleccionadas,
+                                                            'conteo': total_plantas,
+                                                            'valor_formateado': valor_total})
+    except KeyError as e:
+        print('Ocurrió un problema al encontrar las plantas del pedido:', e)
+        return render(request, 'seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                            'conteo': 0})
+  
 def detalle_seleccion_plantas(request, id):
-    try:
-        planta = Planta.objects.filter(pk=id).first()
-        form = SeleccionarPlantaForm()
-        if request.method == 'POST':
-            form = SeleccionarPlantaForm(request.POST)
-            if form.is_valid():
-                arrendatarioo = Arrendatario.objects.filter(usuario=request.user).first()
-                try:
-                    pedido = Pedido.objects.filter(arrendatario=arrendatarioo).first()
-                    if pedido is not None:
-                        #VIENDO SI EL PEDIDO COINCIDE CON EL STOCK
-                        cantidad = int(request.POST['cantidad'])
-                        if(planta.stock >= cantidad):
-                            #VIENDO SI HAY ALGUN REGISTRO EN ESTE PEDIDO DE LA MISMA PLANTA
-                            revision = Planta_pedido.objects.filter(pedido=pedido,planta=planta).first()
-                            if revision is not None:
-                                print("ESTA PLANTA YA ESTA EN ESTE PEDIDO")
-                                return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'Este pedido ya tiene registrada esta planta.'})
-                            else:
-                                planta_pedido = Planta_pedido.objects.create(pedido=pedido, planta=planta, cantidad=form.cleaned_data['cantidad'])
-                                planta_pedido.save()
-                                print("Pedido guardado correctamente")
-                                return redirect('seleccionar_plantas')
-                        else:
-                            print("EL stock no coincide")
-                            return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form,'problem':'La cantidad de plantas del pedido es mayor al stock existente.'})
-                    else:
-                        print('Ocurrio un problema en el tramo final')
-                        return redirect('home')
-                except:
-                    print("Ocurrio un problema al encontrar el pedido")
-                    return redirect('home')
-            else:
-                print(form.errors)
+    planta = Planta.objects.filter(pk=id).first()
+    form = SeleccionarPlantaForm()
+    
+    if request.method == 'POST':
+        if 'misPlantitas' not in request.session:
+            request.session['misPlantitas'] = []
+        
+        data = {'id': planta.pk, 'cantidad': int(request.POST.get('cantidad', 0))}
+        request.session['misPlantitas'].append(data)
+        request.session.modified = True  # Marcar la sesión como modificada
+        
+        print(request.session.get('misPlantitas', 'No hay nada'))
+        return redirect('seleccionar_plantas')
 
+    else:
         return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form})
+    
+def Direccion_pedido(request):
+    form = SeleccionarDireccionForm()
+    if request.method == 'POST':
+        # Manejar el envío del formulario aquí
+        print(request.POST)
+    return render(request, 'direccion_pedido.html', {'form': form})
+
+def Eliminar_seleccion(request, id):
+    try:
+        datosPedido = request.session.get('misPlantitas', [])
+        
+        for index, item in enumerate(datosPedido):
+            if item['id'] == id:
+                del datosPedido[index]
+                break
+        
+        request.session['misPlantitas'] = datosPedido
     except:
-        print("Ocurrio un problema al encontrar la planta")
-        return redirect('home')
-
-@login_required  
-def Eliminar_seleccion(request,id):
-    seleccion = Planta_pedido.objects.filter(pk=id).first()
-    seleccion.delete()
+        pass
+    
     return redirect('seleccionar_plantas')
-
-
-
 
 def MenuEjecutivos(request):
     try:

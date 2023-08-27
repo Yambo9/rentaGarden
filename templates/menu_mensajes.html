@@ -5,8 +5,10 @@
         <div class="col-12">
             <div class="d-flex align-items-center justify-content-center">
                 <u><h3 class="display-5 my-4 mx-5">MENSAJES</h3></u>
-                <form method="POST">
-                    <input type="text" placeholder="Buscar">
+                <form method="POST" class="d-flex">
+                    {%csrf_token%}
+                    {{form.busqueda}}
+                    <button class="h-100 mx-4">Buscar</button>
                 </form>
             </div>
 

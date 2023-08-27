@@ -52,29 +52,31 @@
             <h5 class="mx-2">Cantidad de plantas: {{conteo}}</h5>
             <h5 class="mx-2">Valor Total: {{valor_formateado}}</h5>
             <div class="text-center">
-                <button class=" botoncitoCul text-center">Concretar Pedido</button>
+                <a href="{%url 'direccion_pedido'%}"><button class=" botoncitoCul text-center">Concretar Pedido</button></a>
             </div>
 
-            {%for a in planta_pedido%}
-                <hr>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-10"></div>
-                        <a class="col-2 float-right mb-3" href="{%url 'eliminar_seleccion' id=a.id%}">
-                            <img class=" cerrar " src="{% static 'C:\Users\Tomas\Desktop\rentaGarden\static\img\X.png' %}" alt="">
-                        </a>
-                    </div>
+            {% for a in datos %}
+            <hr>
+            <div class="container">
+                <div class="row">
+                    <div class="col-10"></div>
+                    <a class="col-2 float-right mb-3" href="{% url 'eliminar_seleccion' id=a.planta.id %}">
+                        <img class="cerrar" src="{% static 'C:\Users\Tomas\Desktop\rentaGardenLogicaCambiada\static\img\X.png' %}" alt="">
+                    </a>
                 </div>
-                <h6 class=" mb-3 mx-3 text-center">{{a.planta.nombre}} X {{a.cantidad}}</h6>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3"></div>
-                        <img src="{{a.planta.imagen.url}}" alt="" class="col-6 mb-2">
-
-                        <div class="col-3"></div>
-                    </div>
+            </div>
+        
+            <!-- Código para mostrar la planta y la cantidad -->
+            <h6 class="mb-3 mx-3 text-center">{{ a.planta.nombre }} X {{ a.cantidad }}</h6>
+            <div class="container">
+                <div class="row">
+                    <div class="col-3"></div>
+                    <img src="{{ a.planta.imagen.url }}" alt="" class="col-6 mb-2">
+                    <div class="col-3"></div>
                 </div>
-            {%endfor%}
+            </div>
+        {% endfor %}
+        
         </div>
 
         <div class="col-1"></div>
