@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from rentaPlant import settings
 from django.contrib import messages 
 from django.core.cache import cache
-from autocomplete_light import shortcuts as autocomplete_light
+
 
 
 # Create your views here.
@@ -543,3 +543,7 @@ def ReponerPlanta(request,id):
             return redirect('menu_plantas')
     except:
         print("Ocurrio un problema al Encontrar la planta")
+
+
+
+

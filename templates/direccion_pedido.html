@@ -1,19 +1,9 @@
-{%extends 'base.html'%}
-{%block content%}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2>Ingresa la direccion de tu arriendo</h2>
-                <hr>
-            </div>
-            <div class="col-2">
+{% extends "base.html" %}
 
-            </div>
-            <div class="col-8"><form method="POST">
-                {%csrf_token%}
-                {{form}}
-            </form>
-        </div>
-        </div>
-    </div>
-{%endblock%}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enviar</button>
+</form>
+{% endblock %}

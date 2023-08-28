@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from .models import *
-from autocomplete_light import shortcuts as autocomplete_light
+
+
 
 class RegisterForm(forms.Form):
     nombres = forms.CharField(label="Nombres", max_length=150, required=True)
@@ -64,19 +65,11 @@ class SeleccionarPlantaForm(forms.Form):
 
 
 class SeleccionarDireccionForm(forms.Form):
-    comuna = forms.ModelChoiceField(queryset=Comuna.objects.none(), empty_label='Selecciona una comuna')
+    comuna = forms.ModelChoiceField(queryset=Comuna.objects.all().order_by('nombre'), empty_label='Selecciona una comuna')
     calle = forms.CharField(max_length=150)
     numero = forms.CharField(max_length=10)
     depto = forms.CharField(max_length=10, required=False)
     indicaciones = forms.CharField(widget=forms.Textarea, required=False)
-
-    class Media:
-        js = ('autocomplete_light/jquery.init.js',
-              'autocomplete_light/autocomplete.init.js',
-              'autocomplete_light/jquery.post-setup.js',
-              'autocomplete_light/select2.js',)
-
-
 
 
 class CrearPlantaForm(forms.ModelForm):
