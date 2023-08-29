@@ -67,10 +67,16 @@ class SeleccionarPlantaForm(forms.Form):
 class SeleccionarDireccionForm(forms.Form):
     comuna = forms.ModelChoiceField(queryset=Comuna.objects.all().order_by('nombre'), empty_label='Selecciona una comuna')
     calle = forms.CharField(max_length=150)
-    numero = forms.CharField(max_length=10)
+    numero = forms.IntegerField()
     depto = forms.CharField(max_length=10, required=False)
     indicaciones = forms.CharField(widget=forms.Textarea, required=False)
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['comuna'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['calle'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['numero'].widget.attrs['class'] = 'form-control mb-4 rounded-5'
+        self.fields['depto'].widget.attrs['class'] = 'form-control mb-4 rounded-5 col-12'
+        self.fields['indicaciones'].widget.attrs['class'] = 'form-control mb-4 rounded-5 col-12'
 
 class CrearPlantaForm(forms.ModelForm):
     caracteristica = forms.ModelMultipleChoiceField(queryset=Caracteristica.objects.all())  # Ajusta el queryset

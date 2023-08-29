@@ -16,65 +16,10 @@ from django.core.cache import cache
 
 
 # Create your views here.
-
+#VISTAS GENERALES DE USO PUBLICO
 def Home(request):
     print(request.user)
     return render(request,'index.html',{})
-
-def Register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            nombres = form.cleaned_data['nombres']
-            apellidos = form.cleaned_data['apellidos']
-            email = form.cleaned_data['email']
-            contraseña = form.cleaned_data['contraseña1']
-            contraseña2 = form.cleaned_data['contraseña2']
-            if contraseña == contraseña2:
-                if len(contraseña) >= 8:
-                    # Crear el usuario
-                    User = get_user_model()
-                    user = User.objects.create_user(username=email, email=email, password=contraseña)
-                    user.first_name = nombres
-                    user.last_name = apellidos
-                    user.save()
-                    print("Usuario guardado correctamente")
-                    user = authenticate(request, username=email, password=contraseña)
-                    if user is not None:
-                        login(request, user)
-                    return redirect('profile')  # Redirigir a la página de inicio después del registro exitoso
-                else:
-                    problem = "La contraseña ingresada es demasiado corta. Asegúrate de que tenga un mínimo de 8 caracteres."
-            else:
-                problem = "Las contraseñas ingresadas no coinciden."
-        else:
-            problem = "Hay errores en el formulario. Verifica los campos."
-
-        # Si hay algún problema, renderizar la página con el formulario y el mensaje de error
-        form = RegisterForm()
-        return render(request, 'register.html', {'form': form, 'problem': problem})
-    else:
-        form = RegisterForm()
-        return render(request, 'register.html', {'form': form})
-
-@login_required
-def Logout(request):
-    logout(request)
-    return redirect('home')
-
-def Signin(request):
-    if request.method == 'GET':
-        form = AuthenticationForm()
-        return render(request,'signin.html',{'form':form})
-    else:
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is not None:
-            login(request, user) 
-            return redirect('profile')
-        form = AuthenticationForm()       
-        return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
-
-
 
 def Mensaje_Anonimo(request):
     form = MensajeAnonimoForm()
@@ -132,6 +77,241 @@ def Mensaje_Anonimo(request):
         print("Ocurrio un error al enviar el mensaje")
         return render(request,'mensaje_anonimo.html',{'form':form})
 
+def Catalogo(request):
+    try:
+        arboles = Planta.objects.filter(categoria='Arbol')
+        arbustos = Planta.objects.filter(categoria ='Arbusto')
+        return render(request,'catalogo.html',{'arboles':arboles,'arbustos':arbustos})
+
+    except:
+        print("Ocurrio un error al cargar las plantas.")
+        return redirect('home')
+    
+def DetallePlanta(request,id):
+    try:
+        plantita = Planta.objects.get(pk=id)
+        return render(request,'detalle_planta.html',{'planta':plantita})
+    except:
+        print('Ocurrio un error al encontrar la planta')
+        return redirect('home')
+    
+
+#LOGICA USUARIO
+def Register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            nombres = form.cleaned_data['nombres']
+            apellidos = form.cleaned_data['apellidos']
+            email = form.cleaned_data['email']
+            contraseña = form.cleaned_data['contraseña1']
+            contraseña2 = form.cleaned_data['contraseña2']
+            if contraseña == contraseña2:
+                if len(contraseña) >= 8:
+                    # Crear el usuario
+                    User = get_user_model()
+                    user = User.objects.create_user(username=email, email=email, password=contraseña)
+                    user.first_name = nombres
+                    user.last_name = apellidos
+                    user.save()
+                    print("Usuario guardado correctamente")
+                    user = authenticate(request, username=email, password=contraseña)
+                    if user is not None:
+                        login(request, user)
+                    return redirect('profile')  # Redirigir a la página de inicio después del registro exitoso
+                else:
+                    problem = "La contraseña ingresada es demasiado corta. Asegúrate de que tenga un mínimo de 8 caracteres."
+            else:
+                problem = "Las contraseñas ingresadas no coinciden."
+        else:
+            problem = "Hay errores en el formulario. Verifica los campos."
+
+        # Si hay algún problema, renderizar la página con el formulario y el mensaje de error
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form, 'problem': problem})
+    else:
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form})
+
+@login_required
+def Logout(request):
+    logout(request)
+    return redirect('home')
+
+def Signin(request):
+    if request.method == 'GET':
+        form = AuthenticationForm()
+        return render(request,'signin.html',{'form':form})
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+            login(request, user) 
+            return redirect('profile')
+        form = AuthenticationForm()       
+        return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
+
+@login_required
+def Crear_arrendatario(request):
+    if request.method == 'POST':
+        try:
+            if 8 <= len(request.POST['rut']) and len(request.POST['rut']) <= 12:
+                # Get the Comuna object based on the ID from the form
+                comuna_id = int(request.POST['comuna'])
+                comuna_instance = Comuna.objects.get(pk=comuna_id)
+
+                data = Arrendatario.objects.create(
+                    usuario=request.user,
+                    rut=request.POST['rut'],
+                    fecha_nacimiento=request.POST['fecha_nacimiento'],
+                    comuna=comuna_instance,  # Assign the Comuna instance, not the ID
+                    direccion=request.POST['direccion'],
+                    numero_direccion=request.POST['numero_direccion'],
+                    numero_telefono=request.POST['numero_telefono'],
+                )
+                data.save()
+                return redirect('menuArriendo')
+            else:
+                problem_message = 'El rut ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
+                form = ArrendatarioForm(request.POST)
+                return render(request, 'crear_arrendatario.html', {'form': form, 'problem': problem_message})
+
+        except Exception as e:
+            error_message = str(e)  # Get the error message from the exception
+            form = ArrendatarioForm(request.POST)
+            return render(request, 'crear_arrendatario.html', {'form': form, 'problem': 'Ocurrió un problema :('})
+    
+    else:
+        form = ArrendatarioForm()  # Define the form for GET request
+    return render(request, 'crear_arrendatario.html', {'form': form})
+
+@login_required
+def Profile(request):
+    if request.user.is_authenticated:
+        #REVISA SI ES ADMIN
+        try:
+            admin = Admin.objects.filter(usuario=request.user).first()
+            if admin is None:
+            #REVISA SI ES ARRENDATARIO
+                try:
+                    arrendatario = Arrendatario.objects.filter(usuario=request.user).first()
+                    if arrendatario is None:
+                        print('El usuario no tiene sus datos completos')
+                        return render(request, 'profile.html', {})
+                    else:
+                        print('Arrendatario encontrado')
+                        return render(request, 'profile.html', {'arrendatario': arrendatario})
+                except Exception as e:
+                    print('Ocurrió un error al cargar el Perfil:', e)
+                    return redirect('home')
+            else:
+                print('ADMIN encontrado')
+                return render(request, 'profile.html', {'admin': admin})
+        except:
+            print("ERROR AL BUSCAR AL ADMIN")
+            return redirect('home')
+    else:
+        print('El usuario no está autenticado')
+        return redirect('home')  # or redirect to the login page
+
+
+
+#LOGICA PEDIDO
+def seleccionar_plantas_pedido(request):
+    try:
+        arbol = Planta.objects.filter(categoria='Arbol')
+        arbusto = Planta.objects.filter(categoria='Arbusto')
+        datosPedido = request.session.get('misPlantitas', [])
+        plantas_seleccionadas = []
+
+        for pedido in datosPedido:
+            planta_id = pedido['id']
+            cantidad = pedido['cantidad']
+            planta = Planta.objects.get(pk=planta_id)
+            plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad})
+
+        total_plantas = sum(item['cantidad'] for item in datosPedido)
+        valor_total = sum(item['subtotal'] for item in plantas_seleccionadas)  # Calcular el valor total
+
+        return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                            'datos': plantas_seleccionadas,
+                                                            'conteo': total_plantas,
+                                                            'valor_formateado': valor_total})
+    except KeyError as e:
+        print('Ocurrió un problema al encontrar las plantas del pedido:', e)
+        return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                            'conteo': 0})
+  
+def detalle_seleccion_plantas(request, id):
+    planta = Planta.objects.filter(pk=id).first()
+    form = SeleccionarPlantaForm()
+    
+    if request.method == 'POST':
+        if 'misPlantitas' not in request.session:
+            request.session['misPlantitas'] = []
+        
+        #REVISANDO SI YA ESTA LA ID EN LA LISTA
+        datosPlantas = request.session.get('misPlantitas',[])
+        estaEnLista = False
+        for a in datosPlantas:
+            if a['id'] == id:
+                print("La id de la planta ya esta en la lista.")
+                estaEnLista = True
+
+        if estaEnLista:
+            return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form, 'problem':'La planta que ingresaste ya esta en su lista. Si quiere agregar más Modifique la que ya tiene en su lista de pedido.'})
+
+        else:
+            #AGREGANDO LA PLANTA A LA LISTA
+            data = {'id': planta.pk, 'cantidad': int(request.POST.get('cantidad', 0))}
+            request.session['misPlantitas'].append(data)
+            request.session.modified = True  # Marcar la sesión como modificada
+            #DIRECCIONANDO AL MENU
+            print(request.session.get('misPlantitas', 'No hay nada'))
+            return redirect('seleccionar_plantas')
+
+    else:
+        return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form})
+    
+def Direccion_pedido(request):
+    form = SeleccionarDireccionForm()
+    if request.method == 'POST':
+        try:
+            # Manejar el envío del formulario aquí
+            comuna = request.POST['comuna']
+            calle= request.POST['calle']
+            numero= request.POST['numero']
+            depto= request.POST['depto']
+            indicaciones= request.POST['indicaciones']
+            request.session["miDireccion"] = {'comuna':comuna,'calle':calle,'numero':numero,'depto':depto,'indicaciones':indicaciones}
+            datos = request.session.get('miDireccion')
+            datos2 = request.session.get('misPlantitas')
+            print(datos)
+            print(datos2)
+            print("Datos guardados temporalmente")
+            return render(request,'pedido_direccion.html',{'form':form})
+        except:
+            print("Ocurrio un error al guardar la direccion")
+            return render(request,'pedido_direccion.html',{'form':form})
+    else:
+        return render(request, 'pedido_direccion.html', {'form': form})
+
+def Eliminar_seleccion(request, id):
+    try:
+        datosPedido = request.session.get('misPlantitas', [])
+        
+        for index, item in enumerate(datosPedido):
+            if item['id'] == id:
+                del datosPedido[index]
+                break
+        
+        request.session['misPlantitas'] = datosPedido
+    except:
+        pass
+    
+    return redirect('seleccionar_plantas')
+
+
+#LOGICA ADMIN
 @login_required
 def Menu_mensajes(request):
     #revisando si es admin
@@ -154,8 +334,8 @@ def Menu_mensajes(request):
     
         print("Ocurrio un error al encontrar los mensajes")
         return redirect('home')
-    
 
+@login_required    
 def Leer_mensaje(request,id):
         mensaje = MensajeAnonimo.objects.filter(pk=id).first()
         respuesta = RespuestaMensajeAnonimo.objects.filter(mensajeAnonimo = mensaje)
@@ -210,158 +390,6 @@ def Leer_mensaje(request,id):
         return redirect('home')
 
 @login_required
-def Profile(request):
-    if request.user.is_authenticated:
-        #REVISA SI ES ADMIN
-        try:
-            admin = Admin.objects.filter(usuario=request.user).first()
-            if admin is None:
-            #REVISA SI ES ARRENDATARIO
-                try:
-                    arrendatario = Arrendatario.objects.filter(usuario=request.user).first()
-                    if arrendatario is None:
-                        print('El usuario no tiene sus datos completos')
-                        return render(request, 'profile.html', {})
-                    else:
-                        print('Arrendatario encontrado')
-                        return render(request, 'profile.html', {'arrendatario': arrendatario})
-                except Exception as e:
-                    print('Ocurrió un error al cargar el Perfil:', e)
-                    return redirect('home')
-            else:
-                print('ADMIN encontrado')
-                return render(request, 'profile.html', {'admin': admin})
-        except:
-            print("ERROR AL BUSCAR AL ADMIN")
-            return redirect('home')
-    else:
-        print('El usuario no está autenticado')
-        return redirect('home')  # or redirect to the login page
-
-
-  # Make sure to import the Comuna model
-
-@login_required
-def Crear_arrendatario(request):
-    if request.method == 'POST':
-        try:
-            # ... other code
-
-            if 8 <= len(request.POST['rut']) and len(request.POST['rut']) <= 12:
-                # Get the Comuna object based on the ID from the form
-                comuna_id = int(request.POST['comuna'])
-                comuna_instance = Comuna.objects.get(pk=comuna_id)
-
-                data = Arrendatario.objects.create(
-                    usuario=request.user,
-                    rut=request.POST['rut'],
-                    fecha_nacimiento=request.POST['fecha_nacimiento'],
-                    comuna=comuna_instance,  # Assign the Comuna instance, not the ID
-                    direccion=request.POST['direccion'],
-                    numero_direccion=request.POST['numero_direccion'],
-                    numero_telefono=request.POST['numero_telefono'],
-                )
-                data.save()
-                return redirect('menuArriendo')
-            else:
-                problem_message = 'El rut ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
-                form = ArrendatarioForm(request.POST)
-                return render(request, 'crear_arrendatario.html', {'form': form, 'problem': problem_message})
-
-        except Exception as e:
-            error_message = str(e)  # Get the error message from the exception
-            form = ArrendatarioForm(request.POST)
-            return render(request, 'crear_arrendatario.html', {'form': form, 'problem': 'Ocurrió un problema :('})
-    
-    else:
-        form = ArrendatarioForm()  # Define the form for GET request
-    return render(request, 'crear_arrendatario.html', {'form': form})
-
-def Catalogo(request):
-    try:
-        arboles = Planta.objects.filter(categoria='Arbol')
-        arbustos = Planta.objects.filter(categoria ='Arbusto')
-        return render(request,'catalogo.html',{'arboles':arboles,'arbustos':arbustos})
-
-    except:
-        print("Ocurrio un error al cargar las plantas.")
-        return redirect('home')
-    
-def DetallePlanta(request,id):
- 
-        plantita = Planta.objects.get(pk=id)
-        return render(request,'detalle_planta.html',{'planta':plantita})
- 
-        print('Ocurrio un error al encontrar la planta')
-        return redirect('home')
-    
-
-
-def seleccionar_plantas_pedido(request):
-    try:
-        arbol = Planta.objects.filter(categoria='Arbol')
-        arbusto = Planta.objects.filter(categoria='Arbusto')
-        datosPedido = request.session.get('misPlantitas', [])
-        plantas_seleccionadas = []
-
-        for pedido in datosPedido:
-            planta_id = pedido['id']
-            cantidad = pedido['cantidad']
-            planta = Planta.objects.get(pk=planta_id)
-            plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad})
-
-        total_plantas = sum(item['cantidad'] for item in datosPedido)
-        valor_total = sum(item['subtotal'] for item in plantas_seleccionadas)  # Calcular el valor total
-
-        return render(request, 'seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
-                                                            'datos': plantas_seleccionadas,
-                                                            'conteo': total_plantas,
-                                                            'valor_formateado': valor_total})
-    except KeyError as e:
-        print('Ocurrió un problema al encontrar las plantas del pedido:', e)
-        return render(request, 'seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
-                                                            'conteo': 0})
-  
-def detalle_seleccion_plantas(request, id):
-    planta = Planta.objects.filter(pk=id).first()
-    form = SeleccionarPlantaForm()
-    
-    if request.method == 'POST':
-        if 'misPlantitas' not in request.session:
-            request.session['misPlantitas'] = []
-        
-        data = {'id': planta.pk, 'cantidad': int(request.POST.get('cantidad', 0))}
-        request.session['misPlantitas'].append(data)
-        request.session.modified = True  # Marcar la sesión como modificada
-        
-        print(request.session.get('misPlantitas', 'No hay nada'))
-        return redirect('seleccionar_plantas')
-
-    else:
-        return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form})
-    
-def Direccion_pedido(request):
-    form = SeleccionarDireccionForm()
-    if request.method == 'POST':
-        # Manejar el envío del formulario aquí
-        print(request.POST)
-    return render(request, 'direccion_pedido.html', {'form': form})
-
-def Eliminar_seleccion(request, id):
-    try:
-        datosPedido = request.session.get('misPlantitas', [])
-        
-        for index, item in enumerate(datosPedido):
-            if item['id'] == id:
-                del datosPedido[index]
-                break
-        
-        request.session['misPlantitas'] = datosPedido
-    except:
-        pass
-    
-    return redirect('seleccionar_plantas')
-
 def MenuEjecutivos(request):
     try:
         admin = Admin.objects.get(usuario=request.user)
@@ -382,6 +410,7 @@ def MenuEjecutivos(request):
         print('Ocurrio un error al ver si eres Admin')
         return redirect('home')
 
+@login_required
 def CrearEjecutivo(request):
     if request.method == 'POST':
         form = EjecutivoForm(request.POST)
@@ -423,6 +452,7 @@ def CrearEjecutivo(request):
         form = EjecutivoForm()
         return render(request, 'crear_ejecutivo.html', {'form': form})
 
+@login_required
 def ModificarEjecutivo(request, id):
     try:
         ejecutivo = Ejecutivo.objects.get(usuario=id)
@@ -459,6 +489,7 @@ def ModificarEjecutivo(request, id):
         print('Ocurrió un error al modificar al usuario.')
         return redirect('home')
 
+@login_required
 def EliminarEjecutivo(request,id):
     try:
         if request.method == 'GET':
@@ -471,8 +502,6 @@ def EliminarEjecutivo(request,id):
     except:
         print("Ocurrio un error al eliminar al ejecutivo.")
         return redirect('home')
-
-
 
 @login_required
 def MenuPlantas(request):
@@ -494,8 +523,6 @@ def EliminarPlanta(request,id):
             planta.save()
             return redirect('menu_plantas')
 
-
-
 @login_required
 def crear_planta(request):
     if request.method == 'POST':
@@ -508,7 +535,6 @@ def crear_planta(request):
     else:
         form = CrearPlantaForm()
     return render(request, 'crear_planta.html', {'form': form})
-
 
 @login_required
 def modificar_planta(request, id):
@@ -524,13 +550,11 @@ def modificar_planta(request, id):
         form = PlantaForm(instance=planta)  # Pasa la instancia para cargar los datos
         return render(request, 'editar_planta.html', {'form': form, 'planta': planta})
 
-
 @login_required
 def PlantasBorradas(request):
         plantas = Planta.objects.filter(archivada='True')
         return render(request,'plantas_eliminadas.html',{'plantas':plantas})
-
-    
+  
 @login_required
 def ReponerPlanta(request,id):
     try:
@@ -543,6 +567,10 @@ def ReponerPlanta(request,id):
             return redirect('menu_plantas')
     except:
         print("Ocurrio un problema al Encontrar la planta")
+
+
+
+
 
 
 

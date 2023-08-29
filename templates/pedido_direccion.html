@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center my-5 mt-5">
+            <div class="d-flex align-items-center justify-content-center">
+                <h3 class="display-5">Ingresa la direccion para el pedido..</h3>
+                <a href="{%url 'seleccionar_plantas'%}">
+                    <button class=" px-4 py-2">Volver</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-6 container">
+        <form method="post" class="row">
+            {% csrf_token %}
+
+            <div class="col-6 text-center">
+                <h5>Comuna</h5>
+                {{form.comuna}}
+            </div>
+            <div class="col-6 text-center">
+                <h5>Calle</h5>
+                {{form.calle}}
+            </div>
+            <div class="col-6 text-center">
+                <h5>Numero</h5>
+                {{form.numero}}
+            </div>
+            <div class="col-6 text-center">
+                <h5>Depto / Block / Etc</h5>
+                {{form.depto}}
+            </div>
+            <div class="col-12 text-center">
+                <h5>Indicaciones Especiales</h5>
+                {{form.indicaciones}}
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+    <div class="col-3"></div>
+</div>
+
+{% endblock %}
