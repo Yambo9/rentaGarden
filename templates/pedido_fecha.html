@@ -1,4 +1,51 @@
-{%extends 'base.html'%}
-{%block content%}
+{% extends 'base.html' %}
 
-{%endblock%}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3 class="display-5 my-5">Ingrese la Fecha para cuando necesita las Plantas..</h3>
+        </div>
+        <div class="col-3"></div>
+        <div class="col-6 container mb-5">
+            <form method="POST" class="row">
+                {% csrf_token %}
+                <div class="col-6">
+                    <h5>Dia del arriendo</h5>
+                    {{ form.diaInicio }}
+                    {% if form.diaInicio.errors %}
+                        <p class="text-danger">{{ form.diaInicio.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <h5>Hora en que se necesitan las plantas</h5>
+                    {{ form.horaInicio }}
+                    {% if form.horaInicio.errors %}
+                        <p class="text-danger">{{ form.horaInicio.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <h5>Dia de fin del arriendo</h5>
+                    {{ form.fechaFin }}
+                    {% if form.fechaFin.errors %}
+                        <p class="text-danger">{{ form.fechaFin.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <h5>Hora de fin del Arriendo</h5>
+                    {{ form.horaFin }}
+                    {% if form.horaFin.errors %}
+                        <p class="text-danger">{{ form.horaFin.errors }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-4"></div>
+                <div class="col-4 text-center">
+                    <button class="px-5 py-3 rounded-6 my-4 btn border border-dark">Guardar</button>
+                </div>
+                <div class="col-4"></div>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+{% endblock %}

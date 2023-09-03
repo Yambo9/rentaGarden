@@ -31,7 +31,11 @@ urlpatterns=[
     path('detalle_seleccion_plantas/<int:id>/',detalle_seleccion_plantas,name='detalle_seleccion_plantas'),
     path('eliminar_seleccion/<int:id>/',Eliminar_seleccion,name='eliminar_seleccion'),
     path('direccion_pedido/',Direccion_pedido,name='direccion_pedido'),
+    path('fecha_pedido/',Fecha_pedido,name='fecha_pedido'),
+    path('datos_personales_pedido/',Datos_personales_pedido ,name='datos_personales_pedido'),
+    path('pedido_valores_pagos/', Pagame ,name='pagame'),
 
+    
 
     #MANEJO DE PLANTAS DE PARTE DEL ADMIN
     path('crear_planta/', crear_planta, name='crear_planta'),

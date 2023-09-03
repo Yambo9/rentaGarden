@@ -3,7 +3,6 @@ from django.contrib.auth import login, authenticate, get_user_model,logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
 from django.contrib.auth.decorators import login_required
-import random
 from .models import *
 from django.db.models import F, Sum
 from django.contrib import messages
@@ -288,7 +287,7 @@ def Direccion_pedido(request):
             print(datos)
             print(datos2)
             print("Datos guardados temporalmente")
-            return render(request,'pedido_direccion.html',{'form':form})
+            return redirect('fecha_pedido')
         except:
             print("Ocurrio un error al guardar la direccion")
             return render(request,'pedido_direccion.html',{'form':form})
@@ -310,6 +309,102 @@ def Eliminar_seleccion(request, id):
     
     return redirect('seleccionar_plantas')
 
+def Fecha_pedido(request):
+    form = SeleccionarFechaForm()
+    
+    if request.method == "POST":
+        print("Se esta ejecutando el form")
+        form = SeleccionarFechaForm(request.POST)
+        if form.is_valid():
+            diaInicio = form.cleaned_data['diaInicio']
+            horaInicio = form.cleaned_data['horaInicio']
+            diaFin = form.cleaned_data['fechaFin']
+            horaFin = form.cleaned_data['horaFin']
+            
+            if diaInicio < datetime.now().date():
+                form.add_error('diaInicio', "La fecha de inicio no puede ser anterior al día actual.")
+                print("La fecha es antigua")
+            else:
+                if diaInicio > diaFin:
+                    form.add_error('diaInicio', "La fecha de inicio no puede ser anterior a la fecha de fin del arriendo.")
+                    print("La fecha es antigua")
+                else:
+                    diferencia_dias = (diaFin - diaInicio).days
+                    request.session['miFecha'] = {
+                        'diaInicio': diaInicio.strftime('%Y-%m-%d'),
+                        'horaInicio': horaInicio.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
+                        'diaFin': diaFin.strftime('%Y-%m-%d'),
+                        'horaFin': horaFin.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
+                        'diferencia_dias': diferencia_dias
+                    }
+                    print(request.session.get('miFecha'))
+                    print(request.session.get('miDireccion'))
+                    print(request.session.get('misPlantitas'))
+                    return redirect('datos_personales_pedido')
+        else:
+            print("El formulario no es valido")
+    return render(request, 'pedido_fecha.html', {'form': form})
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from .forms import Login2, CrearUsuarioPedido
+
+def Datos_personales_pedido(request):
+    if request.user.is_authenticated:
+        return redirect('pagame')
+
+    loginForm = Login2()
+    crearForm = CrearUsuarioPedido()
+
+    if request.method == 'POST':
+        if 'login_form_submit' in request.POST:
+            loginForm = Login2(request.POST)
+            if loginForm.is_valid():
+                # Procesar el formulario de inicio de sesión
+                print("Se activó el formulario de inicio de sesión")
+                # Verificar si el usuario existe
+                user = authenticate(request, username=request.POST['login_email'], password=request.POST['contraseña'])
+                if user is not None:
+                    print("El usuario fue reconocido")
+                    login(request, user)
+                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm})
+
+                else:
+                    print("El usuario no fue reconocido")
+                    # Renderizar el formulario de inicio de sesión con un mensaje de error
+                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm, 'loginProblem': 'El usuario o la contraseña son incorrectos'})
+
+        elif 'crear_form_submit' in request.POST:
+            crearForm = CrearUsuarioPedido(request.POST)
+            if crearForm.is_valid():
+                print("Se activó el formulario de ingreso de datos personales")
+                nombre = request.POST['nombre']
+                rut = request.POST['rut']
+                telefono = request.POST['telefono']
+                email = request.POST['email']
+                fecha_nacimiento = request.POST['fecha_nacimiento']
+                print(nombre)
+                print(rut)
+                print(telefono)
+                print(email)
+                print(fecha_nacimiento)
+
+                if len(rut)<11 and len(rut)>9:
+                    print("La longitud del rut es la correcta")
+                else:
+                    print("La longitud del rut es incorrecta") 
+                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': 'El Rut ingresado es demasiado corto'})
+
+
+    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm})
+
+
+
+def Pagame(request):
+    try:
+        return render(request,'pedido_valores_pagos.html',{})
+    except:
+        return render(request,'pedido_valores_pagos.html',{})
 
 #LOGICA ADMIN
 @login_required
