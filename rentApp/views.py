@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from rentaPlant import settings
 from django.contrib import messages 
 from django.core.cache import cache
-
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -345,10 +345,6 @@ def Fecha_pedido(request):
             print("El formulario no es valido")
     return render(request, 'pedido_fecha.html', {'form': form})
 
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from .forms import Login2, CrearUsuarioPedido
-
 def Datos_personales_pedido(request):
     if request.user.is_authenticated:
         return redirect('pagame')
@@ -367,36 +363,102 @@ def Datos_personales_pedido(request):
                 if user is not None:
                     print("El usuario fue reconocido")
                     login(request, user)
-                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm})
+                    return redirect('profile')  # Redirigir a la página de perfil o donde desees
 
                 else:
                     print("El usuario no fue reconocido")
                     # Renderizar el formulario de inicio de sesión con un mensaje de error
-                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm, 'loginProblem': 'El usuario o la contraseña son incorrectos'})
+                    loginProblem = 'El usuario o la contraseña son incorrectos'
+                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm, 'loginProblem': loginProblem})
 
         elif 'crear_form_submit' in request.POST:
             crearForm = CrearUsuarioPedido(request.POST)
             if crearForm.is_valid():
                 print("Se activó el formulario de ingreso de datos personales")
-                nombre = request.POST['nombre']
-                rut = request.POST['rut']
-                telefono = request.POST['telefono']
-                email = request.POST['email']
-                fecha_nacimiento = request.POST['fecha_nacimiento']
-                print(nombre)
-                print(rut)
-                print(telefono)
-                print(email)
-                print(fecha_nacimiento)
-
-                if len(rut)<11 and len(rut)>9:
+                # Procesar el formulario de creación de usuario
+                nombre = crearForm.cleaned_data['nombre']
+                rut = crearForm.cleaned_data['rut']
+                telefono = crearForm.cleaned_data['telefono']
+                email = crearForm.cleaned_data['email']
+                fecha_nacimiento = crearForm.cleaned_data['fecha_nacimiento']
+                # Revisando si la longitud del rut está bien
+                if len(rut) < 11 and len(rut) > 8:
+                    # La longitud del rut está bien, seguimos al próximo paso
                     print("La longitud del rut es la correcta")
-                else:
-                    print("La longitud del rut es incorrecta") 
-                    return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': 'El Rut ingresado es demasiado corto'})
+                    # Revisando si el rut ya está en la base de datos
+                    filtrado = Arrendatario.objects.filter(rut=rut).first()
+                    if filtrado is None:
+                        # No se encontró otro arrendatario con este rut, seguimos al próximo paso
+                        print("El rut no está en la db")
+                        # Revisando si el correo electrónico está en la DB
+                        filtradoMail = User.objects.filter(email=email).first()
+                        if filtradoMail is None:
+                            # No se encontró el correo en la db, seguimos al próximo paso
+                            print("No se encontró el correo en la db")
+                            # Revisando la longitud del número telefónico
+                            if len(str(telefono)) >= 7 and len(str(telefono)) <= 11:
+                                # La longitud del número telefónico es la correcta, seguimos al próximo paso
+                                print("Longitud del número telefónico es la correcta")
+                                # PROCEDIENDO A CREAR AL USUARIO Y ARRENDATARIO
+                                # --------------------------------------------------------
+                                # Crear el usuario
+                                user = get_user_model()
+                                nuevo_usuario = user.objects.create_user(username=email, email=email, password=rut)
+                                nuevo_usuario.save()
+                                print("Usuario guardado correctamente")
+                                nuevo_usuario = authenticate(request, username=email, password=rut)
+                                if nuevo_usuario is not None:
+                                    login(request, nuevo_usuario)
+                                    print("Se creó correctamente al usuario")
+                                    # Creando el arrendatario
+                                    arrendatario = Arrendatario.objects.create(usuario=nuevo_usuario, rut=rut,
+                                                                               fecha_nacimiento=fecha_nacimiento,
+                                                                               numero_telefono=telefono)
+                                    arrendatario.save()
+                                    if arrendatario is not None:
+                                        print("Se guardó todo correctamente")
+                                        return redirect('pagame')
+                                    else:
+                                        print("Ocurrió un problema al registrar al arrendatario")
+                                        return render(request, 'pedido_datos_personales.html',
+                                                      {'loginForm': loginForm, 'crearForm': crearForm})
+                                else:
+                                    print("Ocurrió un problema al registrar al usuario")
+                                    return render(request, 'pedido_datos_personales.html',
+                                                  {'loginForm': loginForm, 'crearForm': crearForm})
 
+                                # --------------------------------------------------------
+                            else:
+                                # La longitud del número telefónico es errónea
+                                print("Longitud del número telefónico es errónea")
+                                crearProblem = 'El número de teléfono ingresado no tiene la longitud correcta.'
+                                return render(request, 'pedido_datos_personales.html',
+                                              {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': crearProblem})
+
+                        else:
+                            # El correo ya está en la db
+                            print("El correo se encontró en la db")
+                            crearProblem = 'El correo electrónico ingresado ya se encuentra registrado.'
+                            return render(request, 'pedido_datos_personales.html',
+                                          {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': crearProblem})
+                    else:
+                        # El rut está en la db
+                        print("El rut está en la db")
+                        crearProblem = 'El rut ingresado ya está registrado'
+                        return render(request, 'pedido_datos_personales.html',
+                                      {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': crearProblem})
+                else:
+                    # Longitud del rut incorrecta
+                    print("La longitud del rut es incorrecta")
+                    crearProblem = 'El rut ingresado es demasiado corto'
+                    return render(request, 'pedido_datos_personales.html',
+                                  {'loginForm': loginForm, 'crearForm': crearForm, 'crearProblem': crearProblem})
+        else:
+            print("No se está ejecutando ninguna wea")
 
     return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm})
+
+
 
 
 

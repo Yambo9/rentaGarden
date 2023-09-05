@@ -47,7 +47,7 @@
                         <div class="row">
                             <h5 class="col-12 mt-1">Si no Tienes una cuenta</h5>
                             <h3 class="text-center mt-4 col-12">Ingrese sus datos Personales</h3>
-                            {%if loginProblem%}
+                            {%if crearProblem%}
                                 <p class="text-danger">{{crearProblem}}</p>
                             {%endif%}
                             <hr>
@@ -76,7 +76,8 @@
                                         {{crearForm.email}}
                                     </div>
 
-                                    <button>Login</button>
+                                    <button type="submit" name="crear_form_submit">Crear cuenta</button>
+
                                 </form>
                                 <hr class="mb-3">
                             </div>
