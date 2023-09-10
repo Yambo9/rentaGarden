@@ -13,7 +13,6 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.contrib.auth.models import User
 
-
 # Create your views here.
 #VISTAS GENERALES DE USO PUBLICO
 def Home(request):
@@ -217,6 +216,7 @@ def Profile(request):
 #LOGICA PEDIDO
 def seleccionar_plantas_pedido(request):
     try:
+        #RECOPILANDO LOS DATOS
         arbol = Planta.objects.filter(categoria='Arbol')
         arbusto = Planta.objects.filter(categoria='Arbusto')
         datosPedido = request.session.get('misPlantitas', [])
@@ -226,15 +226,32 @@ def seleccionar_plantas_pedido(request):
             planta_id = pedido['id']
             cantidad = pedido['cantidad']
             planta = Planta.objects.get(pk=planta_id)
-            plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad})
-
+            plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad,'peso':planta.peso*cantidad})
+                
         total_plantas = sum(item['cantidad'] for item in datosPedido)
         valor_total = sum(item['subtotal'] for item in plantas_seleccionadas)  # Calcular el valor total
+        peso_total = sum(item['peso'] for item in plantas_seleccionadas)
+                    
+        if request.method == 'GET':
+            return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                                'datos': plantas_seleccionadas,
+                                                                'conteo': total_plantas,
+                                                                'valor_formateado': valor_total,
+                                                                'peso_total':peso_total})
+        else:
+            #SE HACE UN POST
+            print("Si hay plantas")
+            if len(plantas_seleccionadas)>0:
+                print("Hay plantas seleccionadas enviando al proximo paso")
+                return redirect('direccion_pedido')
+            else:
+                return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
+                                                                    'datos': plantas_seleccionadas,
+                                                                    'conteo': total_plantas,
+                                                                    'valor_formateado': valor_total,
+                                                                    'peso_total':peso_total,
+                                                                    'problem':'*Se deben seleccionar plantas poder hacer un envío'})                
 
-        return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
-                                                            'datos': plantas_seleccionadas,
-                                                            'conteo': total_plantas,
-                                                            'valor_formateado': valor_total})
     except KeyError as e:
         print('Ocurrió un problema al encontrar las plantas del pedido:', e)
         return render(request, 'pedido_seleccionar_plantas.html', {'arbol': arbol, 'arbusto': arbusto,
@@ -272,27 +289,28 @@ def detalle_seleccion_plantas(request, id):
         return render(request, 'detalle_seleccion_plantas.html', {'planta': planta, 'form': form})
     
 def Direccion_pedido(request):
-    form = SeleccionarDireccionForm()
-    if request.method == 'POST':
-        try:
-            # Manejar el envío del formulario aquí
-            comuna = request.POST['comuna']
-            calle= request.POST['calle']
-            numero= request.POST['numero']
-            depto= request.POST['depto']
-            indicaciones= request.POST['indicaciones']
-            request.session["miDireccion"] = {'comuna':comuna,'calle':calle,'numero':numero,'depto':depto,'indicaciones':indicaciones}
-            datos = request.session.get('miDireccion')
-            datos2 = request.session.get('misPlantitas')
-            print(datos)
-            print(datos2)
-            print("Datos guardados temporalmente")
-            return redirect('fecha_pedido')
-        except:
-            print("Ocurrio un error al guardar la direccion")
-            return render(request,'pedido_direccion.html',{'form':form})
+    if request.session.get("miDireccion") is not None:
+        return redirect('datos_personales_pedido')
     else:
-        return render(request, 'pedido_direccion.html', {'form': form})
+        form = SeleccionarDireccionForm()
+        if request.method == 'POST':
+            try:
+                # Manejar el envío del formulario aquí
+                comuna = request.POST['comuna']
+                calle= request.POST['calle']
+                numero= request.POST['numero']
+                depto= request.POST['depto']
+                indicaciones= request.POST['indicaciones']
+                request.session["miDireccion"] = {'comuna':comuna,'calle':calle,'numero':numero,'depto':depto,'indicaciones':indicaciones}
+                datos = request.session.get('miDireccion')
+                print(datos)
+                print("Datos guardados temporalmente")
+                return redirect('fecha_pedido')
+            except:
+                print("Ocurrio un error al guardar la direccion")
+                return render(request,'pedido_direccion.html',{'form':form})
+        else:
+            return render(request, 'pedido_direccion.html', {'form': form})
 
 def Eliminar_seleccion(request, id):
     try:
@@ -459,13 +477,188 @@ def Datos_personales_pedido(request):
     return render(request, 'pedido_datos_personales.html', {'loginForm': loginForm, 'crearForm': crearForm})
 
 
+#Fuciones para calculo final
+def calcularFlete(request):
+    #recibiendo la comuna donde sera el arriendo
+    direccion = request.session.get('miDireccion') 
+    comuna = direccion['comuna']
+    comunita = Comuna.objects.filter(id=comuna).first()
+    precio_base=10000
+    #Recibiendo listado de plantas
+    datosPedido = request.session.get('misPlantitas', [])
+    plantas_seleccionadas = []
+    for pedido in datosPedido:
+        planta_id = pedido['id']
+        cantidad = pedido['cantidad']
+        planta = Planta.objects.get(pk=planta_id)
+        plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad,'peso':planta.peso*cantidad})
 
+    #Calculo Peso Total    
+    peso_total = sum(item['peso'] for item in plantas_seleccionadas)
 
+    if int(comuna) == 1:
+        distancia = 100
+    elif int(comuna) == 2:
+        distancia = 5
+    elif int(comuna) == 3:
+        distancia = 30
+    elif int(comuna) == 4:
+        distancia = 30.3
+    elif int(comuna) == 5:
+        distancia = 60
+    elif int(comuna) == 6:
+        distancia = 47
+    elif int(comuna) == 7:
+        distancia = 50
+    elif int(comuna) == 8:
+        distancia = 80
+    elif int(comuna) == 9:
+        distancia = 60
+    elif int(comuna) == 10:
+        distancia = 55
+    elif int(comuna) == 11:
+        distancia = 65
+    elif int(comuna) == 12:
+        distancia = 40
+    elif int(comuna) == 13:
+        distancia = 165
+    elif int(comuna) == 14:
+        distancia = 55
+    elif int(comuna) == 15:
+        distancia = 65
+    elif int(comuna) == 16:
+        distancia = 88
+    elif int(comuna) == 17:
+        distancia = 135
+    elif int(comuna) == 18:
+        distancia = 25
+    elif int(comuna) == 19:
+        distancia = 24
+    elif int(comuna) == 20:
+        distancia = 18
+    elif int(comuna) == 21:
+        distancia = 34
+    elif int(comuna) == 22:
+        distancia = 18
+    elif int(comuna) == 23:
+        distancia = 6
+    elif int(comuna) == 24:
+        distancia = 10
+    elif int(comuna) == 25:
+        distancia = 28
+    elif int(comuna) == 26:
+        distancia = 33
+    elif int(comuna) == 27:
+        distancia = 35
+    elif int(comuna) == 28:
+        distancia = 46
+    elif int(comuna) == 29:
+        distancia = 10
+    elif int(comuna) == 30:
+        distancia = 10
+    elif int(comuna) == 31:
+        distancia = 18
+    elif int(comuna) == 32:
+        distancia = 30
+    elif int(comuna) == 33:
+        distancia = 22
+    elif int(comuna) == 34:
+        distancia = 20
+    elif int(comuna) == 35:
+        distancia = 40
+    elif int(comuna) == 36:
+        distancia = 23
+    elif int(comuna) == 37:
+        distancia = 25
+    elif int(comuna) == 38:
+        distancia = 37
+    elif int(comuna) == 39:
+        distancia = 15
+    elif int(comuna) == 40:
+        distancia = 30
+    elif int(comuna) == 41:
+        distancia = 23
+    elif int(comuna) == 42:
+        distancia = 22
+    elif int(comuna) == 43:
+        distancia = 5
+    elif int(comuna) == 44:
+        distancia = 20
+    elif int(comuna) == 45:
+        distancia = 21
+    elif int(comuna) == 46:
+        distancia = 27
+    elif int(comuna) == 47:
+        distancia = 31
+    elif int(comuna) == 48:
+        distancia = 15
+    elif int(comuna) == 50:
+        distancia = 63
+    elif int(comuna) == 52:
+        distancia = 70
+    elif int(comuna) == 53:
+        distancia = 49
+    elif int(comuna) == 54:
+        distancia = 53
+    elif int(comuna) == 55:
+        distancia = 58
+
+    precio_flete = int(precio_base + int(peso_total) * (distancia * 2))
+
+    return {'peso_total':peso_total,'precio_flete':precio_flete,'comuna':comunita}
+
+def listadoPlantas(request):
+    datosPedido = request.session.get('misPlantitas', [])
+    plantas_seleccionadas = []
+    for pedido in datosPedido:
+        planta_id = pedido['id']
+        cantidad = pedido['cantidad']
+        planta = Planta.objects.get(pk=planta_id)
+        plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad,'peso':planta.peso*cantidad})
+    return plantas_seleccionadas 
+
+def costoPlantas(request):
+    #Recibiendo listado de plantas
+    datosPedido = request.session.get('misPlantitas', [])
+    plantas_seleccionadas = []
+    for pedido in datosPedido:
+        planta_id = pedido['id']
+        cantidad = pedido['cantidad']
+        planta = Planta.objects.get(pk=planta_id)
+        plantas_seleccionadas.append({'planta': planta, 'cantidad': cantidad, 'subtotal': planta.valor * cantidad,'peso':planta.peso*cantidad})
+
+    #Calculo Peso Total    
+    valor_total = sum(item['subtotal'] for item in plantas_seleccionadas)
+    return valor_total
+
+def recibirDireccion(request):
+    try:
+        direccion = request.session.get('miDireccion')
+        return direccion
+    except:
+        print("Ocurrio un error")
+        return None
+
+def recibirFecha(request):
+    try:
+        fecha = request.session.get('miFecha')
+        return fecha
+    except:
+        print("Ocurrió un error. (Fecha)")
+        return None
 
 def Pagame(request):
     try:
-        return render(request,'pedido_valores_pagos.html',{})
+        flete = calcularFlete(request)
+        listado_plantas=listadoPlantas(request)
+        valor_plantas = costoPlantas(request)
+        direccion = recibirDireccion(request)
+        fecha = recibirFecha(request)
+        precioTotal = flete['precio_flete'] + valor_plantas
+        print(precioTotal)
+        return render(request,'pedido_valores_pagos.html',{'fecha':fecha,'flete':flete,'listado_plantas':listado_plantas,'valor_plantas':valor_plantas,'direccion':direccion,'total':precioTotal})
     except:
+        print("Ocurrio un problema")
         return render(request,'pedido_valores_pagos.html',{})
 
 #LOGICA ADMIN

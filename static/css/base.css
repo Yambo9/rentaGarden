@@ -7,6 +7,9 @@ body{background:#eee;}
 .borde-izquierdo{
     border-left: 2px solid whitesmoke;
 }
+.borde-izquierdo2{
+    border-left: 1px solid rgb(136, 136, 136);
+}
 .cerrar{font-family: 'Roboto', sans-serif; width: 50%;}
 .footer{
     background-color: rgb(4, 75, 49);

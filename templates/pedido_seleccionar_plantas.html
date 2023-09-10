@@ -49,11 +49,17 @@
         <div class="col-3 borde-izquierdo">
             <h5 class="mt-4 mx-4">Plantas Seleccionadas para su pedido...</h5>
             <hr>
-            <h5 class="mx-2">Cantidad de plantas: {{conteo}}</h5>
-            <h5 class="mx-2">Valor Total: {{valor_formateado}}</h5>
-            <div class="text-center">
-                <a href="{%url 'direccion_pedido'%}"><button class=" botoncitoCul text-center">Concretar Pedido</button></a>
-            </div>
+            <h5 class="mx-4 my-3">Cantidad de plantas: {{conteo}}</h5>
+            <h5 class="mx-4 my-3">Valor Total: {{valor_formateado}} Pesos</h5>
+            <h5 class="mx-4 mt-3">Peso Total: {{peso_total}} KG</h5>
+            
+            {%if problem%}
+                <h5 class="mx-4 my-3 text-danger">{{problem}}</h5>
+            {%endif%}
+            <form method="POST" class="text-center">
+                {%csrf_token%}
+                <button type="submit" class=" botoncitoCul text-center">Concretar Pedido</button>
+            </form>
 
             {% for a in datos %}
             <hr>
