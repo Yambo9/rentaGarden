@@ -2,22 +2,20 @@
 {%block content%}
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/catalogo.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/detalle_planta.css' %}">
+
 
 
     <img class="w-100" src="{% static 'img\stone-texture.jpg' %}" alt="Descripción de la imagen">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 my-4 py-4 mb-3 text-center"><u><h1 class="display-4">Arriendo de Plantas</h1></u></div>
-            <div class="col-2"></div>
-            <p class="col-8">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste natus mollitia alias voluptas ea facilis!</p>
-            <div class="col-2"></div>
             <!--MENU DE PLANTAS-->
-            <div class="col-1"></div>
-            <div class="col-10 d-flex recuadro align-items-center align-self-center border rounded-5 border-dark container-fluid mb-5">
+            <div class="col-0 col-md-0 col-lg-1"></div>
+            <div class="col-12 col-md-12 col-lg-10 d-flex recuadro align-items-center align-self-center border rounded-5 border-dark container-fluid mb-5">
                 <div class="row">
                     <div class="col-1"></div>
-                    <div class="col-9 mt-5"><u><h5 class="display-5">Arbustos</h5></u></div>
+                    <div class="col-9 mt-5 mb-4"><u><h5 class="display-5">Arbustos</h5></u></div>
                     <div class="col-2"></div>
 
                     <div class="col-12 container-fluid">
@@ -26,9 +24,9 @@
                             {%for a in arbustos%}
                                 <div class="text-center col-4 mb-3">
                                     <a href="{%url 'detalle_planta' id=a.id%}">
-                                    <img class="col-4 px-5 mt-5 w-100 mb-3"  src="{{ a.imagen.url }}" alt="{{ a.nombre }}">
-                                    <h4>{{a.nombre}}</h4>
-                                    <h5>{{a.nombre_cientifico}}</h5>
+                                    <img class="col-4 margenes_arbustos w-100"  src="{{ a.imagen.url }}" alt="{{ a.nombre }}">
+                                    <h4 class="menu_text">{{a.nombre}}</h4>
+                                    <h5 class="menu_nombreCientifico">({{a.nombre_cientifico}})</h5>
                                     </a>
                                 </div>
                             {%endfor%}
@@ -49,11 +47,11 @@
                         <div class="row">
                             {%if arboles%}
                                 {%for a in arboles%}
-                                    <div class="text-center col-3 mb-3">
+                                    <div class="text-center col-4 col-md-3 mb-3">
                                         <a href="{%url 'detalle_planta' id=a.id%}">
-                                            <img class="col-4 px-5 mt-5 w-100 mb-3"  src="{{ a.imagen.url }}" alt="{{ a.nombre }}">
-                                            <h4>{{a.nombre}}</h4>
-                                            <h5>{{a.nombre_cientifico}}</h5>
+                                            <img class="margenes_arboles col-4 w-100"  src="{{ a.imagen.url }}" alt="{{ a.nombre }}">
+                                            <h4 class="menu_text">{{a.nombre}}</h4>
+                                            <h5 class="menu_nombreCientifico">({{a.nombre_cientifico}})</h5>
                                         </a>
                                     </div>
                                 {%endfor%}
@@ -65,17 +63,17 @@
 
 
                     <!--FILA BOTON-->
-                    <div class="col-4"></div>
-                    <a href="{%url 'seleccionar_plantas' %}"class="col-4 mb-5  mt-3 text-center align-self-center">
-                        <button class="boton text-dark boton w-100">Hacer Arriendo!</button>
-                    </a>
+                    <div class="col-3 col-md-4"></div>
+                    <a href="{%url 'seleccionar_plantas'%}" class="col-6 mb-5 col-md-4 px-4 py-4 my-3 highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+                        Hacer un Arriendo !
+                    </a> 
 
-                    <div class="col-4"></div>
+                    <div class="col-3 col-md-4"></div>
                     <!--FILA BOTON-->
 
                 </div>    
             </div>
-            <div class="col-1"></div>
+            <div class="col-0 col-md-0 col-lg-1"></div>
         </div>
     </div>
 {%endblock%}

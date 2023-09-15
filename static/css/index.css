@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:900i');
 
-.seccion1{width: 30%;}
+
 
 .seccion2{background-color: rgb(4, 75, 49); color: white;}
 
@@ -187,4 +187,29 @@ body{
 
 .highlight-button:hover i {
     color: #fff
+}
+
+@media only screen and (max-width: 600px) {
+    .seccion1{width: 55%;}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+    .seccion1{width: 55%;}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .seccion1{width: 30%;}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .seccion1{width: 30%;}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .seccion1{width: 30%;}
 }

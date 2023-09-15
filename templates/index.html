@@ -7,8 +7,8 @@
     <div class="container-fluid">
         <div class="fade-in row d-flex align-self-center align-self-center align-items-center my-5">
             <!--SECCION 1-->
-            <div class="col-2"></div>
-            <div class="col-4">
+            <div class="col-1 col-sm-2 col-md-2"></div>
+            <div class="col-4 col-sm-3 col-md-4">
                 <h1 class="display-2 text-center">Renta un Jardin</h1>
                 <div class="d-flex justify-content-center"> 
                     <div class="wrapper">
@@ -28,9 +28,9 @@
                 </div>
             </div>
 
-            <img class="col-4 mb-3 seccion1  align-self-center text-align-center" src="{% static 'C:\Users\Tomas\Desktop\rentaGardenLogicaCambiada\static\img\suculentaRedondaa.png' %}" alt="Descripción de la imagen">
+            <img class="col-7 col-sm-3 col-md-4  mb-3 seccion1  align-self-center text-align-center" src="{% static 'C:\Users\Tomas\Desktop\rentaGardenLogicaCambiada\static\img\suculentaRedondaa.png' %}" alt="Descripción de la imagen">
 
-            <div class="col-2"></div>
+            <div class="col-0 col-sm-2 col-md-2"></div>
             <!--SECCION 1-->
         </div>
 
@@ -40,33 +40,34 @@
         <!--SECCION 2-->
     <div class="container-fluid seccion2 py-5">
         <div class="row align-self-center text-align-center py-3">
-            <div class="col-12 d-flex justify-content-around align-items-center">
-              <div class=" fade-in align-items-center align-self-center text-center">
-                <img class="w-90 mb-4" src="{% static 'img\registerIcon.png' %}" alt="Descripción de la imagen">
-                <h6>Registrate</h6>
+            <div class="col-12 container-fluid d-flex justify-content-around align-items-center container">
+              <div class="row">
+                  <div class=" fade-in align-items-center align-self-center text-center col-6 col-sm-6 col-md-3">
+                    <img class="w-90 mb-4" src="{% static 'img\registerIcon.png' %}" alt="Descripción de la imagen">
+                    <h6>Registrate</h6>
+                  </div>
+                  <div class=" fade-in align-items-center align-self-center text-center col-6 col-sm-6 col-md-3">
+                    <img class="w-80 mb-4" src="{% static 'img\selectIcon.png' %}" alt="Descripción de la imagen">
+                    <h6>Selecciona tus productos</h6>
+                  </div>
+                  <div class=" fade-in align-items-center align-self-center text-center col-6 col-sm-6 col-md-3">
+                    <img class="w-90 mb-4" src="{% static 'img\pedidoIcon.png' %}" alt="Descripción de la imagen">
+                    <h6>Realiza tu Pedido</h6>
+                  </div>
+                  <div class=" fade-in align-items-center align-self-center text-center col-6 col-sm-6 col-md-3">
+                    <img class="w-90 mb-4" src="{% static 'img\envioIcon.png' %}" alt="Descripción de la imagen">
+                    <h6>Se despacharán sus plantas</h6>
+                  </div>
               </div>
-              <div class=" fade-in align-items-center align-self-center text-center">
-                <img class="w-80 mb-4" src="{% static 'img\selectIcon.png' %}" alt="Descripción de la imagen">
-                <h6>Selecciona tus productos</h6>
-              </div>
-              <div class=" fade-in align-items-center align-self-center text-center">
-                <img class="w-90 mb-4" src="{% static 'img\pedidoIcon.png' %}" alt="Descripción de la imagen">
-                <h6>Realiza tu Pedido</h6>
-              </div>
-              <div class=" fade-in align-items-center align-self-center text-center">
-                <img class="w-90 mb-4" src="{% static 'img\envioIcon.png' %}" alt="Descripción de la imagen">
-                <h6>Nuestro equipo distribuira las plantas<br> a la ubicacion indicada</h6>
-              </div>
-
             </div>
-            <div class="col-4"></div>
+            <div class="col-3 col-sm-4"></div>
             <!--BOTONCITO MAS DETALLES-->
 
-            <section class="col-4 mt-5 button-style">
+            <section class="col-4 col-sm-4 mt-5 button-style">
                <div class="container">
                  <div class="row">
                    <div class="col-md-12 col-sm-12 center-col text-center">
-                    <a href="#" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">
+                    <a href="{%url 'info'%}" class="highlight-button btn btn-medium button xs-margin-bottom-five" data-abc="true">
                       <i class="fa fa-warning">
                       </i>Ver Más Detalles</a> 
                    </div>
@@ -74,30 +75,36 @@
               </div>
             </section>
 
-            <div class="col-4"></div>
+            <div class="col-4 col-sm-4"></div>
         </div>
     </div>
      <!--SECCION 2-->
      <!--SECCION 3-->
     <div class="container-fluid ">
       <div class="row py-4 align-items-center align-self-center">
-        <div class="col-1"></div>
-        <div class="col-4 my-4 text-center px-5">
-          <p class="display-7">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti dicta neque odit doloribus? Eveniet neque eos unde vel qui eum animi autem aliquam deserunt eaque non ut, eligendi placeat dolorem rerum a consectetur ipsum impedit voluptatibus. Possimus ipsum perferendis, hic aperiam id, dolore in officiis reiciendis rem tempora eaque dicta?</p>
-          <div class="d-flex justify-content-between">
-            <!--BOTON SOBRE NOSOTROS-->
-            <a href="{%url 'catalogo'%}" class="highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+        <img class="col-12 my-4 aparecer" src="{% static 'img\RedondaMultiple.png' %}" alt="Descripción de la imagen">
 
-              </i>Ver Catalogo</a> 
-           
-           <a href="#" class="highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+        <div class="col-0 col-md-1 aparecer"></div>
+        <p class="col-12 col-md-10 aparecer">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi ipsam consequuntur impedit molestiae atque dolorum fugiat odio architecto corrupti fugit?</p>
+        <div class="col-0 col-md-1 aparecer"></div>
+        
+        <div class="col-12  col-md-5 col-lg-5 my-4 text-center px-5">
+              <p class="display-7 esconder">Con más de tres décadas de experiencia en la industria de arriendo de elementos decorativos y venta de plantas, somos una empresa líder en Chile. Durante este tiempo, nos hemos especializado en proporcionar elementos decorativos de la más alta calidad para satisfacer las necesidades de nuestros clientes.</p>
+            
+              <div class="d-flex justify-content-between">
+                <!--BOTON SOBRE NOSOTROS-->
+                <a href="{%url 'catalogo'%}" class="highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
 
-            </i>Ver About</a> 
-          </div>
+                  </i>Ver Catalogo</a> 
+              
+                <a href="{%url 'about'%}" class="highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
 
-          </div>
-        <img class="col-7 my-4" src="{% static 'img\RedondaMultiple.png' %}" alt="Descripción de la imagen">
+                </i>Ver About</a> 
+              </div>
 
+        </div>
+        <img class="col-5 col-sm-5 col-md-5 col-lg-5 my-4 esconder" src="{% static 'img\RedondaMultiple.png' %}" alt="Descripción de la imagen">
+        <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
         </div>
 
       </div>

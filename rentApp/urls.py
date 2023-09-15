@@ -12,6 +12,8 @@ urlpatterns=[
     path('crear_arrendatario/',Crear_arrendatario,name="crear_arrendatario"),
     path('catalogo/',Catalogo,name='catalogo'),
     path('detalle_planta/<int:id>/', DetallePlanta, name='detalle_planta'),
+    path('about/', About, name='about'),
+    path('info/',Info,name='info'),
 
     # FUNCIONES USUARIO
     path('register/',Register,name='register'),

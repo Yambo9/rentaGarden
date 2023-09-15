@@ -28,13 +28,13 @@
                         <div class="col-8 my-4">
                             <h4 class="mt-1 mx-4"><u>Costo</u></h4>
                             <h5 class="mx-4 mt-4">Peso Total: {{flete.peso_total}} KG</h5>
-                            <h5 class="mx-4 ">Valor Plantas: {{valor_plantas}} </h5>
+                            <h5 class="mx-4 ">Valor Arriendo de Plantas: {{valor_plantas}} </h5>
                             <h5 class="mx-4">Valor Envio y Montaje a {{flete.comuna.nombre}}: {{flete.precio_flete}} </h5>
                             <h5 class="mx-4 mb-4">Valor Total: {{total}}</h5>
                             <hr>
                             <h4 class="mx-4"><u>Hora y Fecha</u></h4>
-                            <h5 class="mx-4 mt-4">Desde: {Fecha} {Hora}</h5>
-                            <h5 class="mx-4 mt-3">Hasta: {Fecha} {Hora}</h5>
+                            <h5 class="mx-4 mt-4">Desde: {{fecha.diaInicio}} a las {{fecha.horaInicio}}</h5>
+                            <h5 class="mx-4 mt-3">Hasta: {{fecha.diaFin}} a las {{fecha.horaFin}}</h5>
 
                         </div>
 
@@ -49,7 +49,7 @@
 
                         </div>
                         <div class="col-12 mb-4 text-center">
-                            <button class="btn btn-warning">Hola</button>
+                            <button class="btn btn-warning">Hacer Pedido</button>
                         </div>
                     </div>        
                 </div>

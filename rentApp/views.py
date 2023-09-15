@@ -93,6 +93,11 @@ def DetallePlanta(request,id):
         print('Ocurrio un error al encontrar la planta')
         return redirect('home')
     
+def About(request):
+    return render(request,'about.html',{})
+
+def Info(request):
+    return render(request,'info_arriendo.html')
 
 #LOGICA USUARIO
 def Register(request):

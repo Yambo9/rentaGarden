@@ -5,3 +5,38 @@
 
 a{transition: color 0.8s;}
 a:hover{color: rgb(122, 122, 122);}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .menu_text{font-size: 14px; margin-top: 10px;}
+    .menu_nombreCientifico{font-size: 12px;}
+    .margenes_arbustos{padding-left: 1px; padding-right: 1px; margin-top: 20px;}
+    .margenes_arboles{padding-left: 1px; padding-right: 1px; margin-top: 20px;}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .margenes_arbustos{padding-left: 20px; padding-right: 20px; margin-top: 20px;}
+    .margenes_arboles{padding-left: 20px; padding-right: 20px; margin-top: 20px;}
+    .menu_text{font-size: 17px; margin-top: 18px;}
+    .menu_nombreCientifico{font-size: 14px;}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .margenes_arbustos{padding-left: 40px; padding-right: 40px; margin-top: 20px;}
+    .margenes_arboles{padding-left: 40px; padding-right: 40px; margin-top: 20px;}
+    .menu_text{font-size: 21px; margin-top: 22px;}
+    .menu_nombreCientifico{font-size: 16px;}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+   
+}

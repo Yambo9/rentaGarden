@@ -1,0 +1,38 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+
+<div class="container">
+    <div class="row">
+        <div class="col-0 col-md-1 col-lg-2"></div>
+        <div class="col-12   col-md-10 col-lg-8 container">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 text-center justify-content-center d-flex align-items-center">
+                    <div class="text-center">
+                        <h2 class="text-center titulo_about">Rentagarden</h2>
+                        <h4 class="">"Renta tu Jardin!"</h4>
+                    </div>
+                </div>
+                <div class="col-1 col-sm-2 col-md-1"></div>
+                <img class="img-fluid col-10 col-sm-8 col-md-7 foto_about" src="{% static 'img/about.png' %}" alt="Imagen de ejemplo">
+                <div class="col-1 col-sm-2 col-md-0"></div>
+            </div>
+        </div>
+        <div class="col-0 col-md-1 col-lg-2"></div>
+
+        <div class="col-1 col-md-1 col-lg-2"></div>
+        <div class="col-10 col-md-10 col-lg-8 my-4">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Con más de tres décadas de experiencia en la industria del arriendo y venta de plantas, somos una empresa líder en Chile. Durante este tiempo, nos hemos especializado en proporcionar elementos decorativos de la más alta calidad para satisfacer las necesidades de nuestros clientes.
+            <br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nuestro compromiso con la excelencia y la innovación nos ha llevado a ser pioneros en la introducción de un sistema de seguimiento único en el país. Hemos desarrollado un software que permite a nuestros clientes mantenerse constantemente conectados con su ejecutivo de arriendo designado. Esta herramienta revolucionaria brinda una experiencia de servicio excepcional al proporcionar una comunicación fluida y transparente. Ya no es necesario esperar largos tiempos de respuesta o preocuparse por la logística de su arriendo, ya que nuestro sistema lo mantiene informado en tiempo real.
+            <br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nuestro catálogo incluye una amplia variedad de plantas y elementos decorativos para adaptarse a cualquier ocasión y estilo. Ya sea que esté planificando una boda, un evento corporativo o la decoración de su hogar, contamos con la selección perfecta para usted. La calidad, la frescura y la atención meticulosa al detalle son los sellos distintivos de nuestros productos.
+        </div>
+        <hr class="margen_inferior">
+        <div class="col-1 col-md-1 col-lg-2"></div>
+    </div>
+</div>
+{%endblock%}

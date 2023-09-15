@@ -1,3 +1,5 @@
+
+
 body{background:#eee;}
 
 .header{
@@ -98,5 +100,40 @@ a{text-decoration: none; color: white;}
     border: 2px solid #ffffff;
     color: #fff
 }
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .esconder{display: none;}
+    .margen_arriba{margin-top: 25px;}
+    .padding_chico{padding-left: 10px; padding-right: 30px;}
+    .texto_header{font-size: 15px;}
+    .aparecer{display: block;}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .esconder{display: block;}
+    .margen_arriba{margin-top: 25px;}
+    .padding_chico{padding-left: 20px; padding-right: 20px;}
+    .texto_header{font-size: 20px;}
+    .aparecer{display: none;}
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .esconder{display: block;}
+    
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .esconder{display: block;}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .esconder{display: block;}
+}
 
 .botoncito{font-size: 15px;}
+
