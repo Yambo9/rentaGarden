@@ -1,38 +1,41 @@
 {% extends 'base.html' %}
-
 {% block content %}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/pedido_fecha.css' %}">
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-center">
-            <h3 class="display-5 my-5">Ingrese la Fecha para cuando necesita las Plantas..</h3>
+            <h3 class="display-5 my-5">Ingrese la Fecha en la que necesita su arriendo</h3>
         </div>
-        <div class="col-3"></div>
-        <div class="col-6 container mb-5">
+        <hr>
+        <div class="col-0 col-sm-0 col-md-1 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-md-10 col-lg-6 container mb-5">
             <form method="POST" class="row">
                 {% csrf_token %}
                 <div class="col-6">
-                    <h5>Dia del arriendo</h5>
+                    <h5 class="texto_campo">Dia del arriendo</h5>
                     {{ form.diaInicio }}
                     {% if form.diaInicio.errors %}
                         <p class="text-danger">{{ form.diaInicio.errors }}</p>
                     {% endif %}
                 </div>
                 <div class="col-6">
-                    <h5>Hora en que se necesitan las plantas</h5>
+                    <h5 class="texto_campo">Hora del arriendo</h5>
                     {{ form.horaInicio }}
                     {% if form.horaInicio.errors %}
                         <p class="text-danger">{{ form.horaInicio.errors }}</p>
                     {% endif %}
                 </div>
                 <div class="col-6">
-                    <h5>Dia de fin del arriendo</h5>
+                    <h5 class="texto_campo">Dia fin del arriendo</h5>
                     {{ form.fechaFin }}
                     {% if form.fechaFin.errors %}
                         <p class="text-danger">{{ form.fechaFin.errors }}</p>
                     {% endif %}
                 </div>
                 <div class="col-6">
-                    <h5>Hora de fin del Arriendo</h5>
+                    <h5 class="texto_campo">Hora fin del Arriendo</h5>
                     {{ form.horaFin }}
                     {% if form.horaFin.errors %}
                         <p class="text-danger">{{ form.horaFin.errors }}</p>
@@ -45,7 +48,7 @@
                 <div class="col-4"></div>
             </form>
         </div>
-        <div class="col-3"></div>
+        <div class="col-0 col-sm-0 col-md-1 col-lg-3"></div>
     </div>
 </div>
 {% endblock %}

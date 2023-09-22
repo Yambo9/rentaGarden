@@ -1,0 +1,59 @@
+a:hover{color: rgb(225, 225, 220);}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+        .nombre_planta{font-size: 17px; margin-top: 12px;}
+        .nombre_cientifico{font-size: 15px; display: none;}
+        .elemento{margin-top: 25px; padding-left: 30px; padding-right: 30px;}
+        .desaparece{display: none;}
+        .aparece{display: block;}
+
+        .portada{margin-top: 45px; margin-bottom: 45px;}
+
+        .titulo_menu{font-size: 18px;}
+        .texto_menu{font-size: 15px;}
+        .elementito{ padding-left: 2%;}
+    }
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        .elemento{margin-top: 25px; padding-left: 35px; padding-right: 35px;}
+        .nombre_planta{font-size: 17px; margin-top: 12px;}
+        .nombre_cientifico{font-size: 15px; display: none;}
+        .desaparece{display: none;}
+        .aparece{display: block;}
+        .portada{margin-top: 65px; margin-bottom: 65px;}
+        .titulo_menu{font-size: 18px;}
+        .texto_menu{font-size: 15px;}
+        .elementito{ padding-left: 5%;}
+
+    }
+    
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        .elemento{margin-top: 25px; padding-left: 25px;}
+        .nombre_planta{font-size: 18px; margin-top: 20px;}
+        .nombre_cientifico{font-size: 15px; display: block;}
+        .desaparece{display: block;}
+        .aparece{display: none;}
+
+        .portada{margin-top: 85px; margin-bottom: 85px;}
+        .titulo_menu{font-size: 18px;}
+        .texto_menu{font-size: 15px;}
+        .plantas_seleccionadas{font-size: 20px}
+
+    }
+    
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+        .elemento{margin-top: 25px; padding-right:20px; }
+        .nombre_planta{font-size: 20px; margin-top: 20px;}
+        .plantas_seleccionadas{font-size: 25px}
+
+    }
+    
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        .elemento{margin-top: 23px; padding-left: 40px; padding-right:40px;}
+        .plantas_seleccionadas{font-size: 35px}
+    }

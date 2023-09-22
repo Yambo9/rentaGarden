@@ -1,5 +1,8 @@
 {%extends 'base.html'%}
 {%block content%}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu_plantas.css' %}">
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-center my-4 d-flex justify-content-center align-items-center">
@@ -7,71 +10,77 @@
             <a href="{%url 'crear_planta'%}"><button class="rounded-4 mx-4 py-2 px-4 display-6">Agregar Planta</button></a>
         </div>
         <hr>
-        <div class="col-1"></div>
-        <div class="col-10 my-4 d-flex justify-content-around align-items-center">
-            <div class="text-center"><h1 class="display-3">{{cantidad_total}}</h1><h4>Cantidad de Plantas</h4></div>
-            <div class="text-center"><h1 class="display-3">{{peso_total}} KG</h1><h4>Peso Total de las Plantas</h4></div>
-            <div class="text-center"><h1 class="display-3">{{tipos_plantas}}</h1><h4>Distintas Plantas</h4></div>
+        <div class="col-0 col-md-1"></div>
+        <div class="col-12 col-md-10 my-4 d-flex justify-content-around align-items-center">
+            <div class="text-center"><h1 class="display-3 data">{{cantidad_total}}</h1><h4>Cantidad de Plantas</h4></div>
+            <div class="text-center"><h1 class="display-3 data">{{peso_total}} KG</h1><h4>Peso Total de las Plantas</h4></div>
+            <div class="text-center"><h1 class="display-3 data">{{tipos_plantas}}</h1><h4>Distintas Plantas</h4></div>
         </div>
-        <div class="col-1"></div>
+        <div class="col-0 col-md-1"></div>
         <hr>
         <div class="col-3"></div>
-        <div class="col-6"><u><h3 class="display-5 mt-4">Arbustos</h3></u></div>
+        <div class="col-6 mb-3"><u><h3 class="display-5 mt-4">Arbustos</h3></u></div>
         <div class="col-3"></div>
 
         {%for a in arbustos%}
-        <div class="col-3"></div>
-        <div class="col-6 container-fluid border border-dark">
+        <div class="col-0 col-sm-0 col-md-2 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-md-8 col-lg-6 container-fluid border border-dark">
             <div class="row my-4">
                 {% if a.imagen %}
-                    <img class="col-4" src="{{ a.imagen.url }}" alt="">
+                    <img class="col-6 col-sm-6 col-md-6 col-lg-5" src="{{ a.imagen.url }}" alt="">
                 {% endif %}
-                <div class="col-8">
-                    <u><h3 class="mb-3 text-center mb-3">{{a.nombre}}</h3></u>
-                    <h5>Nombre Cientifico: {{a.nombre_cientifico}}</h5>
-                    <h5 class="">Perenne: {{a.perenne}}</h5>
-                    <h5 class="">Floración: {{a.floracion}}</h5>
-                    <h5 class="">Altura: {{a.altura}}</h5>
-                    <h5 class="">Peso: {{a.peso}}</h5>
-                    <div class="d-flex text-center justify-content-center my-2">
-                        <a href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
-                        <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
-                    </div>
+                <div class="col-6 col-sm-6 col-md-6 col-lg-7">
+                    <u><h3 class="titulo_planta mb-3 text-center mb-3">{{a.nombre}}</h3></u>
+                    <h5 class="descripcion_planta">Nombre Cientifico: {{a.nombre_cientifico}}</h5>
+                    <h5 class="descripcion_planta">Perenne: {{a.perenne}}</h5>
+                    <h5 class="descripcion_planta">Floración: {{a.floracion}}</h5>
+                    <h5 class="descripcion_planta">Altura: {{a.altura}}</h5>
+                    <h5 class="descripcion_planta">Peso: {{a.peso}}</h5>
 
+                    <div class="d-flex text-center justify-content-center my-2 boton_big">
+                        <a class="boton_big" href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
+                        <a class="boton_big" href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
+                    </div>
+                    
+                    
+                    <div class="text-center boton_sm"><button class="w-100">Modificar</button><button class="w-100">Eliminar</button></div>
+                    
                 </div>
             </div>
         </div>
-        <div class="col-3"></div>
+        <div class="col-0 col-sm-0 col-md-2 col-lg-3"></div>
         {%endfor%}
 
         <hr class="my-3">
 
         <div class="col-3"></div>
-        <div class="col-6 mt-3"><u><h3 class="display-5">Arboles</h3></u></div>
+        <div class="col-6 mt-3 mb-3"><u><h3 class="display-5">Arboles</h3></u></div>
         <div class="col-3"></div>
 
         {%for a in arboles%}
-        <div class="col-3"></div>
-        <div class="col-6 container-fluid border border-dark">
+        <div class="col-0 col-sm-0 col-md-2 col-lg-3"></div>
+        <div class="col-12 col-sm-12 col-md-8 col-lg-6 container-fluid border border-dark">
             <div class="row my-4">
-                <img class="col-3" src="{{a.imagen.url}}" alt="">
-                <div class="col-1"></div>
-                <div class="col-8">
-                    <u><h3 class="mb-5 text-center">{{a.nombre}}</h3></u>
+                <img class="col-5 col-sm-3 col-md-3 col-lg-3" src="{{a.imagen.url}}" alt="">
+                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
+                <div class="col-6 col-sm-8 col-md-8 col-lg-8">
+                    <u><h3 class="titulo_planta mb-5 text-center">{{a.nombre}}</h3></u>
                     <h5>Nombre Cientifico: {{a.nombre_cientifico}}</h5>
-                    <h5 class="">Perenne: {{a.perenne}}</h5>
-                    <h5 class="">Floración: {{a.floracion}}</h5>
-                    <h5 class="">Altura: {{a.altura}}</h5>
-                    <h5 class="">Peso: {{a.peso}}</h5>
+                    <h5 class="descripcion_planta">Perenne: {{a.perenne}}</h5>
+                    <h5 class="descripcion_planta">Floración: {{a.floracion}}</h5>
+                    <h5 class="descripcion_planta">Altura: {{a.altura}}</h5>
+                    <h5 class="descripcion_planta">Peso: {{a.peso}}</h5>
                     <div class="d-flex text-center justify-content-center my-4">
-                        <a href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
-                        <a href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
+                        <a class="boton_big" href="{%url 'modificar_planta' id=a.id%}"><button class="btn btn-primary mx-4">Modificar</button></a>
+                        <a class="boton_big" href="{%url 'eliminar_planta' id=a.id%}"><button class="btn btn-dark mx-4">Eliminar</button></a>
                     </div>
+
+                    <div class="text-center boton_sm"><button class="w-100">Modificar</button><button class="w-100">Eliminar</button></div>
 
                 </div>
             </div>
         </div>
-        <div class="col-3"></div>
+        <div class="col-0 col-sm-0 col-md-2 col-lg-3"></div>
         {%endfor%}
         <hr class="my-4">
         <div class="col-12 d-flex justify-content-center my-4">

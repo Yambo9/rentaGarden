@@ -1,6 +1,8 @@
 {%extends 'base.html'%}
 {%block content%}
 {%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/detalle_seleccion_plantas.css' %}">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 text-center">
@@ -8,29 +10,33 @@
             </div>
 
         </div>
-        <div class="row recuadro my-4 py-5">
-            <div class="col-3"></div>
-            <div class="col-3">
+        <div class="row recuadro my-4 py-5 align-items-center">
+            <div class="col-0 col-md-3"></div>
+            <div class="col-7 col-sm-4 col-md-3">
                 <img src="{{planta.imagen.url}}" alt="" class="w-100">
             </div>
-            <div class="col-3">
-                <h4 class="mt-5">{{planta.nombre}}</h4>
-                <h5>Nombre Cientifico: {{planta.nombre_cientifico}}</h5>
-                <h5 class="">Stock Disponible: {{planta.stock}}</h5>
-                <h5 class="">Valor Unidad: {{planta.valor}}</h5>
+            <div class="col-5 col-sm-8 col-md-3">
+                
+                <a class="d-flex align-items-start  text-right justify-content-end mb-2" href="{%url 'seleccionar_plantas'%}"><img class="fotito" src="{% static 'C:\Users\Tomas\Desktop\rentaGardenLogicaCambiada\static\img\X.png' %}" alt=""></a>
+                <h4 class="nombre_planta ">{{planta.nombre}}</h4>
+                <h5 class="texto_planta display-3">Nombre Cientifico: <b>{{planta.nombre_cientifico}}</b></h5>
+                <h5 class="texto_planta display-3">Stock Disponible: <b>{{planta.stock}}</b></h5>
+                <h5 class="texto_planta display-3">Valor Unidad: <b>{{planta.valor}}</b></h5>
 
                 <form method="POST" class="mt-4 text-center">
                     {%csrf_token%}
                     <p class="text-danger">{{problem}}</p>
+                    <br class="separador">
+                    <p class="aparece_chico display-5"><b>Ingrese la cantidad de plantas</b></p>
                     {{form.cantidad}}
                     <div class="text-center d-flex justify-content-around">
-                        <button type="submit" class="btn btn-success botoncito px-5 py-3 mt-3 text-center">Agregar al Pedido</button>
+                        <button type="submit" class="btn btn-success botoncito px-3 py-3 mt-3 text-center">Agregar al Pedido</button>
                 </div>
                 </form>
 
             </div>
-            <div class="col-1 "><a href="{%url 'seleccionar_plantas'%}"><img class="w-50" src="{% static 'C:\Users\Tomas\Desktop\rentaGardenLogicaCambiada\static\img\cancel.png' %}" alt=""></a></div>
-            <div class="col-3"></div>
+            <div class="col-0 col-md-1 "></div>
+            <div class="col-0 col-md-2"></div>
         </div>
     </div>
 

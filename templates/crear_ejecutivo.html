@@ -2,9 +2,16 @@
 
 {% block content %}
 <div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6">
-            <h5 class="text-center mb-4">Crear Ejecutivo</h5>
+    <div class="row justify-content-center ">
+        <div class="col-2"></div>
+        <div class="col-8 text-center d-flex justify-content-around align-items-center">
+            <h3 class="display-5 my-5">CREAR EJECUTIVO</h3>
+            <a href="{%url 'menu_ejecutivos'%}">
+                <button class="btn btn-warning py-3 px-4 mx-3">Volver</button>
+            </a>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-md-6 mb-4">
             <form method="POST" class="border rounded-8 border-dark p-4">
                 {% csrf_token %}
                 <div class="row mb-3">

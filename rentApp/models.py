@@ -20,7 +20,7 @@ class Comuna(models.Model):
     nombre = models.CharField(max_length=150)
     ciudad = models.ForeignKey(Ciudad,on_delete=models.CASCADE)
     def __str__(self): 
-        return self.nombre + " - " + str(self.id)
+        return self.nombre 
 
 class Admin(models.Model):
     usuario = models.ForeignKey(User,on_delete=models.CASCADE)

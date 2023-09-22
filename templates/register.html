@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
-
 {% block content %}
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/signin.css' %}">
 
 <div class="container-fluid">
     <div class="row justify-content-center align-items-center mt-5 text-center mb-4">
-        <div class="col-lg-6 col-md-12 col-sm-12 col-12 text-center">
-            <h2 class="display-5">Registro de Usuario</h2>
+        <div class="col-0 col-md-1 col-lg-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-12 col-12 text-center">
+            <h2 class=" titulo">Registro de Usuario</h2>
             {%if problem%}
                 <h6 class="text-danger">*{{problem}}</h6>
             {%endif%}
         </div>
-        <div class="col-6"></div>
-        <div class="col-lg-6 col-md-6 col-sm-8 col-10 align-items-center container-fluid border rounded-8 border-dark py-5">
+        <div class="col-6 col-md-1 col-lg-1"></div>
+        <div class="col-lg-5 col-md-5 col-sm-8 col-10 align-items-center container-fluid border rounded-8 border-dark py-5">
+            <div class="row">
+
+            <div class="col-2"></div>
+            <img class="img-fluid col-8 mb-4 foto_chica" src="{% static 'img/suculentaRedondaa.png' %}" alt="Imagen de ejemplo">
+            <div class="col-2"></div>
+            </div>
             <form method="POST" class="register-form row">
                 {% csrf_token %}
                 <!--FILA 1-->
@@ -30,17 +37,16 @@
                 <!--FILA 1-->
 
                 <!--FILA 2-->
-                <div class="col-2"></div>
+                <div class="col-1"></div>
 
-                <div class="col-8 text-center">
+                <div class="col-10 px-5 w-100 text-center">
                     <h6>Correo Electronico</h6>
                     {{ form.email }}
                 </div>
-                <div class="col-2"></div>
+                <div class="col-1"></div>
                 <!--FILA 2-->
 
                 <!--FILA 3-->
-                <div class="col-1"></div>
 
                 <div class="col-5 mb-4 text-center">
                     <h6>Contraseña</h6>
@@ -53,14 +59,14 @@
                 <div class="col-1"></div>
                 <!--FILA 3-->
 
-                <div class="col-4"></div>
-                <button class="col-4 btn btn-warning">Registrarme</button>
-                <div class="col-4"></div>
+                <div class="col-2"></div>
+                <button class="col-8 btn btn-warning">Registrarme</button>
+                <div class="col-2"></div>
             </form>
         </div>
 
-        <div class="col-lg-3 col-md-4 col-sm-6 col-8 mb-5 text-center">
-            <img class="img-fluid" src="{% static 'img/suculentaRedondaa.png' %}" alt="Imagen de ejemplo">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-8 mb-5 text-center">
+            <img class="img-fluid foto" src="{% static 'img/suculentaRedondaa.png' %}" alt="Imagen de ejemplo">
         </div>
         <div class="col-1"></div>
     </div>

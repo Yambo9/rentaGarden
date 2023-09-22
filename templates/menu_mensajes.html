@@ -1,40 +1,43 @@
 {%extends 'base.html'%}
 {%block content%}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/menu_mensajes.css' %}">
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="d-flex align-items-center justify-content-center">
-                <u><h3 class="display-5 my-4 mx-5">MENSAJES</h3></u>
+            <div class="d-flex align-items-center justify-content-center mt-4">
+                <u><h3 class="display-5 titulo">MENSAJES</h3></u>
                 <form method="POST" class="d-flex">
                     {%csrf_token%}
                     {{form.busqueda}}
-                    <button class="h-100 mx-4">Buscar</button>
+                    <button class="h-100 boton btn border border-dar-mdk">Buscar</button>
                 </form>
             </div>
 
         </div>
     </div>
     <div class="row border border-dark rounded-5 py-5 px-4">
-        <div class="col-3"></div>
-        <div class="col-5 mb-3"><h3>Mensajes Nuevos</h3></div>
-        <div class="col-4"> </div>
+        <div class="col-4 col-md-3"></div>
+        <div class="col-4 col-md-5 mb-3"><h3>Mensajes Nuevos</h3></div>
+        <div class="col-4 col-md-4"> </div>
         {%if mensajes%}
         {%for a in mensajes%}
-        <div class="col-3"></div>
-        <div class="col-6 container-fluid border border-dark recuadro mb-1">
+        <div class="col-0 col-sm-1 col-md-2"></div>
+        <div class="col-12 col-sm-10 col-md-8 container-fluid border border-dark recuadro mb-1  recuadrox">
             <div class="row">
-                <div class="col-8 my-4 px-5">
-                    <a href="{%url 'leer_mensaje' id=a.id%}"><h4>De: {{a.nombre}}</h4></a>
-                    <h5>Asunto: {{a.asunto}}</h5>
-                    <h5>Correo: {{a.email}}</h5>
+                <div class="col-8 my-4 recuadrox">
+                    <a href="{%url 'leer_mensaje' id=a.id%}"><h4 class="mensaje_titulo">De: {{a.nombre}}</h4></a>
+                    <h5 class="mensaje_texto">Asunto: {{a.asunto}}</h5>
+                    <h5 class="mensaje_texto">Correo: {{a.email}}</h5>
 
                 </div>
                 <div class="col-4 borde-izquierdo">
-                    <h5 class="pt-4">Fecha: {{a.fecha}}</h5>
+                    <h5 class="pt-4 mensaje_texto">Fecha: {{a.fecha}}</h5>
                 </div>
             </div>
         </div>
-        <div class="col-3"></div>
+        <div class="col-0 col-sm-1 col-md-2"></div>
         {%endfor%}
         {%else%}
         <div class="col-12 text-center">
@@ -46,26 +49,26 @@
 
 
     <div class="row border border-dark rounded-5 py-5 px-4">
-        <div class="col-3"></div>
-        <div class="col-5 mb-3"><h3>Mensajes Leidos</h3></div>
-        <div class="col-4"> </div>
+        <div class="col-4 col-md-3"></div>
+        <div class="col-4 col-md-5 mb-3"><h3>Mensajes Leidos</h3></div>
+        <div class="col-4 col-md-4"> </div>
         
         {%for a in mensajesLeidos%}
-        <div class="col-3"></div>
-        <div class="col-6 container-fluid border border-dark recuadro mb-1">
+        <div class="col-0 col-sm-1 col-md-2"></div>
+        <div class="col-12 col-sm-10 col-md-8 container-fluid border border-dark recuadro mb-3">
             <div class="row">
-                <div class="col-8 my-4 px-5">
-                    <a href="{%url 'leer_mensaje' id=a.id%}"><h4>De: {{a.nombre}}</h4></a>
-                    <h5>Asunto: {{a.asunto}}</h5>
-                    <h5>Correo: {{a.email}}</h5>
+                <div class="col-8 my-4 recuadrox">
+                    <a href="{%url 'leer_mensaje' id=a.id%}"><h4 class="mensaje_titulo">De: {{a.nombre}}</h4></a>
+                    <h5 class="mensaje_texto">Asunto: {{a.asunto}}</h5>
+                    <h5 class="mensaje_texto">Correo: {{a.email}}</h5>
 
                 </div>
                 <div class="col-4 borde-izquierdo">
-                    <h5 class="pt-4">Fecha: {{a.fecha}}</h5>
+                    <h5 class="pt-4 mensaje_texto ">Fecha: {{a.fecha}}</h5>
                 </div>
             </div>
         </div>
-        <div class="col-3"></div>
+        <div class="col-0 col-sm-1 col-md-2"></div>
         {%endfor%}
     </div>
 </div>

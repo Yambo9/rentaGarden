@@ -1,33 +1,24 @@
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .elemento{margin-top: 15px;}
-    .foto_nums{width: 70%;}
-    .boton_volver{margin-top: 100px;}
+.texto_campo{font-size: 14px;}
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-    .elemento{margin-top: 20px;}
-    .foto_nums{width: 60%;}
+
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-    .elemento{margin-top: 25px;}
-    .foto_nums{width: 40%;}
 
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .elemento{margin-top: 30px;}
-    .foto_nums{width: 30%;}
 
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-    .elemento{margin-top: 30px;} 
-    .foto_nums{width: 30%;}
-
+   
 }

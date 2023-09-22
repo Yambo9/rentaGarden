@@ -3,24 +3,34 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 text-center">
+        <div class="col-2"></div>
+        <div class="col-8 text-center d-flex justify-content-around align-items-center">
             <h3 class="display-5 my-5">ELIMINAR EJECUTIVO</h3>
-            <hr class="mb-5">                
+            <a href="{%url 'menu_ejecutivos'%}">
+                <button class="btn btn-warning py-3 px-4 mx-3">Volver</button>
+            </a>
         </div>
+        <div class="col-2"></div>
+
+        <hr class="mb-5">                
     </div>
     <div class="row">
         <div class="col-12 text-center">
             <h5 class="display-7 my-4">¿ Seguro que quieres eliminar al ejecutivo {{ejecutivo.nombre}} {{ejecutivo.apellido}} ?</h5>
         </div>
-        <div class="col-2 mb-5"></div>
-        <div class="col-8 text-center mb-5">
+        <div class="col-2 "></div>
+        <div class="col-8 text-center">
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ ejecutivo.usuario.id }}">
                 <button type="submit" class="btn btn-danger py-3 px-5 my-4 mb-5">Eliminar</button>
             </form>
         </div>
-        <div class="col-2 mb-5"></div>
+        <div class="col-2"></div>
+        <div class="col-2"></div>
+        <div class="col-8 mb-5 text-center">
+
+        </div>
     </div>
 </div>
 {% endblock %}

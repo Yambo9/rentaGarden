@@ -98,7 +98,7 @@ class SeleccionarPlantaForm(forms.Form):
         widget=forms.NumberInput(
             attrs={
                 'min': 1,
-                'class': 'form-control mb-3 rounded-5 mt-5',
+                'class': 'form-control mb-3 rounded-5 ',
                 'placeholder': 'Ingrese la cantidad de plantas a arrendar'}
         )
     )

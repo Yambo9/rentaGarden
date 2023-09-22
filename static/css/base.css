@@ -111,18 +111,18 @@ a{text-decoration: none; color: white;}
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-    .esconder{display: block;}
-    .margen_arriba{margin-top: 25px;}
+    .esconder{display: none;}
+    .margen_arriba{margin-top: 25px;}   
     .padding_chico{padding-left: 20px; padding-right: 20px;}
     .texto_header{font-size: 20px;}
-    .aparecer{display: none;}
-
+    .aparecer{display: block;}
+    
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .esconder{display: block;}
-    
+    .aparecer{display: none;}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

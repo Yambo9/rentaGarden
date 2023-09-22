@@ -77,8 +77,8 @@ def Mensaje_Anonimo(request):
 
 def Catalogo(request):
     try:
-        arboles = Planta.objects.filter(categoria='Arbol')
-        arbustos = Planta.objects.filter(categoria ='Arbusto')
+        arboles = Planta.objects.filter(categoria='Arbol', archivada=False)
+        arbustos = Planta.objects.filter(categoria ='Arbusto', archivada=False)
         return render(request,'catalogo.html',{'arboles':arboles,'arbustos':arbustos})
 
     except:
@@ -222,8 +222,8 @@ def Profile(request):
 def seleccionar_plantas_pedido(request):
     try:
         #RECOPILANDO LOS DATOS
-        arbol = Planta.objects.filter(categoria='Arbol')
-        arbusto = Planta.objects.filter(categoria='Arbusto')
+        arbol = Planta.objects.filter(categoria='Arbol', archivada=False)
+        arbusto = Planta.objects.filter(categoria='Arbusto', archivada=False)
         datosPedido = request.session.get('misPlantitas', [])
         plantas_seleccionadas = []
 

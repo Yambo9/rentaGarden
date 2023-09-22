@@ -1,15 +1,95 @@
 {%extends 'base.html'%}
 {%block content%}
 {% load static %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/info.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/catalogo.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/detalle_planta.css' %}">
 
 <div class="container">
-    <div class="row">
-        <div class="col-12 text-center my-4"><h3>Sobre los arriendos...</h3></div>
-        <div class="col-0"></div>
-        <div class="col-12"><h1>(1)</h1></div>
-        <div class="col-0"></div>
+    <div class="row align-items-center">
+        <div class="col-12 mt-5 text-center my-4"><h3>Sobre los arriendos...</h3></div>
+
+        <div class="col-1"></div>
+        <div class="col-10">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio veritatis alias autem, minima, harum sapiente quos est quibusdam ut libero tempore deleniti aut vel quasi iusto pariatur porro optio rerum voluptates nisi. Facilis inventore doloribus nesciunt rem incidunt officia quaerat suscipit distinctio, aliquam consequatur dolor cupiditate pariatur impedit laborum necessitatibus explicabo, reprehenderit quod exercitationem fugiat. Tempora, vitae sit? Amet id expedita ipsa numquam ducimus incidunt nulla rerum. Quia quaerat eius placeat alias perferendis eum ad numquam quam unde, magnam nemo, ducimus doloremque dolores? Repudiandae, nesciunt ut! Reprehenderit asperiores exercitationem, dicta veniam fuga consequuntur totam sequi placeat esse suscipit cupiditate possimus.</p>
+        </div>
+        <div class="col-1"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/1.png' %}" alt="Imagen de ejemplo">
+            <h3>Presiona en arriendos</h3>
+        </div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/2.png' %}" alt="Imagen de ejemplo">
+            <h3>Selecciona Las plantas que deseas arrendar</h3>
+        </div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/3.png' %}" alt="Imagen de ejemplo">
+            <h3>Ingresa la direccion hacia donde enviar el pedido</h3>
+        </div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/4.png' %}" alt="Imagen de ejemplo">
+            <h3>Seleccione las fechas para cuando requiere las plantas</h3>
+        </div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/5.png' %}" alt="Imagen de ejemplo">
+            <h3>Obtendrá el valor total de su pedido y presione continuar</h3>
+        </div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/6.png' %}" alt="Imagen de ejemplo">
+            <h3>Su pedido se creará</h3>
+        </div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/7.png' %}" alt="Imagen de ejemplo">
+            <h3>Haga el Pago</h3>
+        </div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+        <div class="col-7 col-md-6 col-lg-5 elemento">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam perspiciatis natus libero accusamus modi sit voluptate voluptates itaque vitae, dolore exercitationem accusantium ad voluptas et quos officiis neque dolorum, dolor deserunt quae aliquam veniam molestiae, quis quod! Repellendus voluptas earum ipsam. Esse aliquam similique temporibus vel dolores aut est magni?</div>
+        <div class="col-5 col-md-4 col-lg-3 elemento text-center">
+            <img class=" foto_nums" src="{% static 'img/nums/8.png' %}" alt="Imagen de ejemplo">
+            <h3>Espere a que sus plantas sean despachadas</h3>
+        </div>
+        <div class="col-0 col-md-1 col-lg-2 elemento"></div>
+
+        <div class="col-3 col-md-4 col-lg-5"></div>
+        <a href="{%url 'home'%}" class="col-6 mb-5 col-md-4 col-lg-2 px-4 my-5 boton_volver highlight-button2 btn btn-medium border border-dark button xs-margin-bottom-five" data-abc="true">
+            Volver
+        </a> 
+        <div class="col-3 col-md-4 col-lg-5"></div>
+
     </div>
+    <br class="mb-5">
+    <br>
 </div>
 
 {%endblock%}

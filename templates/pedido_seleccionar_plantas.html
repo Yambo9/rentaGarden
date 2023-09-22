@@ -4,50 +4,102 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/pedido_seleccionar_plantas.css' %}">
+
 <div class="container-fluid">
-    <div class="row my-5">
-        <div class="col-12 text-center mt-5 mb-2">
+    <div class="row portada">
+        <div class="col-12 text-center">
             <h5 class="display-5">Selecciona tus Plantas</h5>
-            <h5 class=" mb-5">Presiona Sobre ellas y Selecciona cuantas quieres arrendar</h5>
+            <h5 class=" ">Presiona Sobre ellas y Selecciona cuantas quieres arrendar</h5>
 
         </div>
     </div>
-    <div class="row recuadro border-5 rounded-7 pb-5 mb-5  px-5 pt-5 mx-4">
-        <div class="col-1"></div>
-        <div class="col-8 container ">
+    
+    <div class="row">
+                <!--APARECE-->
+        <!--PLANTAS YA SELECCIONADAS-->
+        <div class="col-12 sm-12 col-md-12 border border-dark px-2 rounded-5  aparece mb-5">
+            <h5 class="mt-4 mx-4 text-center titulo_menu display-3"><b>Plantas Seleccionadas</b></h5>
+            <hr>
+            <div class="d-flex text-center justify-content-around">
+                <h5 class=" texto_menu display-3">Cantidad de plantas:<b> {{conteo}}</b></h5>
+                <h5 class="mx-5 texto_menu display-3">Valor Total: <b>{{valor_formateado}} Pesos</b></h5>
+                <h5 class=" texto_menu display-3">Peso Total: <b>{{peso_total}} KG</b></h5>
+            </div>
+            
+            {%if problem%}
+                <h5 class="mx-4 my-3 text-danger">{{problem}}</h5>
+            {%endif%}
+
+            <div class="">
+            {% for a in datos %}
+            <hr>
+            <div class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-9"></div>
+
+                </div>
+            </div>
+        
+            <!-- Código para mostrar la planta y la cantidad -->
+            <div class="d-flex  align-items-center  justify-content-between">
+                <h6 class=" mx-3 text-center texto_menu elementito mt-2">{{ a.planta.nombre }} X {{ a.cantidad }}</h6>
+                <a class="" href="{% url 'eliminar_seleccion' id=a.planta.id %}">
+                    <button class="btn btn-danger">X</button>
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+        
+    </div>
+    <hr>
+    <form method="POST" class="text-center">
+        {%csrf_token%}
+        <button type="submit" class="mb-4 py-3 px-4 btn btn-success text-center">Concretar Pedido</button>
+    </form>
+        </div>
+        <!--APARECE-->
+    </div>
+
+    <div class="row recuadro border-5 rounded-7 pb-5 mb-5">
+        <div class="col-12 sm-12 col-md-9 container ">
             <div class="row">
                 <div class="col-1 mb-3"></div>
                 <div class="col-11 mb-3">
-                    <h5 class="display-6"><u>Arbustos</u></h5>
+                    <h5 class="display-6 mt-4"><u>Arbustos</u></h5>
                 </div>
+
                 {%for a in arbusto%}
-                    <div class="col-4 text-center my-4">
-                            <a href="{%url 'detalle_seleccion_plantas' id=a.id%}"><img src="{{a.imagen.url}}" alt="" class="w-100 px-5">
-                            <h5 >{{a.nombre}}</h5>
-                            <h5>{{a.nombre_cientifico}}</h5></a>
+                    <div class="col-6 col-sm-4 col-lg-3 text-center elemento">
+                            <a href="{%url 'detalle_seleccion_plantas' id=a.id%}"><img src="{{a.imagen.url}}" alt="" class="w-100">
+                            <h5 class="nombre_planta">{{a.nombre}}</h5>
+                            <h5 class="display-5 nombre_cientifico">( {{a.nombre_cientifico}} )</h5></a>
                     </div>
                 {%endfor%}
+            
             </div>
-            <hr>
+            <hr class="mt-5">
             <div class="row">
-                <div class="col-1 mt-5 mb-3"></div>
-                <div class="col-11 mt-5 mb-3">
+                <div class="col-1 mb-3"></div>
+                <div class="col-11 mb-3">
                     <h5 class="display-6"><u>Arboles</u></h5>
                 </div>
                 {%for a in arbol%}
-                    <div class="col-3 text-center my-4">
+                    <div class="col-6 col-sm-4 col-md-4 col-lg-3 text-center my-4 elemento">
                         <a href="{%url 'detalle_seleccion_plantas' id=a.id%}">
-                            <img src="{{a.imagen.url}}" alt="" class="w-100 px-5">
-                            <h5 >{{a.nombre}}</h5>
-                            <h5>{{a.nombre_cientifico}}</h5>
+                            <img src="{{a.imagen.url}}" alt="" class="w-100">
+                            <h5 class="nombre_planta">{{a.nombre}}</h5>
+                            <h5 class="display-5 nombre_cientifico">( {{a.nombre_cientifico}} )</h5>
                         </a>
                     </div>
                 {%endfor%}
             </div>
         </div>
         <!--PLANTAS YA SELECCIONADAS-->
-        <div class="col-3 borde-izquierdo">
-            <h5 class="mt-4 mx-4">Plantas Seleccionadas para su pedido...</h5>
+        <div class="col-4 sm-4 col-md-3 borde-izquierdo desaparece">
+            <h5 class="mt-5 mx-4 my-5 text-center display-3 plantas_seleccionadas">Plantas Seleccionadas</h5>
             <hr>
             <h5 class="mx-4 my-3">Cantidad de plantas: {{conteo}}</h5>
             <h5 class="mx-4 my-3">Valor Total: {{valor_formateado}} Pesos</h5>

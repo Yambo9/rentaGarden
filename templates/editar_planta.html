@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Editar Planta: {{ planta.nombre }}</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar Cambios</button>
-  </form>
-  <a href="{% url 'menu_plantas' %}">Volver al Menú de Plantas</a>
+<div class="col-12 text-center">
+  <h2 class="display-5 my-5">Editar Planta: {{ planta.nombre }}</h2>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="col-12 text-center">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Guardar Cambios</button>
+</form>
+<a href="{% url 'menu_plantas' %}" class="text-center col-12 my-4"><h5 class="my-4 text-dark">Volver al Menú de Plantas</h5></a>
+
+
 {% endblock %}

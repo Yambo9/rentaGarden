@@ -19,26 +19,26 @@
             <hr>
             {%for a in ejecutivos%}
 
-            <div class="col-2 my-3"></div>
-            <div class="col-8 px-4 py-4 container recuadrito rounded-8 my-3">
+            <div class="col-0 col-md-2"></div>
+            <div class="col-12 col-md-8 px-4 py-4 container recuadrito rounded-8">
                 <div class="row">
                     <div class="col-7">
-                        <h3>{{a.nombre}} {{a.apellido}}</h3>   
-                        <h4>Rut: {{a.rut}}</h4>      
-                        <h4>Email: {{a.usuario.username}}</h4>        
-                        <h4>Rol: {{a.rol}}</h4>        
+                        <h3 class="nombre">{{a.nombre}} {{a.apellido}}</h3>   
+                        <h4 class="resto">Rut: {{a.rut}}</h4>      
+                        <h4 class="resto">Email: {{a.usuario.username}}</h4>        
+                        <h4 class="resto">Rol: {{a.rol}}</h4>        
                     </div>
                     <div class="col-5">
-                        <h5>Telefono: {{a.telefono}}</h5>
-                        <h5>Fecha Registro: {{a.FechaRegistro}}</h5>
+                        <h5 class="resto">Telefono: {{a.telefono}}</h5>
+                        <h5 class="resto">Fecha Registro: {{a.FechaRegistro}}</h5>
                         <div class="d-flex justify-content-around mt-4">
 
                             <a href="{% url 'modificar_ejecutivo' id=a.usuario.pk %}">
-                                <button class="btn btn-primary py-3 px-5">Modificar</button>
+                                <button class="btn btn-primary boton">Modificar</button>
                             </a>
 
                             <a href="{% url 'eliminar_ejecutivo' id=a.usuario.pk %}">
-                                <button class="btn btn-danger py-3 px-5">Eliminar</button>
+                                <button class="btn btn-danger boton">Eliminar</button>
                             </a>
 
                         </div>
@@ -46,13 +46,13 @@
 
                 </div>   
             </div>
-            <div class="col-2 my-3"></div>
+            <div class="col-0 col-md-2"></div>
            
             {%endfor%}
-            <div class="col-2"></div>
-            <div class="col-7"></div>
-            <a href="{%url 'profile'%}" class="col-1"><button class=" btn btn-warning my-3 py-2 px-5">Volver</button></a>
-            <div class="col-2"></div>
+
+            <div class="col-2 col-md-8"></div>
+            <a href="{%url 'profile'%}" class="col-8 col-md-2"><button class="w-100 btn btn-success my-3 py-3 px-5">Volver</button></a>
+            <div class="col-2 col-md-2"></div>
 
         </div>
     </div>

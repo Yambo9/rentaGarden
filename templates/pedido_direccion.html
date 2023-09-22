@@ -1,19 +1,22 @@
 {% extends "base.html" %}
-
 {% block content %}
+{%load static%}
+<link rel="stylesheet" type="text/css" href="{% static 'css/pedido_direccion.css' %}">
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 text-center my-5 mt-5">
-            <div class="d-flex align-items-center justify-content-center">
-                <h3 class="display-5">Ingresa la direccion para el pedido..</h3>
+        <div class="col-12 text-center mb-3 mt-5">
+            <div class="d-flex align-items-center justify-content-center align-items-center titulo">
+                <h3 class="display-5 titulo">Ingrese la direccion de su pedido</h3>
                 <a href="{%url 'seleccionar_plantas'%}">
-                    <button class=" px-4 py-2">Volver</button>
+                    <button class="boton_volver btn btn-dark  h-100 ">Volver</button>
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-3"></div>
-    <div class="col-6 container">
+    <hr>
+    <div class="col-0 col-sm-1 col-md-1 col-lg-3"></div>
+    <div class="col-12 col-sm-10 col-md-10 col-lg-6 container">
         <form method="post" class="row">
             {% csrf_token %}
 
@@ -37,10 +40,16 @@
                 <h5>Indicaciones Especiales</h5>
                 {{form.indicaciones}}
             </div>
-            <button type="submit">Enviar</button>
+            <div class="container col-12">
+                <div class="row">
+                    <div class="col-0 col-sm-1 col-md-7 col-lg-9"></div>
+                    <button class="col-12 col-sm-10 col-md-5 col-lg-3 py-4 mb-4 btn btn-success border border-dark" type="submit">Enviar</button>
+                    <div class="col-0 col-sm-1 col-md-0 col-lg-0"></div>
+                </div>
+            </div>
         </form>
     </div>
-    <div class="col-3"></div>
+    <div class="col-0 col-sm-1 col-md-1 col-lg-3"></div>
 </div>
 
 {% endblock %}
