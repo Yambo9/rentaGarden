@@ -1,0 +1,5 @@
+-Hacerlo todo responsive
+-Corregir bug donde al hacer login te redirige al Profile
+-Corregir bug donde al volver entrar al pedido con datos llenos te lleva a fecha
+-permitir volver a lo largo del proceso del pedido
+-poder corregir los datos desde el resumen final del pedido y que recalcule el presupuesto

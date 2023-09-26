@@ -1,24 +1,32 @@
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-.texto_campo{font-size: 14px;}
+    .titulo_fecha{font-size: 22px; margin-top: 30px; margin-bottom: 30px;}
+    .texto_campo{font-size: 14px;}
+    .volver{margin-left: 10%;  padding-top: 15px; padding-bottom: 15px;}
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-
+    .titulo_fecha{font-size: 27px; margin-top: 40px; margin-bottom: 40px; padding-left: 35px; padding-right: 35px;}
+    .texto_campo{font-size: 14px;}
+    .volver{margin-left: 10%;  padding-top: 15px; padding-bottom: 15px; margin-right: 50px;}
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-
+    .titulo_fecha{font-size: 29px; margin-top: 40px; margin-bottom: 40px; padding-left: 45px; padding-right: 45px;}
+    .texto_campo{font-size: 15px;}
+    .volver{margin-left: 12%;  padding-top: 15px; padding-bottom: 15px; margin-right: 60px;}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
+    .titulo_fecha{font-size: 34px; margin-top: 40px; margin-bottom: 40px; padding-left: 45px; padding-right: 45px;}
 
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+    .titulo_fecha{font-size: 37px; margin-top: 40px; margin-bottom: 40px; padding-left: 45px; padding-right: 45px;}
    
 }
