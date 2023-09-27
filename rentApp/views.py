@@ -99,6 +99,7 @@ def About(request):
 def Info(request):
     return render(request,'info_arriendo.html')
 
+
 #LOGICA USUARIO
 def Register(request):
     if request.method == 'POST':
@@ -295,7 +296,7 @@ def detalle_seleccion_plantas(request, id):
     
 def Direccion_pedido(request):
     if request.session.get("miDireccion") is not None:
-        return redirect('datos_personales_pedido')
+        return redirect('fecha_pedido')
     else:
         form = SeleccionarDireccionForm()
         if request.method == 'POST':
@@ -306,7 +307,7 @@ def Direccion_pedido(request):
                 numero= request.POST['numero']
                 depto= request.POST['depto']
                 indicaciones= request.POST['indicaciones']
-                request.session["miDireccion"] = {'comuna':comuna,'calle':calle,'numero':numero,'depto':depto,'indicaciones':indicaciones}
+                request.session["miDireccion"] = {'comuna':comuna,'calle':calle,'numero':numero,'depto':depto,'indicaciones':indicaciones,'volver':False}
                 datos = request.session.get('miDireccion')
                 print(datos)
                 print("Datos guardados temporalmente")
@@ -334,39 +335,57 @@ def Eliminar_seleccion(request, id):
 
 def Fecha_pedido(request):
     form = SeleccionarFechaForm()
-    
-    if request.method == "POST":
-        print("Se esta ejecutando el form")
-        form = SeleccionarFechaForm(request.POST)
-        if form.is_valid():
-            diaInicio = form.cleaned_data['diaInicio']
-            horaInicio = form.cleaned_data['horaInicio']
-            diaFin = form.cleaned_data['fechaFin']
-            horaFin = form.cleaned_data['horaFin']
-            
-            if diaInicio < datetime.now().date():
-                form.add_error('diaInicio', "La fecha de inicio no puede ser anterior al día actual.")
-                print("La fecha es antigua")
-            else:
-                if diaInicio > diaFin:
-                    form.add_error('diaInicio', "La fecha de inicio no puede ser anterior a la fecha de fin del arriendo.")
+    if request.session.get("miFecha") is not None:
+        print("Hay una fecha registrada")
+        return redirect('pagame')
+    else:    
+        if request.method == "POST":
+            print("Se esta ejecutando el form")
+            form = SeleccionarFechaForm(request.POST)
+            if form.is_valid():
+                diaInicio = form.cleaned_data['diaInicio']
+                horaInicio = form.cleaned_data['horaInicio']
+                diaFin = form.cleaned_data['fechaFin']
+                horaFin = form.cleaned_data['horaFin']
+                
+                if diaInicio < datetime.now().date():
+                    form.add_error('diaInicio', "La fecha de inicio no puede ser anterior al día actual.")
                     print("La fecha es antigua")
                 else:
-                    diferencia_dias = (diaFin - diaInicio).days
-                    request.session['miFecha'] = {
-                        'diaInicio': diaInicio.strftime('%Y-%m-%d'),
-                        'horaInicio': horaInicio.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
-                        'diaFin': diaFin.strftime('%Y-%m-%d'),
-                        'horaFin': horaFin.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
-                        'diferencia_dias': diferencia_dias
-                    }
-                    print(request.session.get('miFecha'))
-                    print(request.session.get('miDireccion'))
-                    print(request.session.get('misPlantitas'))
-                    return redirect('datos_personales_pedido')
-        else:
-            print("El formulario no es valido")
-    return render(request, 'pedido_fecha.html', {'form': form})
+                    if diaInicio > diaFin:
+                        form.add_error('diaInicio', "La fecha de inicio no puede ser anterior a la fecha de fin del arriendo.")
+                        print("La fecha es antigua")
+                    else:
+                        diferencia_dias = (diaFin - diaInicio).days
+                        request.session['miFecha'] = {
+                            'diaInicio': diaInicio.strftime('%Y-%m-%d'),
+                            'horaInicio': horaInicio.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
+                            'diaFin': diaFin.strftime('%Y-%m-%d'),
+                            'horaFin': horaFin.strftime('%H:%M:%S'),  # Convertir a cadena de tiempo
+                            'diferencia_dias': diferencia_dias,
+                            'volver':False
+                        }
+                        print(request.session.get('miFecha'))
+                        print(request.session.get('miDireccion'))
+                        print(request.session.get('misPlantitas'))
+                        return redirect('pagame')
+            else:
+                print("El formulario no es valido")
+        return render(request, 'pedido_fecha.html', {'form': form})
+
+def Pagame(request):
+    try:
+        flete = calcularFlete(request)
+        listado_plantas=listadoPlantas(request)
+        valor_plantas = costoPlantas(request)
+        direccion = recibirDireccion(request)
+        fecha = recibirFecha(request)
+        precioTotal = flete['precio_flete'] + valor_plantas
+        print(precioTotal)
+        return render(request,'pedido_valores_pagos.html',{'fecha':fecha,'flete':flete,'listado_plantas':listado_plantas,'valor_plantas':valor_plantas,'direccion':direccion,'total':precioTotal})
+    except:
+        print("Ocurrio un problema")
+        return render(request,'pedido_valores_pagos.html',{})
 
 def Datos_personales_pedido(request):
     if request.user.is_authenticated:
@@ -386,7 +405,7 @@ def Datos_personales_pedido(request):
                 if user is not None:
                     print("El usuario fue reconocido")
                     login(request, user)
-                    return redirect('profile')  # Redirigir a la página de perfil o donde desees
+                    return redirect('pagame')  # Redirigir a la página de perfil o donde desees
 
                 else:
                     print("El usuario no fue reconocido")
@@ -652,19 +671,19 @@ def recibirFecha(request):
         print("Ocurrió un error. (Fecha)")
         return None
 
-def Pagame(request):
-    try:
-        flete = calcularFlete(request)
-        listado_plantas=listadoPlantas(request)
-        valor_plantas = costoPlantas(request)
-        direccion = recibirDireccion(request)
-        fecha = recibirFecha(request)
-        precioTotal = flete['precio_flete'] + valor_plantas
-        print(precioTotal)
-        return render(request,'pedido_valores_pagos.html',{'fecha':fecha,'flete':flete,'listado_plantas':listado_plantas,'valor_plantas':valor_plantas,'direccion':direccion,'total':precioTotal})
-    except:
-        print("Ocurrio un problema")
-        return render(request,'pedido_valores_pagos.html',{})
+#Volver pedido
+def Volver_direccion(request):
+    del request.session['miDireccion']
+    return redirect('direccion_pedido')
+
+def Volver_fecha(request):
+    del request.session['miFecha']
+    return redirect('fecha_pedido')
+
+
+
+
+
 
 #LOGICA ADMIN
 @login_required

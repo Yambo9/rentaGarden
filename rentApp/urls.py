@@ -37,6 +37,8 @@ urlpatterns=[
     path('datos_personales_pedido/',Datos_personales_pedido ,name='datos_personales_pedido'),
     path('pedido_valores_pagos/', Pagame ,name='pagame'),
 
+    path('volver_direccion/', Volver_direccion ,name='volver_direccion'),
+    path('volver_fecha/', Volver_fecha ,name='volver_fecha'),
     
 
     #MANEJO DE PLANTAS DE PARTE DEL ADMIN
