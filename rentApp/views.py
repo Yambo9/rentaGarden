@@ -337,7 +337,7 @@ def Fecha_pedido(request):
     form = SeleccionarFechaForm()
     if request.session.get("miFecha") is not None:
         print("Hay una fecha registrada")
-        return redirect('pagame')
+        return redirect('datos_personales_pedido')
     else:    
         if request.method == "POST":
             print("Se esta ejecutando el form")
@@ -365,10 +365,11 @@ def Fecha_pedido(request):
                             'diferencia_dias': diferencia_dias,
                             'volver':False
                         }
-                        print(request.session.get('miFecha'))
-                        print(request.session.get('miDireccion'))
-                        print(request.session.get('misPlantitas'))
-                        return redirect('pagame')
+                        fecha = request.session.get('miFecha')
+                        print('numero de dias: ' + str(fecha['diferencia_dias']))
+
+
+                        return redirect('datos_personales_pedido')
             else:
                 print("El formulario no es valido")
         return render(request, 'pedido_fecha.html', {'form': form})
@@ -380,9 +381,11 @@ def Pagame(request):
         valor_plantas = costoPlantas(request)
         direccion = recibirDireccion(request)
         fecha = recibirFecha(request)
-        precioTotal = flete['precio_flete'] + valor_plantas
-        print(precioTotal)
-        return render(request,'pedido_valores_pagos.html',{'fecha':fecha,'flete':flete,'listado_plantas':listado_plantas,'valor_plantas':valor_plantas,'direccion':direccion,'total':precioTotal})
+        precio_dias = int((float(valor_plantas) / 4) * (-1 + fecha['diferencia_dias']))
+        precioTotal = flete['precio_flete'] + valor_plantas + precio_dias
+        diferencia_dias = fecha['diferencia_dias'] - 1
+        print(fecha['diferencia_dias'])
+        return render(request,'pedido_valores_pagos.html',{'fecha':fecha,'flete':flete,'listado_plantas':listado_plantas,'valor_plantas':valor_plantas,'direccion':direccion,'total':precioTotal,'diferencia_dias':diferencia_dias,'precio_dias':precio_dias})
     except:
         print("Ocurrio un problema")
         return render(request,'pedido_valores_pagos.html',{})
@@ -679,7 +682,6 @@ def Volver_direccion(request):
 def Volver_fecha(request):
     del request.session['miFecha']
     return redirect('fecha_pedido')
-
 
 
 
