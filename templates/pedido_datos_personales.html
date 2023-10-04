@@ -2,8 +2,13 @@
 {%block content%}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12 text-center my-5">
-                <h3 class="display-5">Ingrese sus datos o haga login si tiene una cuenta</h3>
+            <div class="col-12 text-center mb-3 mt-5">
+                <div class="d-flex align-items-center justify-content-center align-items-center titulo">
+                    <h3 class="display-5 titulo">Ingrese sus datos o haga login si tiene una cuenta</h3>
+                    <a href="{%url 'volver_fecha'%}">
+                        <button class="boton_volver btn btn-dark  h-100 ">Volver</button>
+                    </a>
+                </div>
             </div>
             <hr>
             <br>
