@@ -1,1 +1,1 @@
-web: gunicorn rentaPlant.wsgi --log-file -
+web: gunicorn rentaPlant.wsgi
