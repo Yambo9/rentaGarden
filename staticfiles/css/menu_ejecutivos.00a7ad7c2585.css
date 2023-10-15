@@ -1,0 +1,55 @@
+.recuadrito{background-color: whitesmoke; color: rgb(23, 23, 23);}
+
+.botonAgregar{
+    background-color: rgb(18, 129, 79);
+    color: whitesmoke; 
+    border: solid black;
+    font-size: 21px;
+    
+}
+
+.botonAgregar:hover{
+    background-color: rgb(110, 178, 76);
+    color: whitesmoke; 
+    border: solid black;
+    font-size: 21px;
+    transition: 2s;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .boton{padding:20px 7px 20px 7px;}
+    .recuadrito{margin-bottom: 20px;}
+    .nombre{font-size: 18px;}
+    .resto{font-size: 15px;}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .boton{padding:20px 30px 20px 30px;}
+    .recuadrito{margin-bottom: 28px;}
+    .nombre{font-size: 20px;}
+    .resto{font-size: 18px;}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .boton{padding:20px 30px 20px 30px;}
+    .recuadrito{margin-bottom: 30px;}
+    .nombre{font-size: 25px;}
+    .resto{font-size: 20px;}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .boton{padding:30px 45px 30px 45px;}    
+    .recuadrito{margin-bottom: 30px;}
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .boton{padding:20px 50px 20px 50px;}    
+    .recuadrito{margin-bottom: 30px;}
+   
+}
