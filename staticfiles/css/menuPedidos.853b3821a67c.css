@@ -1,0 +1,11 @@
+.boton_grande{
+    background-color: rgb(8, 133, 87); 
+    color: rgb(200, 223, 212);
+    padding: 50px 90px;
+    transition: 2s;
+    font-size: 35px;
+}
+.boton_grande:hover{
+    background-color: rgb(138, 226, 203);
+    color: rgb(46, 46, 46);
+}

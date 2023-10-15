@@ -135,8 +135,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_TMP = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
 
-os.makedirs(STATIC_TMP,exists_ok=True)
-os.makedirs(STATIC_ROOT,exists_ok=True)
+if not os.path.exists(STATIC_TMP):
+    os.makedirs(STATIC_TMP)
+
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT)
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
