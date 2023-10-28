@@ -393,8 +393,8 @@ def Fecha_pedido(request):
         return render(request, 'pedido_fecha.html', {'form': form})
 
 def Volver_fecha(request):
-    data = request.session.get('miFecha')
-    data['volver'] = True
+    request.session['miFecha'] = None
+    return redirect('fecha_pedido')
 
 def Datos_personales_pedido(request):
     if request.user.is_authenticated:
