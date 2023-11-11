@@ -2,9 +2,9 @@
 {%block content%}
 {%load static%}
 <link rel="stylesheet" type="text/css" href="{% static 'css/detalle_planta.css' %}">
-    <div class="container-fluid my-5">
-        <div class="row">
-
+    <div class="container-fluid my-5 aparicion_tablet">
+        <!--MODO NORMAL-->
+        <div class="row ">
             <div class="col-1"></div>
             <div class="col-3 h-100 text-center">
                 <img src="{{planta.imagen.url}}" alt="" class="col-12 h-100">
@@ -52,6 +52,9 @@
             <div class="col-1"></div>
 
             <div class="col-1"></div>
+        <!--MODO NORMAL-->
+        <!--MODO TELEFONO-->
+        <!--MODO TELEFONO-->
 
         </div>
     </div>

@@ -450,7 +450,7 @@ def Datos_personales_pedido(request):
                             if len(str(telefono)) >= 7 and len(str(telefono)) <= 11:
                                 # La longitud del número telefónico es la correcta, seguimos al próximo paso
                                 print("Longitud del número telefónico es la correcta")
-                                # PROCEDIENDO A CREAR AL USUARIO Y ARRENDATARIO
+                                  # PROCEDIENDO A CREAR AL USUARIO Y ARRENDATARIO
                                 # --------------------------------------------------------
                                 # Crear el usuario
                                 user = get_user_model()
