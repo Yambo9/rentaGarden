@@ -153,39 +153,30 @@ def Signin(request):
         form = AuthenticationForm()       
         return render(request,'signin.html',{'problem':'Usuario no encontrado o contraseña equivocada','form':form})
 
+
 @login_required
 def Crear_arrendatario(request):
     if request.method == 'POST':
-        try:
-            if 8 <= len(request.POST['rut']) and len(request.POST['rut']) <= 12:
-                # Get the Comuna object based on the ID from the form
-                comuna_id = int(request.POST['comuna'])
-                comuna_instance = Comuna.objects.get(pk=comuna_id)
-
+ 
+            # Validar la longitud del RUT
+            if 8 <= len(request.POST['rut']) <= 12:
                 data = Arrendatario.objects.create(
                     usuario=request.user,
                     rut=request.POST['rut'],
                     fecha_nacimiento=request.POST['fecha_nacimiento'],
-                    comuna=comuna_instance,  # Assign the Comuna instance, not the ID
-                    direccion=request.POST['direccion'],
-                    numero_direccion=request.POST['numero_direccion'],
-                    numero_telefono=request.POST['numero_telefono'],
+                    numero_telefono=request.POST['numero_telefono']
                 )
                 data.save()
-                return redirect('menuArriendo')
+                return redirect('profile')
             else:
-                problem_message = 'El rut ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
+                problem_message = 'El RUT ingresado no cumple con la longitud esperada (entre 8 y 12 caracteres).'
                 form = ArrendatarioForm(request.POST)
                 return render(request, 'crear_arrendatario.html', {'form': form, 'problem': problem_message})
 
-        except Exception as e:
-            error_message = str(e)  # Get the error message from the exception
-            form = ArrendatarioForm(request.POST)
-            return render(request, 'crear_arrendatario.html', {'form': form, 'problem': 'Ocurrió un problema :('})
-    
     else:
-        form = ArrendatarioForm()  # Define the form for GET request
+        form = ArrendatarioForm()  # Definir el formulario para la solicitud GET
     return render(request, 'crear_arrendatario.html', {'form': form})
+
 
 @login_required
 def Profile(request):

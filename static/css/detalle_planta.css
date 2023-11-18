@@ -1,6 +1,8 @@
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
     .aparicion_tablet{display: none;}
+    .aparicion_telefono{display:block}
+    .margenes_bloque_derecho{margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px;}
 
 }
 
@@ -14,7 +16,7 @@
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .aparicion_tablet{display: block;}
-    .aparicion_telefono{display:block}
+    .aparicion_telefono{display:none;}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */

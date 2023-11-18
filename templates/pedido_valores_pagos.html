@@ -1,17 +1,20 @@
 {%extends 'base.html'%}
 {%block content%}
 {%load static%}
-
-    <div class="container-fluid">
+<link rel="stylesheet" type="text/css" href="{% static 'css/pedido_valores_pagos.css' %}">
+    <!--Modo tablet / escritorio-->
+    <div class="container-fluid aparece_tablet">
         <div class="row">
             <div class="col-12 text-center mb-3 mt-5">
                 <div class="d-flex align-items-center justify-content-center align-items-center titulo">
                     <h3 class="display-5 titulo mx-4">Detalle</h3>
                     <a href="{%url 'volver_fecha'%}">
-                        <button class="boton_volver btn btn-dark  h-100 ">Volver</button>
+                        <button class="boton_volver btn btn-dark boton h-100 ">Volver</button>
                     </a>
                 </div>
             </div>
+
+            
             <div class="col-2"></div>
             <!--CUADRO IZQUIERDO-->
             <div class="col-2 my-4 border border-dark rounded-3 text-center mx-3">
@@ -58,7 +61,7 @@
 
                         </div>
                         <div class="col-12 mb-4 text-center">
-                            <button class="btn btn-warning">Hacer Pedido</button>
+                            <button class="btn btn-success btn-lg display-5 boton">Ir a Pagos</button>
                         </div>
                     </div>        
                 </div>
@@ -68,4 +71,84 @@
             <div class="col-2"></div>
         </div>
     </div>
+    <!--Modo tablet / escritorio-->
+
+
+
+
+    <!--Modo Telefono-->
+    <div class="container-fluid aparece_telefono">
+        <div class="row">
+            <div class="col-12 text-center mb-3 mt-5">
+                <div class="d-flex align-items-center justify-content-center align-items-center titulo">
+                    <h3 class="display-5 titulo mx-4">Detalle</h3>
+                    <a href="{%url 'volver_fecha'%}">
+                        <button class="boton_volver btn btn-dark  h-100 ">Volver</button>
+                    </a>
+                </div>
+            </div>
+
+            
+
+            <div class="col-1"></div>
+            <div class="col-10 my-4 border border-dark rounded-3 text-center">
+                {%for a in listado_plantas%}
+                <div class="d-flex align-items-center text-center my-4">
+                    <img class="img-fluid w-50 menuLink" src="{{a.planta.imagen.url}}" alt="Imagen de ejemplo">
+                    <div class="text-center">
+                        <h5 class="mt-3">{{a.planta.nombre}}</h5>
+                        <h5>x{{a.cantidad}}</h5>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+            <div class="col-1"></div>
+
+
+            <div class="col-1 col-xs-1 col-sm-1"></div>
+            <div class="col-12 col-xs-10 col-sm-10 my-4  mt-4 border border-dark rounded-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 my-4">
+                            <h4 class="mt-1 mx-4"><u>Costo</u></h4>
+                            <h5 class="mt-4 text-center">Peso Total: {{flete.peso_total}} KG</h5>
+                            <h5 class="text-center">Valor Arriendo de Plantas: {{valor_plantas}} </h5>
+                            <h5 class="text-center">Valor Envio y Montaje a {{flete.comuna.nombre}}: {{flete.precio_flete}} </h5>
+                            {%if diferencia_dias == 0 or diferencia_dias == -1 %}
+                            {%else%}
+                                <h5 class="text-center">Valor por {{diferencia_dias}} dias extra: {{precio_dias}}</h5>
+                            {%endif%}
+                            <h5 class="text-center mb-4">Valor Total: {{total}}</h5>
+                            <hr>
+                            <h4 class=""><u>Hora y Fecha</u></h4>
+                            <h5 class="text-center mt-4">Desde: {{fecha.diaInicio}} a las {{fecha.horaInicio}}</h5>
+                            <h5 class="text-center mt-3">Hasta: {{fecha.diaFin}} a las {{fecha.horaFin}}</h5>
+
+                        </div>
+                        <hr>
+                        <div class="col-12 mb-3 mt-3 align-items-center">
+                            <h4><u>Destino:</u></h4> 
+                            <h5 class="text-center mt-4">{{direccion.calle}} {{direccion.numero}}, {{flete.comuna.nombre}}.</h5>
+                            {% if direccion.depto %}
+                                <h5 class="mt-4 text-center">Depto / Block: {{direccion.depto}}</h5>
+                            {%endif%}
+                            {% if direccion.indicaciones %}
+                                <h5 class="mt-4 text-center">Indicaciones:</h5><p class="text-center">{{direccion.indicaciones}}</p>
+                            {%endif%}
+
+                        </div>
+                        <hr>
+                        <div class="col-12 mb-4 text-center">
+                            <button class="btn btn-success btn-lg">Ir a Pagos</button>
+
+                        </div>
+                    </div>        
+                </div>
+
+            </div>
+            <div class="col-1 col-xs-1 col-sm-1"></div>
+
+        </div>
+    </div>
+    <!--Modo Telefono-->
 {%endblock%}
